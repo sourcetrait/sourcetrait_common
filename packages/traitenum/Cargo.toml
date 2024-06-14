@@ -1,0 +1,21 @@
+[package]
+name = "asmov-common-traitenum"
+version = "1.0.0"
+description = "A Rust library for using fieldless enums as schema definitions."
+authors = ["Asmov LLC <development.pub@asmov.software>"]
+repository = "https://github.com/asmov/common"
+homepage = "https://github.com/asmov/common/tree/dev/traitenum"
+license = "AGPL-3.0-or-later"
+keywords = ["enum", "trait", "asmov"]
+categories = []
+edition = "2021"
+
+
+[dependencies]
+asmov-common-traitenum-parse = { path = "../traitenum-parse", optional = true }
+asmov-common-traitenum-macro = { path = "../traitenum-macro", optional = true }
+
+[features]
+default = ["macro"]
+macro = ["asmov-common-traitenum-macro"]
+parse = ["asmov-common-traitenum-parse"]

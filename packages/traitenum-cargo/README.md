@@ -1,20 +1,17 @@
-Asmov Common
+Asmov Common Traitenum Cargo
 ================================================================================
-Common libraries and tools for Asmov projects
+*Cargo subcommands to generate traitenum traits and derive macros*
 
-
-Packages
+Installation
 --------------------------------------------------------------------------------
-### Libraries
-- [Testing](./packages/testing)
-- [Traitenum](./packages/traitenum)
+```bash
+cargo install asmov-common-traitenum-cargo
+```
 
 
-[Documents](./docs)
+Usage
 --------------------------------------------------------------------------------
-- [Design Notes](./docs/DESIGN.md)
-- [Roadmap](./docs/PLAN.md)
-- [Todo](./docs/TODO.md)
+Refer to `cargo traitenum help`.
 
 
 Repository
@@ -28,7 +25,7 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-Asmov Common: Common libraries and tools for Asmov projects  
+Asmov Common Traitenum Cargo: Cargo subcommands to generate traitenum traits and derive macros  
 Copyright (C) 2024-2025 Asmov LLC  
 
 This program is free software: you can redistribute it and/or modify

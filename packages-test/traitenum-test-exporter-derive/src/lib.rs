@@ -1,0 +1,5 @@
+asmov_common_traitenum_parse::gen_require!(asmov_common_traitenum_test_exporter, traitenum_test_exporter_derive);
+
+asmov_common_traitenum_parse::gen_derive_macro!(SimpleTraitEnum, derive_traitenum_simple, traitlib::TRAITENUM_MODEL_BYTES_SIMPLE_TRAIT);
+asmov_common_traitenum_parse::gen_derive_macro!(ChildTraitEnum, derive_traitenum_child, traitlib::TRAITENUM_MODEL_BYTES_CHILD_TRAIT);
+asmov_common_traitenum_parse::gen_derive_macro!(ParentTraitEnum, derive_traitenum_parent, traitlib::TRAITENUM_MODEL_BYTES_PARENT_TRAIT);

@@ -1,0 +1,22 @@
+#[cfg(test)]
+mod tests {
+    use asmov_common_net_server as server;
+    use asmov_common_util::*;
+
+    pub struct ProtocolA {
+        pub name: String
+    }
+
+    impl Protocol for ProtocolA {
+        MoveRequest
+    }
+
+    enum ProtocolB {
+        ReadRequest
+    }
+
+    #[test]
+    fn test_server2server() {
+        // Test code here
+    }
+}

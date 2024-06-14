@@ -1,21 +1,6 @@
-Asmov Common
+## Asmov Common Linux
 ================================================================================
-Common libraries and tools for Asmov projects
-
-
-Packages
---------------------------------------------------------------------------------
-### Libraries
-- [Testing](./packages/testing)
-- [Traitenum](./packages/traitenum)
-
-
-[Documents](./docs)
---------------------------------------------------------------------------------
-- [Design Notes](./docs/DESIGN.md)
-- [Roadmap](./docs/PLAN.md)
-- [Todo](./docs/TODO.md)
-
+*Linux platform library for Asmov Common*
 
 Repository
 --------------------------------------------------------------------------------
@@ -28,7 +13,7 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-Asmov Common: Common libraries and tools for Asmov projects  
+Asmov Common Linux: Linux platform library for Asmov Common  
 Copyright (C) 2024-2025 Asmov LLC  
 
 This program is free software: you can redistribute it and/or modify

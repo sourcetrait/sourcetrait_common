@@ -1,0 +1,8 @@
+use std::process;
+use tokio;
+use asmov_else_world_server as world;
+
+#[tokio::main]
+async fn main() -> process::ExitCode {
+    world::run().await
+}

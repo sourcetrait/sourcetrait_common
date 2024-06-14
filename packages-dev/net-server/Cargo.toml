@@ -1,0 +1,28 @@
+[package]
+name = "asmov-common-net-server"
+version = "0.1.0"
+description = "Net server for Asmov Common"
+authors = ["Asmov LLC <development.pub@asmov.software>"]
+repository = "https://github.com/asmov/common"
+license = "AGPL-3.0-or-later"
+keywords = ["asmov", "common", "net", "server"]
+categories = []
+edition = "2024"
+
+[dependencies]
+anyhow = "1"
+asmov-common-linux = { path = "../linux" }
+asmov-common-util = { path = "../util" }
+bincode = { version = "2.0.0-rc", features = ["serde"] }
+bytes = "1"
+chrono = "0"
+futures-util = { version = "0", features = ["tokio-io", "sink"] }
+native-tls = "0"
+thiserror = "1"
+tokio = { version = "1", features = ["full"] }
+tokio-native-tls = "0"
+tokio-tungstenite = { version = "0", features = ["native-tls"] }
+serde = { version = "1", features = ["derive"] }
+toml = "0"
+const_format = "0.2.34"
+strum = { version = "0.27.1", features = ["derive"] }

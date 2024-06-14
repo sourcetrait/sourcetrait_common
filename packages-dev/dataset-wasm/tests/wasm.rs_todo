@@ -1,0 +1,193 @@
+use wasm_bindgen_test::*;
+use wasm_bindgen::prelude::*;
+use wasm_bindgen_futures::JsFuture;
+use serde;
+use asmov_common_dataset::{self as dataset, prelude::*};
+use derive_builder;
+use serde::ser::Serialize;
+//use wasm_bindgen_test::wasm_bindgen_test_configure;
+
+//wasm_bindgen_test_configure!(run_in_browser);
+
+#[derive(Debug, serde::Deserialize, serde::Serialize, PartialEq, Eq, Clone, Hash, derive_builder::Builder)]
+struct WasmModel {
+    meta: dataset::Meta,
+    name: String,
+}
+
+#[derive(dataset::derive::DatasetFieldEnum)]
+pub enum WasmModelField {
+   Name
+}
+
+impl dataset::DatasetFieldEnumComposite for WasmModelField {
+    type Meta = dataset::MetaField;
+}
+
+impl ::asmov_common_dataset::MetaModelMut for WasmModel {
+    fn meta_mut(&mut self) -> &mut ::asmov_common_dataset::Meta {
+        &mut self.meta
+    }
+}
+
+// for testing assertions
+impl PartialEq<std::borrow::Cow<'_, WasmModel>> for WasmModel {
+    fn eq(&self, other: &std::borrow::Cow<'_, WasmModel>) -> bool {
+        match other {
+            std::borrow::Cow::Borrowed(b) => &self == b,
+            std::borrow::Cow::Owned(o) => self == o
+        }
+    }
+}
+
+// for testing assertions
+impl PartialEq<WasmModel> for std::borrow::Cow<'_, WasmModel> {
+    fn eq(&self, other: &WasmModel) -> bool {
+        match self {
+            std::borrow::Cow::Borrowed(b) => b == &other,
+            std::borrow::Cow::Owned(o) => o == other
+        }
+    }
+}
+
+//MACRO: imprint_meta_for_model!($WasmModel, $schema_name, $schema_name_plural)
+impl ::asmov_common_dataset::MetaModel for WasmModel {
+    type FieldEnum = WasmModelField;
+
+    const SCHEMA_NAME: &'static str = "wasm_model"; //MACRO: replace ".." with $schema_name
+    const SCHEMA_NAME_PLURAL: &'static str = "wasm_models"; //MACRO: replace ".." with "$schema_name_plural"
+
+    fn meta(&self) -> &::asmov_common_dataset::Meta {
+        &self.meta
+    }
+}
+#[derive(Debug, Default)]
+struct WasmMemoryDataset {
+    wasm_model_variable: ::asmov_common_dataset::ext::rustc_hash::FxHashMap<::asmov_common_dataset::ID, WasmModel>
+}
+
+impl WasmMemoryDataset {
+    pub fn iter_wasm_models(&self) -> std::collections::hash_map::Iter<'_, ::asmov_common_dataset::ID, WasmModel> {
+        self.wasm_model_variable.iter()
+    }
+}
+
+impl ::asmov_common_dataset::Dataset for WasmMemoryDataset {}
+impl ::asmov_common_dataset::DatasetDirect for WasmMemoryDataset {}
+impl ::asmov_common_dataset::MemoryDataset for WasmMemoryDataset {}
+
+// MACRORULE: imprint_memory_dataset_for_model!($WasmModel, $WasmMemoryDataset, $wasm_model_variable)
+impl ::asmov_common_dataset::DatasetModel<WasmMemoryDataset> for WasmModel {
+    async fn dataset_get<'d:'m,'m>(dataset: &'d WasmMemoryDataset, id: ::asmov_common_dataset::ID) -> ::asmov_common_dataset::Result<::std::option::Option<::std::borrow::Cow<'m, Self>>> where Self: 'm {
+        Ok(dataset.wasm_model_variable.get(&id).and_then(|m| Some(::std::borrow::Cow::Borrowed(m))))
+    }
+
+    async fn dataset_put<'d:'m,'m>(dataset: &'d mut WasmMemoryDataset, model: Self) -> ::asmov_common_dataset::Result<::std::option::Option<::asmov_common_dataset::ID>> where Self: 'm {
+        let id = <Self as ::asmov_common_dataset::MetaModel>::meta(&model).id();
+        dataset.wasm_model_variable.insert(id, model);
+        Ok(Some(id))
+    }
+
+    async fn dataset_delete<'d:'m,'m>(dataset: &'d mut WasmMemoryDataset, id: ::asmov_common_dataset::ID) -> ::asmov_common_dataset::Result<()> where Self: 'm {
+        let _ = dataset.wasm_model_variable.remove(&id);
+        Ok(())
+    }
+}
+
+impl ::asmov_common_dataset::DatasetDirectModel<WasmMemoryDataset> for WasmModel {
+    async fn dataset_take<'d:'m, 'm>(dataset: &'d mut WasmMemoryDataset, id: ::asmov_common_dataset::ID) -> ::asmov_common_dataset::Result<::std::option::Option<Self>> {
+        Ok(dataset.wasm_model_variable.remove(&id))
+    }
+}
+
+fn fixture_model(id: dataset::ID) -> WasmModel {
+    use asmov_common_dataset::{self as dataset, prelude::*};
+     WasmModelBuilder::default()
+        .meta(MetaBuilder::default()
+            .id(id)
+            .shard_id(dataset::ID::LOCAL_USER)
+            .time_created(dataset::Timestamp::now())
+            .time_modified(dataset::Timestamp::now())
+            .build().unwrap())
+        .name("Foobarname".to_string())
+        .build().unwrap()
+        .rehashed()
+}
+
+#[wasm_bindgen_test]
+pub async fn test_memory() {
+    use asmov_common_dataset::{self as dataset, prelude::*};
+
+    let mut memory_dataset = WasmMemoryDataset::default();
+
+    assert!(matches!(memory_dataset.get::<WasmModel>(dataset::ID::Local(101)).await.unwrap(), None),
+        "Memory dataset should return Ok(None) for a missing model");
+
+    let model = fixture_model(dataset::ID::Local(101));
+
+    let field_names = WasmModelField::iter()
+        .map(|f| f.name())
+        .chain(dataset::MetaField::iter()
+            .map(|f| f.name())
+            .filter(|n| *n != "id")
+        ).collect::<Vec<_>>();
+
+    println!("Field names: {:?}", field_names);
+
+    // put() the model into memory and make sure that we can get() it back
+    assert!(matches!(memory_dataset.put(model.clone()).await.unwrap(), Some(dataset::ID::Local(101))),
+        "Memory dataset should return with the expected ID after writing model");
+    assert!(matches!(memory_dataset.get::<WasmModel>(dataset::ID::Local(101)).await.unwrap(), Some(m) if m == model),
+        "Memory dataset should return an exact copy of the model inserted");
+
+    let (_id, the_model) = memory_dataset.iter_wasm_models()
+        .find(|(_id, m)| m.name == "Foobarname")
+        .unwrap();
+
+    assert_eq!("Foobarname", the_model.name,
+        "Memory dataset iterator should find a model by name");
+
+    // take() the model from memory, alter it, put() it back, then get() to compare
+    let mut model_taken = memory_dataset.take::<WasmModel>(dataset::ID::Local(101)).await.unwrap().unwrap();
+    model_taken.name = "Hello, universe!".to_string();
+    assert!(matches!(memory_dataset.put(model_taken).await.unwrap(), Some(id) if id == dataset::ID::Local(101)),
+        "Memory dataset should return the same ID after modifying it");
+    let model_updated = memory_dataset.get::<WasmModel>(dataset::ID::Local(101)).await.unwrap().unwrap();
+    assert_eq!(model_updated.name, "Hello, universe!".to_string(),
+        "Memory dataset should return the updated model after taking, altering, and putting it back");
+
+    // delete() the model from memory and make sure that we can't get() it afterwards
+    assert!(matches!(memory_dataset.delete::<WasmModel>(dataset::ID::Local(101)).await, Ok(())),
+        "Memory dataset should deleting the model and return Ok");
+    assert!(matches!(memory_dataset.get::<WasmModel>(dataset::ID::Local(101)).await, Ok(None)),
+        "Memory dataset should return Ok(None) for a missing model after deletion");
+}
+
+#[wasm_bindgen_test]
+pub async fn test_js_str() {
+    let model = fixture_model(dataset::ID::Local(101));
+    let promise = js_sys::Promise::resolve(&serde_wasm_bindgen::to_value(&model.name).unwrap());
+    let name: String = serde_wasm_bindgen::from_value(JsFuture::from(promise).await.unwrap()).unwrap();
+    assert_eq!(model.name, name);
+}
+
+#[wasm_bindgen_test]
+pub async fn test_js_u64() {
+    let num_expected: u64 = 13646096770106105413; // out of JS's safe range
+    let wasm_serializer = serde_wasm_bindgen::Serializer::new()
+        .serialize_large_number_types_as_bigints(true);
+    let jsval: JsValue = num_expected.serialize(&wasm_serializer).unwrap();
+    let promise = js_sys::Promise::resolve(&jsval);
+    let num_actual: u64 = serde_wasm_bindgen::from_value(JsFuture::from(promise).await.unwrap()).unwrap();
+    assert_eq!(num_expected, num_actual);
+}
+
+#[wasm_bindgen_test]
+pub async fn test_js_model() {
+    let model = fixture_model(dataset::ID::Local(101));
+    let wasm_serializer = serde_wasm_bindgen::Serializer::new()
+        .serialize_large_number_types_as_bigints(true);
+    let promise = js_sys::Promise::resolve(&model.serialize(&wasm_serializer).unwrap());
+    let m: WasmModel = serde_wasm_bindgen::from_value(JsFuture::from(promise).await.unwrap()).unwrap();
+    assert_eq!(model, m);
+}
