@@ -102,21 +102,12 @@ assert_eq!(2, MyParentEnum::Second.children().nth(0).unwrap().column())
 Packages
 --------
 - [traitenum](../traitenum-macro) : Macros used to define traitenum traits
-- [traitenum-lib](../traitenum-lib) : Exports used by traitenum macros
+- [traitenum-parse](../traitenum-parse) : Parsing library used by traitenum macros
 - [cargo-traitneum](../traitenum-cargo) : Cargo addon that initializes traitenum workspaces and adds / removes traitenum traits
 
 Documents
 ---------
-- [Roadmap](./docs/Roadmap.md) : Planned fixes and enhancements
-- [Design: Version 0](./docs/design/v0/README.md): Design notes for Version 0
-- [Copying](./COPYING.txt) : The GPL3 licensing declaration as displayed below.
-- [License](./LICENSE.txt) : The complete GPL3 license definition.
-
-Structure
----------
-- [Documents](./docs)
-- [Export Tests](./tests/exporter/) : Compile testing of a traitenum workspace crate.
-- [Import Tests](./tests/exporter/) : Compile testing of a traitenum end-user crate.
+- [Roadmap](./docs/PLAN.md) : Planned fixes and enhancements
 
 
 Repository
