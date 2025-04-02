@@ -10,13 +10,6 @@ Packages
 - [Traitenum](./packages/traitenum)
 
 
-[Documents](./docs)
---------------------------------------------------------------------------------
-- [Design Notes](./docs/DESIGN.md)
-- [Roadmap](./docs/PLAN.md)
-- [Todo](./docs/TODO.md)
-
-
 Repository
 --------------------------------------------------------------------------------
 Contributors, please review [ASMOV.md](./ASMOV.md).  

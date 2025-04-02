@@ -1,7 +1,7 @@
 [package]
 name = "asmov-common-testing"
 version = "2.1.5"
-description = "A toolkit for organized testing in Rust"
+description = "Structured unit and integration testing library"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/asmov/common"

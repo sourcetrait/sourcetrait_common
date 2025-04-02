@@ -5,7 +5,7 @@ Asmov Common Testing
 [Latest Version]: https://img.shields.io/crates/v/asmov-common-testing.svg
 [crates.io]: https://crates.io/crates/asmov-common-testing
 
-A toolkit for organized testing in Rust.
+*Structured unit and integration testing library*
 
 ## Features
 - Structures tests into heirarchies:
@@ -68,7 +68,7 @@ mod tests {
 Documentation
 -------------
 
-Refer to [docs.rs/asmov-testing](https://docs.rs/asmov-testing/latest/asmov_testing)
+Refer to [docs.rs/asmov-common-testing](https://docs.rs/asmov-common-testing/latest/asmov_common_testing)
 
 
 Repository
@@ -82,7 +82,7 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-Asmov Common: Common libraries and tools for Asmov projects  
+Asmov Common Testing: Structured unit and integration testing library  
 Copyright (C) 2024-2025 Asmov LLC  
 
 This program is free software: you can redistribute it and/or modify
