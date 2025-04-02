@@ -200,7 +200,7 @@ dependencies = [
 
 [[package]]
 name = "asmov-common-testing"
-version = "2.1.4"
+version = "2.1.5"
 dependencies = [
  "anyhow",
  "function_name",
