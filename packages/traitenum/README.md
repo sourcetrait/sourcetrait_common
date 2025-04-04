@@ -1,5 +1,10 @@
 Asmov Common Traitenum
 ================================================================================
+[![Latest Version]][crates.io]
+
+[Latest Version]: https://img.shields.io/crates/v/asmov-common-traitenum.svg
+[crates.io]: https://crates.io/crates/asmov-common-traitenum
+
 *Library for using fieldless enums as schema definitions*
 
 In short, a trait is declared with a configurable set of const properties,   using attributes for each method. An enum is then derived for that trait, with each variant filling in property values via attributes.
@@ -105,10 +110,6 @@ Packages
 - [traitenum-parse](../traitenum-parse) : Parsing library used by traitenum macros
 - [cargo-traitneum](../traitenum-cargo) : Cargo addon that initializes traitenum workspaces and adds / removes traitenum traits
 
-Documents
----------
-- [Roadmap](./docs/PLAN.md) : Planned fixes and enhancements
-
 
 Repository
 --------------------------------------------------------------------------------
@@ -136,4 +137,4 @@ GNU Affero General Public License for more details.
 
 You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
-If not, see [https://www.gnu.org/licenses/].
+If not, see https://www.gnu.org/licenses/.

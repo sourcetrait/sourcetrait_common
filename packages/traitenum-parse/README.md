@@ -1,6 +1,11 @@
-Asmov Common Utility
+Asmov Common Traitenum Parse 
 ================================================================================
-*Utility libraries for Asmov Common*
+[![Latest Version]][crates.io]
+
+[Latest Version]: https://img.shields.io/crates/v/asmov-common-traitenum-parse.svg
+[crates.io]: https://crates.io/crates/asmov-common-traitenum-parse
+
+*Parsing and model for Traitenum*
 
 
 Repository
@@ -14,7 +19,7 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-Asmov Common Utility: Utility libraries for Asmov Common  
+Asmov Common Traitenum Parse: Parsing and model for Traitenum  
 Copyright (C) 2024-2025 Asmov LLC  
 
 This program is free software: you can redistribute it and/or modify
@@ -29,4 +34,4 @@ GNU Affero General Public License for more details.
 
 You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
-If not, see [https://www.gnu.org/licenses/].
+If not, see https://www.gnu.org/licenses/.

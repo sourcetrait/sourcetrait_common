@@ -1,6 +1,12 @@
-## Asmov Common Net Server 
+Asmov Common Traitenum Macro
 ================================================================================
-*Library for running standalone TLS network servers*
+[![Latest Version]][crates.io]
+
+[Latest Version]: https://img.shields.io/crates/v/asmov-common-traitenum-macro.svg
+[crates.io]: https://crates.io/crates/asmov-common-traitenum-macro
+
+*Macro exports for Traitenum*
+
 
 Repository
 --------------------------------------------------------------------------------
@@ -13,7 +19,7 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-Asmov Common Net Server: Library for running standalone TLS network servers
+Asmov Common Traitenum Macro: Macro exports for Traitenum  
 Copyright (C) 2024-2025 Asmov LLC  
 
 This program is free software: you can redistribute it and/or modify
@@ -28,4 +34,4 @@ GNU Affero General Public License for more details.
 
 You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
-If not, see [https://www.gnu.org/licenses/].
+If not, see https://www.gnu.org/licenses/.

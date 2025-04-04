@@ -97,7 +97,7 @@ GNU Affero General Public License for more details.
 
 You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
-If not, see [https://www.gnu.org/licenses/].
+If not, see https://www.gnu.org/licenses/.
 
 
 Third-Party Licenses

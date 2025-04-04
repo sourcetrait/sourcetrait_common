@@ -1,14 +1,14 @@
 [package]
 name = "asmov-common-testing"
-version = "2.1.6"
+version = "2.1.7"
 description = "Structured unit and integration testing library"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/asmov/common"
-homepage = "https://github.com/asmov/common/tree/draft/packages/testing"
+homepage = "https://asmov.software"
 categories = ["development-tools::testing"]
 keywords = ["integration", "unit", "benchmark", "test", "tests"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 anyhow = "1"

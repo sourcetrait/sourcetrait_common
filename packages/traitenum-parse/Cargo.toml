@@ -4,11 +4,11 @@ version = "1.0.0"
 description = "Parsing library for Asmov Common Traitenum"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 repository = "https://github.com/asmov/common"
-homepage = "https://github.com/asmov/common/tree/dev/traitenum"
+homepage = "https://asmov.software"
 license = "AGPL-3.0-or-later"
 keywords = ["enum", "trait", "asmov"]
 categories = []
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

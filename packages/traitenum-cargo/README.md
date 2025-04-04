@@ -1,5 +1,10 @@
 Asmov Common Traitenum Cargo
 ================================================================================
+[![Latest Version]][crates.io]
+
+[Latest Version]: https://img.shields.io/crates/v/asmov-common-traitenum-cargo.svg
+[crates.io]: https://crates.io/crates/asmov-common-traitenum-cargo
+
 *Cargo subcommands to generate traitenum traits and derive macros*
 
 Installation
@@ -40,4 +45,4 @@ GNU Affero General Public License for more details.
 
 You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
-If not, see [https://www.gnu.org/licenses/].
+If not, see https://www.gnu.org/licenses/.

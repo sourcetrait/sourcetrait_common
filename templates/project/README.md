@@ -1,5 +1,10 @@
 Asmov Project
 ================================================================================
+[![Latest Version]][crates.io]
+
+[Latest Version]: https://img.shields.io/crates/v/asmov-project.svg
+[crates.io]: https://crates.io/crates/asmov-project
+
 *This is an Asmov project*
 
 

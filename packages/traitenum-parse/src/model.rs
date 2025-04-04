@@ -321,7 +321,7 @@ impl Definition {
 
     pub fn default(&self) -> Option<Value> {
         match self {
-            Definition::Bool(ref booldef) => match &booldef.default {
+            Definition::Bool(booldef) => match &booldef.default {
                 Some(b) => Some(Value::Bool(*b)),
                 None => None
             },
@@ -710,7 +710,7 @@ impl FromStr for RelationNature {
 
 #[derive(Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 pub enum Dispatch {
-    /// Box<dyn Trait> and Box<dyn Iterator<Item = Box<dyn Trait>>>
+    /// `Box<dyn Trait>` and `Box<dyn Iterator<Item = Box<dyn Trait>>>`
     BoxedTrait,
     /// This is a placeholder to future-proof expansion
     Other

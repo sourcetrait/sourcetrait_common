@@ -6,19 +6,7 @@ members = [
     "packages/traitenum-parse",
     "packages/traitenum-macro",
     "packages/traitenum-cargo",
-    "packages-dev/dataset",
-    "packages-dev/dataset-enum",
-    "packages-dev/dataset-enum-derive",
-    "packages-dev/dataset-wasm",
-    "packages-dev/linux",
     "packages-test/traitenum-test-exporter",
     "packages-test/traitenum-test-exporter-derive",
     "packages-test/traitenum-test-importer",
-    "packages-dev/net-server",
-    "packages-dev/util",
 ]
-
-[[workspace.metadata.traitenum.library]]
-name = "dataset-fieldenum"
-lib-dir = "lib"
-derive-dir = "derive"

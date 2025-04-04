@@ -4,11 +4,11 @@ version = "1.0.0"
 description = "Derive macros for Asmov Common Traitenum"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 repository = "https://github.com/asmov/common"
-homepage = "https://github.com/asmov/common/tree/dev/traitenum"
+homepage = "https://asmov.software"
 license = "AGPL-3.0-or-later"
 keywords = ["enum", "trait", "asmov"]
 categories = []
-edition = "2021"
+edition = "2024"
 
 [lib]
 proc-macro = true
