@@ -28,11 +28,12 @@ pub trait ChildTrait {
 #[cfg(test)]
 mod tests {
     use asmov_common_traitenum_parse;
-    use bincode;
 
     #[test]
     fn test_load_model() {
         let bytes = crate::simple_trait::TRAITENUM_MODEL_BYTES_SIMPLE_TRAIT;
-        let _model: asmov_common_traitenum_parse::model::EnumTrait = bincode::deserialize(bytes).unwrap();
+        let _model: asmov_common_traitenum_parse::model::EnumTrait =
+            asmov_common_traitenum_parse::model::EnumTrait::deserialize(bytes)
+            .unwrap();
     }
 }

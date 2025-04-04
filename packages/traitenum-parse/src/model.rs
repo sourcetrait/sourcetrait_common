@@ -1,11 +1,10 @@
 use std::{fmt::Display, str::FromStr, collections::HashMap, collections::hash_map};
 
-use serde;
 use convert_case::{self as case, Casing};
 
 pub mod parse;
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct EnumTrait {
     identifier: Identifier,
     methods: Vec<Method>,
@@ -34,7 +33,7 @@ impl EnumTrait {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct Identifier{
     path: Vec<String>,
     name: String
@@ -76,7 +75,7 @@ impl Display for Identifier {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum ReturnType {
     Bool,
     StaticStr,
@@ -152,7 +151,7 @@ impl FromStr for ReturnType {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum Definition {
     Bool(BoolDefinition),
     StaticStr(StaticStrDefinition),
@@ -491,7 +490,7 @@ impl Definition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct BoolDefinition {
     pub(crate) default: Option<bool>,
 }
@@ -510,7 +509,7 @@ impl BoolDefinition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct NumberDefinition<N> {
     pub(crate) default: Option<N>,
     pub(crate) preset: Option<NumberPreset>,
@@ -549,7 +548,7 @@ impl<N> NumberDefinition<N> {
 
 /// Presets use the variant name as input and output a case conversion using the [convert_case](https://docs.rs/convert_case/latest/convert_case/enum.Case.html)
 /// crate. The `Variant` preset does no conversion.
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum StringPreset {
     /// The unaltered variant name
     Variant,
@@ -618,7 +617,7 @@ impl StringPreset {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum NumberPreset {
     Ordinal,
     Serial,
@@ -636,7 +635,7 @@ impl FromStr for NumberPreset {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct StaticStrDefinition {
     pub(crate) default: Option<String>,
     pub(crate) preset: Option<StringPreset>,
@@ -653,7 +652,7 @@ impl StaticStrDefinition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct FieldlessEnumDefinition {
     identifier: Identifier,
     default: Option<Identifier>
@@ -674,7 +673,7 @@ impl FieldlessEnumDefinition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct TypeDefinition {
     identifier: Identifier,
 }
@@ -688,7 +687,7 @@ impl TypeDefinition {
 }
 
 
-#[derive(Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum RelationNature {
     OneToOne,
     OneToMany,
@@ -708,7 +707,7 @@ impl FromStr for RelationNature {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Copy, Clone, Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum Dispatch {
     /// `Box<dyn Trait>` and `Box<dyn Iterator<Item = Box<dyn Trait>>>`
     BoxedTrait,
@@ -730,7 +729,7 @@ impl FromStr for Dispatch {
 
 
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct RelationDefinition {
     identifier: Identifier,
     dispatch: Option<Dispatch>,
@@ -768,7 +767,7 @@ impl RelationDefinition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct Method {
     name: String,
     return_type: ReturnType,
@@ -789,7 +788,7 @@ impl Method {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct AttributeValue {
     value: Value
 }
@@ -804,7 +803,7 @@ impl AttributeValue {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub enum Value {
     Bool(bool),
     StaticStr(String),
@@ -822,16 +821,19 @@ pub enum Value {
 }
 
 impl EnumTrait {
-    pub fn serialize(&self) -> bincode::Result<Vec<u8>>{
-        bincode::serialize(self)
+    pub fn serialize(&self) -> Result<Vec<u8>, bincode::error::EncodeError>{
+        const CFG: bincode::config::Configuration = bincode::config::standard();
+        bincode::encode_to_vec(self, CFG)
     }
 
-    pub fn deserialize(bytes: &[u8]) -> bincode::Result<Self> {
-        bincode::deserialize(bytes)
+    pub fn deserialize(bytes: &[u8]) -> Result<Self, bincode::error::DecodeError> {
+        const CFG: bincode::config::Configuration = bincode::config::standard();
+        bincode::decode_from_slice(bytes, CFG)
+            .and_then(|r| Ok(r.0))
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct TraitEnum {
     identifier: Identifier,
     variants: Vec<Variant>,
@@ -932,7 +934,7 @@ impl TraitEnum {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct Variant {
     name: String,
     named_values: HashMap<String, AttributeValue>

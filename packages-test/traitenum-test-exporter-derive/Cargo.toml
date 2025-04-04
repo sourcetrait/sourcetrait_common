@@ -7,6 +7,6 @@ edition = "2021"
 proc-macro = true
 
 [dependencies]
-proc-macro2 = "1.0.69"
+proc-macro2 = "1.0.94"
 asmov-common-traitenum-parse = { path = "../../packages/traitenum-parse" }
 asmov-common-traitenum-test-exporter = { path = "../traitenum-test-exporter" }

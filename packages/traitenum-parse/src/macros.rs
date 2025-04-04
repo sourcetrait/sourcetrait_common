@@ -91,7 +91,7 @@ mod tests {
             }
         };
 
-        let model_bytes = bincode::serialize(&model).unwrap();
+        let model_bytes = model.serialize().unwrap();
         let traitenum::TraitEnumMacroOutput {model: enum_model, tokens: enum_tokens} = traitenum::parse_traitenum_macro(
             item_src, &model_bytes).unwrap();
 
@@ -153,7 +153,7 @@ mod tests {
             }
         };
 
-        let model_bytes = bincode::serialize(&model).unwrap();
+        let model_bytes = model.serialize().unwrap();
         let traitenum::TraitEnumMacroOutput {model: enum_model, tokens: enum_tokens} = traitenum::parse_traitenum_macro(
             item_src, &model_bytes).unwrap();
 
