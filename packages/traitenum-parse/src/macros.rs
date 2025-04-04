@@ -19,7 +19,7 @@ mod tests {
             assert!($model.variant($variant_name).unwrap().value($attribute_name).is_some(),
                 "Variant attribute doesn't exist: {} -> {}", $variant_name, $attribute_name);
             match $model.variant($variant_name).unwrap().value($attribute_name).unwrap().value() {
-                model::Value::$value_type(ref val) => assert_eq!($expected, *val),
+                model::Value::$value_type(val) => assert_eq!($expected, *val),
                 _ => assert!(false, "Incorrect value type for attribute: {}", $attribute_name)
             }
         };
@@ -29,7 +29,7 @@ mod tests {
     macro_rules! assert_traitenum_value_enum {
         ($model:ident, $variant_name:literal, $attribute_name:literal, $expected:literal) => {
             match $model.variant($variant_name).unwrap().value($attribute_name).unwrap().value() {
-                model::Value::EnumVariant(ref val) => assert_eq!($expected, val.to_string()),
+                model::Value::EnumVariant(val) => assert_eq!($expected, val.to_string()),
                 _ => assert!(false, "Incorrect value type for attribute: {}", $attribute_name)
             }
         };
@@ -61,7 +61,7 @@ mod tests {
                 #[enumtrait::Str(preset(Variant))]
                 fn str_preset_variant(&self) -> &'static str;
 
-                // test Num serial preset w/start and increment 
+                // test Num serial preset w/start and increment
                 #[enumtrait::Num(preset(Serial), start(3), increment(2))]
                 fn num_preset_serial_all(&self) -> u64;
 
@@ -71,7 +71,7 @@ mod tests {
                 }
             }
         };
-        
+
         let model = enumtrait::parse_enumtrait_macro(attribute_src, item_src).unwrap().model;
         dbg!(&model);
 
@@ -114,7 +114,7 @@ mod tests {
         // test non-default enum
         assert_traitenum_value_enum!(enum_model, "Four", "enum_default", "RPS::Scissors");
     }
-    
+
     #[test]
     fn test_parse_enumtrait_boxed_trait_relations() {
         let attribute_src = quote::quote!{};
@@ -137,7 +137,7 @@ mod tests {
                 fn one_to_many_elided_dyn(&self) -> Box<dyn Iterator<Item = Box<dyn SecondManyTrait>>>;
             }
         };
-        
+
         let model = enumtrait::parse_enumtrait_macro(attribute_src, item_src).unwrap().model;
         dbg!(&model);
 
@@ -176,7 +176,7 @@ mod tests {
         let attribute_src = quote::quote!{ crate::MyTrait };
         assert!(enumtrait::parse_enumtrait_macro(attribute_src, simple_item_src.clone()).is_err(),
             "Non-empty #[{}(<pathspec>)] should throw an Error", TRAIT_ATTRIBUTE_HELPER_NAME);
-        
+
         // test error: mismatched trait name with identifier
         let attribute_src = quote::quote!{ crate::tests::TheirTrait };
         assert!(enumtrait::parse_enumtrait_macro(attribute_src, simple_item_src.clone()).is_err(),

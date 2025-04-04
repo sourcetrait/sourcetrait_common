@@ -325,43 +325,43 @@ impl Definition {
                 Some(b) => Some(Value::Bool(*b)),
                 None => None
             },
-            Definition::StaticStr(ref strdef) => match &strdef.default {
+            Definition::StaticStr(strdef) => match &strdef.default {
                 Some(s) => Some(Value::StaticStr(s.to_string())),
                 None => None
             },
-            Definition::UnsignedSize(ref numdef) => match &numdef.default {
+            Definition::UnsignedSize(numdef) => match &numdef.default {
                 Some(n) => Some(Value::UnsignedSize(*n)),
                 None => None
             },
-            Definition::UnsignedInteger64(ref numdef) => match &numdef.default {
+            Definition::UnsignedInteger64(numdef) => match &numdef.default {
                 Some(n) => Some(Value::UnsignedInteger64(*n)),
                 None => None
             },
-            Definition::Integer64(ref numdef) => match &numdef.default {
+            Definition::Integer64(numdef) => match &numdef.default {
                 Some(n) => Some(Value::Integer64(*n)),
                 None => None
             },
-            Definition::Float64(ref numdef) => match &numdef.default {
+            Definition::Float64(numdef) => match &numdef.default {
                 Some(n) => Some(Value::Float64(*n)),
                 None => None
             },
-            Definition::UnsignedInteger32(ref numdef) => match &numdef.default {
+            Definition::UnsignedInteger32(numdef) => match &numdef.default {
                 Some(n) => Some(Value::UnsignedInteger32(*n)),
                 None => None
             },
-            Definition::Integer32(ref numdef) => match &numdef.default {
+            Definition::Integer32(numdef) => match &numdef.default {
                 Some(n) => Some(Value::Integer32(*n)),
                 None => None
             },
-            Definition::Float32(ref numdef) => match &numdef.default {
+            Definition::Float32(numdef) => match &numdef.default {
                 Some(n) => Some(Value::Float32(*n)),
                 None => None
             },
-            Definition::Byte(ref numdef) => match &numdef.default {
+            Definition::Byte(numdef) => match &numdef.default {
                 Some(n) => Some(Value::Byte(*n)),
                 None => None
             },
-            Definition::FieldlessEnum(ref typedef) => match &typedef.default {
+            Definition::FieldlessEnum(typedef) => match &typedef.default {
                 Some(id) => Some(Value::EnumVariant(id.clone())),
                 None => None
             },
@@ -409,18 +409,18 @@ impl Definition {
 
         match self {
             Definition::Bool(_booldef) => None,
-            Definition::StaticStr(ref strdef) => {
+            Definition::StaticStr(strdef) => {
                 let preset = match &strdef.preset { Some(p) => p, None => return None };
                 Some(Value::StaticStr(preset.convert(variant_name)))
             },
-            Definition::UnsignedSize(ref numdef) => preset_numdef!(Value::UnsignedSize, usize, numdef),
-            Definition::UnsignedInteger64(ref numdef) => preset_numdef!(Value::UnsignedInteger64, u64, numdef),
-            Definition::Integer64(ref numdef) => preset_numdef!(Value::Integer64, i64, numdef),
-            Definition::Float64(ref numdef) => preset_numdef!(Value::Float64, f64, numdef),
-            Definition::UnsignedInteger32(ref numdef) => preset_numdef!(Value::UnsignedInteger32, u32, numdef),
-            Definition::Integer32(ref numdef) => preset_numdef!(Value::Integer32, i32, numdef),
-            Definition::Float32(ref numdef) => preset_numdef!(Value::Float32, f32, numdef),
-            Definition::Byte(ref numdef) => preset_numdef!(Value::Byte, u8, numdef),
+            Definition::UnsignedSize(numdef) => preset_numdef!(Value::UnsignedSize, usize, numdef),
+            Definition::UnsignedInteger64(numdef) => preset_numdef!(Value::UnsignedInteger64, u64, numdef),
+            Definition::Integer64(numdef) => preset_numdef!(Value::Integer64, i64, numdef),
+            Definition::Float64(numdef) => preset_numdef!(Value::Float64, f64, numdef),
+            Definition::UnsignedInteger32(numdef) => preset_numdef!(Value::UnsignedInteger32, u32, numdef),
+            Definition::Integer32(numdef) => preset_numdef!(Value::Integer32, i32, numdef),
+            Definition::Float32(numdef) => preset_numdef!(Value::Float32, f32, numdef),
+            Definition::Byte(numdef) => preset_numdef!(Value::Byte, u8, numdef),
             Definition::FieldlessEnum(_typedef) => None,
             Definition::Relation(_reldef) => None,
             Definition::Type(_typedef) => None,
@@ -441,7 +441,7 @@ impl Definition {
 
     pub fn needs_value(&self) -> bool {
         match self {
-            Definition::Relation(ref reldef) => match &reldef.nature {
+            Definition::Relation(reldef) => match &reldef.nature {
                 Some(relationship) => match relationship {
                     RelationNature::OneToOne => false,
                     RelationNature::OneToMany => true,
@@ -478,14 +478,14 @@ impl Definition {
 
     pub fn get_relation_definition(&self) -> &RelationDefinition {
         match self {
-            Self::Relation(ref def) => def,
+            Self::Relation(def) => def,
             _ => unreachable!("Unexpected definition type: {}", RelationDefinition::TYPE_NAME)
         }
     }
 
     pub fn get_relation_definition_mut(&mut self) -> &mut RelationDefinition {
         match self {
-            Self::Relation(ref mut def) => def,
+            Self::Relation(def) => def,
             _ => unreachable!("Unexpected definition type: {}", RelationDefinition::TYPE_NAME)
         }
     }

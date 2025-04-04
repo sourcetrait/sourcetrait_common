@@ -131,7 +131,7 @@ fn parse_trait_fn_return(func: &syn::TraitItemFn) -> syn::Result<(model::ReturnT
 
     match &func.sig.output {
         syn::ReturnType::Default => synerr!(&func.sig, "Default return types () are not supported"),
-        syn::ReturnType::Type(_, ref returntype) => match **returntype {
+        syn::ReturnType::Type(_, returntype) => match **returntype {
             syn::Type::Path(ref path_type) => {
                 if let Ok(ret_type) = model::ReturnType::try_from(&path_type.path) {
                     // This models primitive return types that ReturnType supports. E.g., usize, f32, bool, etc.
