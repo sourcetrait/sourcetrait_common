@@ -1,6 +1,6 @@
 [package]
 name = "asmov-common-testing"
-version = "2.1.7"
+version = "2.1.8"
 description = "Structured unit and integration testing library"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 license = "AGPL-3.0-or-later"
