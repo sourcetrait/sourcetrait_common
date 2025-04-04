@@ -12,8 +12,8 @@ edition = "2024"
 
 
 [dependencies]
-asmov-common-traitenum-parse = { path = "../traitenum-parse", optional = true }
-asmov-common-traitenum-macro = { path = "../traitenum-macro", optional = true }
+asmov-common-traitenum-parse = { version="1", path = "../traitenum-parse", optional = true }
+asmov-common-traitenum-macro = { version="1", path = "../traitenum-macro", optional = true }
 
 [features]
 default = ["macro"]

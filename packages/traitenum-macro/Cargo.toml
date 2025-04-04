@@ -15,7 +15,7 @@ proc-macro = true
 
 [dependencies]
 proc-macro2 = "1"
-asmov-common-traitenum-parse = { path = "../traitenum-parse" }
+asmov-common-traitenum-parse = { version="1", path = "../traitenum-parse" }
 
 [dev-dependencies]
-asmov-common-traitenum = { path = "../traitenum" }
+asmov-common-traitenum = { version="1", path = "../traitenum" }
