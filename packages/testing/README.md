@@ -21,7 +21,7 @@ Asmov Common Testing
 #[cfg(test)]
 mod tests {
     use std::fs;
-    use asmov_testing::{self as testing, prelude::*};
+    use asmov_common_testing::{self as testing, prelude::*};
 
     static TESTING: testing::StaticModule = testing::module(|| {
         testing::integration(module_path!())
@@ -104,7 +104,7 @@ Third-Party Licenses
 -------------------------------------------------------------------------------
 ## crate: [function_name](https://crates.io/crates/function_name)
 
->Our library publically exports the **named** macro from [Daniel Henry-Mantilla](https://github.com/danielhenrymantilla)'s crate: [function_name](https://github.com/danielhenrymantilla/rust-function_name). It is available for use from our crate as `asmov_testing::named`.
+>Our library publically exports the **named** macro from [Daniel Henry-Mantilla](https://github.com/danielhenrymantilla)'s crate: [function_name](https://github.com/danielhenrymantilla/rust-function_name). It is available for use from our crate as `asmov_common_testing::named`.
 
 **License (MIT):**  
 [Copyright (c) 2019 Daniel Henry-Mantilla](./docs/licenses/danielhenrymantilla/function_name/LICENSE.txt)
