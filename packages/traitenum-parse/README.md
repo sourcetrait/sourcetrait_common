@@ -20,7 +20,7 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 License (AGPL3)
 --------------------------------------------------------------------------------
 Asmov Common Traitenum Parse: Parsing and model for Traitenum  
-Copyright (C) 2024-2025 Asmov LLC  
+Copyright (C) 2024-2025 [Asmov LLC](https://asmov.software)  
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
