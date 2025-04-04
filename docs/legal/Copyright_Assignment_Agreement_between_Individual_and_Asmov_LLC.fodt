@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:creation-date>2011-05-20T19:25:07</meta:creation-date><dc:date>2024-10-08T12:18:37.292451566</dc:date><meta:editing-duration>PT1H15M54S</meta:editing-duration><meta:editing-cycles>26</meta:editing-cycles><meta:generator>LibreOffice/24.8.2.1$Linux_X86_64 LibreOffice_project/0f794b6e29741098670a3b95d60478a65d05ef13</meta:generator><meta:document-statistic meta:table-count="0" meta:image-count="1" meta:object-count="0" meta:page-count="5" meta:paragraph-count="58" meta:word-count="1475" meta:character-count="9470" meta:non-whitespace-character-count="7951"/></office:meta>
+ <office:settings>
+  <config:config-item-set config:name="ooo:view-settings">
+   <config:config-item config:name="ViewAreaTop" config:type="long">21802</config:config-item>
+   <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
+   <config:config-item config:name="ViewAreaWidth" config:type="long">64983</config:config-item>
+   <config:config-item config:name="ViewAreaHeight" config:type="long">32202</config:config-item>
+   <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="InBrowseMode" config:type="boolean">false</config:config-item>
+   <config:config-item-map-indexed config:name="Views">
+    <config:config-item-map-entry>
+     <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
+     <config:config-item config:name="ViewLeft" config:type="long">36352</config:config-item>
+     <config:config-item config:name="ViewTop" config:type="long">43113</config:config-item>
+     <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
+     <config:config-item config:name="VisibleTop" config:type="long">21802</config:config-item>
+     <config:config-item config:name="VisibleRight" config:type="long">64982</config:config-item>
+     <config:config-item config:name="VisibleBottom" config:type="long">54001</config:config-item>
+     <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
+     <config:config-item config:name="ViewLayoutColumns" config:type="short">0</config:config-item>
+     <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="ZoomFactor" config:type="short">100</config:config-item>
+     <config:config-item config:name="IsSelectedFrame" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="KeepRatio" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="LegacySingleLineFontwork" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="ConnectorUseSnapRect" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
+    </config:config-item-map-entry>
+   </config:config-item-map-indexed>
+  </config:config-item-set>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="PrintProspectRTL" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintPageBackground" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintDrawings" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintFaxName" config:type="string"/>
+   <config:config-item config:name="PrintReversed" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintAnnotationMode" config:type="short">0</config:config-item>
+   <config:config-item config:name="PrintHiddenText" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintEmptyPages" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PaintHellOverHeaderFooter" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintGraphics" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="NoNumberingShowFollowBy" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="HyphenateURLs" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ImagePreferredDPI" config:type="int">0</config:config-item>
+   <config:config-item config:name="FootnoteInColumnToPageEnd" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="GutterAtTop" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ContinuousEndnotes" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="FrameAutowidthWithMorePara" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SubtractFlysAnchoredAtFlys" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="SurroundTextWrapSmall" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintControls" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="TreatSingleColumnBreakAsPageBreak" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabOverSpacing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AutoFirstLineIndentDisregardLineSpace" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabOverMargin" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedComplexScriptFonts" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="EmbedAsianScriptFonts" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintTextPlaceholder" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ApplyTextAttrToEmptyLineAtEndOfParagraph" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedSystemFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DisableOffPagePositioning" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="BackgroundParaOverDrawings" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabOverflow" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AllowPrintJobCancel" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AddVerticalFrameOffsets" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ProtectBookmarks" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddFrameOffsets" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintBlackFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TableRowKeep" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ApplyParagraphMarkFormatToNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrinterIndependentLayout" config:type="string">high-resolution</config:config-item>
+   <config:config-item config:name="JustifyLinesWithShrinking" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="RsidRoot" config:type="int">1542487</config:config-item>
+   <config:config-item config:name="PrintProspect" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CollapseEmptyCellPara" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintPaperFromSetup" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommand" config:type="string"/>
+   <config:config-item config:name="CurrentDatabaseDataSource" config:type="string"/>
+   <config:config-item config:name="SaveThumbnail" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="EmbeddedDatabaseName" config:type="string"/>
+   <config:config-item config:name="UnbreakableNumberings" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SaveGlobalDocumentLinks" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="MsWordCompTrailingBlanks" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintTables" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrintLeftPages" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AddParaTableSpacing" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrinterPaperFromSetup" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
+   <config:config-item config:name="ChartAutoUpdate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="OutlineLevelYieldsNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UseOldNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddParaSpacingToTableCells" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="FieldAutoUpdate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PropLineSpacingShrinksFirstLine" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="TabAtLeftIndentForParagraphsInList" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrintRightPages" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="DoNotCaptureDrawObjsOnPage" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="LoadReadonly" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="HeaderSpacingBelowLastPara" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ClippedPictures" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="MathBaselineAlignment" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AlignTabStopPosition" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="UseFormerLineSpacing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrinterName" config:type="string"/>
+   <config:config-item config:name="AddParaLineSpacingToTableCells" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IsKernAsianPunctuation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DoNotJustifyLinesWithManualBreak" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
+   <config:config-item config:name="IsLabelDocument" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedLatinScriptFonts" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary"/>
+   <config:config-item config:name="UseVariableWidthNBSP" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedOnlyUsedFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ApplyUserData" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AddParaTableSpacingAtStart" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="InvertBorderSpacing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ProtectFields" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddExternalLeading" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="LinkUpdateMode" config:type="short">1</config:config-item>
+   <config:config-item config:name="UseFormerObjectPositioning" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UnxForceZeroExtLeading" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UseFormerTextWrapping" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ConsiderTextWrapOnObjPos" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="StylesNoDefault" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IgnoreFirstLineIndentInNumbering" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="NoGapAfterNoteNumber" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmptyDbFieldHidesPara" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DoNotResetParaAttrsForNumFont" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IgnoreTabsAndBlanksForLineCalculation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ClipAsCharacterAnchoredWriterFlyFrames" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="DropCapPunctuation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UseOldPrinterMetrics" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="RedlineProtectionKey" config:type="base64Binary"/>
+   <config:config-item config:name="TabsRelativeToIndent" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="Rsid" config:type="int">1652326</config:config-item>
+   <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ProtectForm" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="MsWordCompMinLineHeightByFly" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SmallCapsPercentage66" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:scripts>
+  <office:script script:language="ooo:Basic">
+   <ooo:libraries xmlns:ooo="http://openoffice.org/2004/office" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </office:script>
+ </office:scripts>
+ <office:font-face-decls>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Lucida Sans" svg:font-family="&apos;Lucida Sans&apos;"/>
+  <style:font-face style:name="Lucida Sans1" svg:font-family="&apos;Lucida Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="SimSun" svg:font-family="SimSun" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Times New Roman" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#000000" draw:fill-color="#99ccff" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in" draw:start-line-spacing-horizontal="0.1114in" draw:start-line-spacing-vertical="0.1114in" draw:end-line-spacing-horizontal="0.1114in" draw:end-line-spacing-vertical="0.1114in" style:writing-mode="lr-tb" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" loext:tab-stop-distance="0in" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Times New Roman" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="SimSun" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lucida Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="0.4925in" style:writing-mode="page"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Times New Roman" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="SimSun" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lucida Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" style:contextual-spacing="false" fo:keep-with-next="always"/>
+   <style:text-properties style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" style:font-name-asian="SimSun" style:font-family-asian="SimSun" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="14pt" style:font-name-complex="Lucida Sans1" style:font-family-complex="&apos;Lucida Sans&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="14pt"/>
+  </style:style>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0835in" style:contextual-spacing="false"/>
+  </style:style>
+  <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list">
+   <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lucida Sans" style:font-family-complex="&apos;Lucida Sans&apos;"/>
+  </style:style>
+  <style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:margin-top="0.0835in" fo:margin-bottom="0.0835in" style:contextual-spacing="false" text:number-lines="false" text:line-number="0"/>
+   <style:text-properties fo:font-size="12pt" fo:font-style="italic" style:font-size-asian="12pt" style:font-style-asian="italic" style:font-name-complex="Lucida Sans" style:font-family-complex="&apos;Lucida Sans&apos;" style:font-size-complex="12pt" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+   <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lucida Sans" style:font-family-complex="&apos;Lucida Sans&apos;"/>
+  </style:style>
+  <style:style style:name="Header_20_and_20_Footer" style:display-name="Header and Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="3.3465in" style:type="center"/>
+     <style:tab-stop style:position="6.6929in" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="3.4626in" style:type="center"/>
+     <style:tab-stop style:position="6.9252in" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
+   <style:text-properties fo:color="#000080" loext:opacity="100%" fo:language="zxx" fo:country="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+  </style:style>
+  <style:style style:name="Numbering_20_Symbols" style:display-name="Numbering Symbols" style:family="text"/>
+  <style:style style:name="Graphics" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0in" svg:y="0in" style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:background-color="transparent" draw:fill="none" draw:fill-color="#99ccff"/>
+  </style:style>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" loext:num-list-format="%1%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.3in" fo:text-indent="-0.3in" fo:margin-left="0.3in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" loext:num-list-format="%2%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.4in" fo:text-indent="-0.4in" fo:margin-left="0.4in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" loext:num-list-format="%3%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.5in" fo:margin-left="0.5in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" loext:num-list-format="%4%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.6in" fo:text-indent="-0.6in" fo:margin-left="0.6in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" loext:num-list-format="%5%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.7in" fo:text-indent="-0.7in" fo:margin-left="0.7in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" loext:num-list-format="%6%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.8in" fo:text-indent="-0.8in" fo:margin-left="0.8in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" loext:num-list-format="%7%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.9in" fo:text-indent="-0.9in" fo:margin-left="0.9in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" loext:num-list-format="%8%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1in" fo:text-indent="-1in" fo:margin-left="1in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" loext:num-list-format="%9%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.1in" fo:text-indent="-1.1in" fo:margin-left="1.1in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" loext:num-list-format="%10%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.2in" fo:text-indent="-1.2in" fo:margin-left="1.2in"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
+  <loext:theme loext:name="Office">
+   <loext:theme-colors loext:name="LibreOffice">
+    <loext:color loext:name="dark1" loext:color="#000000"/>
+    <loext:color loext:name="light1" loext:color="#ffffff"/>
+    <loext:color loext:name="dark2" loext:color="#000000"/>
+    <loext:color loext:name="light2" loext:color="#ffffff"/>
+    <loext:color loext:name="accent1" loext:color="#18a303"/>
+    <loext:color loext:name="accent2" loext:color="#0369a3"/>
+    <loext:color loext:name="accent3" loext:color="#a33e03"/>
+    <loext:color loext:name="accent4" loext:color="#8e03a3"/>
+    <loext:color loext:name="accent5" loext:color="#c99c00"/>
+    <loext:color loext:name="accent6" loext:color="#c9211e"/>
+    <loext:color loext:name="hyperlink" loext:color="#0000ee"/>
+    <loext:color loext:name="followed-hyperlink" loext:color="#551a8b"/>
+   </loext:theme-colors>
+  </loext:theme>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Footer">
+   <style:text-properties fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="0.6339in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="0.6339in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="0.6339in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties officeooo:paragraph-rsid="00178957"/>
+  </style:style>
+  <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="0.6339in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties officeooo:rsid="00178957" officeooo:paragraph-rsid="00178957"/>
+  </style:style>
+  <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="0.6339in"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-weight="bold" officeooo:rsid="0018aefd" officeooo:paragraph-rsid="0018aefd" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-weight="bold" officeooo:rsid="00178957" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:font-style="italic" officeooo:rsid="00178957" style:font-style-asian="italic" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties officeooo:rsid="00178957"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Graphics">
+   <style:graphic-properties style:run-through="foreground" style:wrap="none" style:horizontal-pos="center" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0in, 0in, 0in, 0in)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.7874in" fo:margin-bottom="0.7874in" fo:margin-left="0.7874in" fo:margin-right="0.7874in" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.278in" style:layout-grid-ruby-height="0.139in" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0in" loext:margin-gutter="0in">
+    <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="0in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0.1965in"/>
+   </style:footer-style>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1">
+   <style:footer>
+    <text:p text:style-name="P1">Harmony Individual Contributor Assignment Agreement (HA-CAA-I)<text:tab/><text:page-number text:select-page="current">5</text:page-number></text:p>
+    <text:p text:style-name="P1">Version 1.0 July 4, 2011</text:p>
+   </style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="P2">Harmony Individual Contributor Assignment Agreement</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">Thank you for your interest in contributing to <text:span text:style-name="T1">Asmov LLC</text:span> (&quot;We&quot; or &quot;Us&quot;).</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">This contributor agreement (&quot;Agreement&quot;) documents the rights granted by contributors to Us. To make this document effective, please sign it and send it to Us by mail, email, fax, or electronic submission. This is a legally binding document, so please read it carefully before agreeing to it. The Agreement may cover more than one software project managed by Us.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P2">1. Definitions</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;You&quot; means the individual who Submits a Contribution to Us.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Contribution&quot; means any work of authorship that is Submitted by You to Us in which You own or assert ownership of the Copyright. If You do not own the Copyright in the entire work of authorship, please <text:span text:style-name="T2">contact us for more information</text:span>.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Copyright&quot; means all rights protecting works of authorship owned or controlled by You, including copyright, moral and neighboring rights, as appropriate, for the full term of their existence including any extensions by You.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Material&quot; means the work of authorship which is made available by Us to third parties. When this Agreement covers more than one software project, the Material means the work of authorship to which the Contribution was Submitted. After You Submit the Contribution, it may be included in the Material.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Submit&quot; <text:s/>means any form of electronic, verbal, or written communication sent to Us or our representatives, including but not limited to electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, Us for the purpose of discussing and improving the Material, but excluding communication that is conspicuously marked or otherwise designated in writing by You as &quot;Not a Contribution.&quot;</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Submission Date&quot; means the date on which You Submit a Contribution to Us.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Effective Date&quot; means the date You execute this Agreement or the date You first Submit a Contribution to Us, whichever is earlier.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:s text:c="8"/>&quot;Media&quot; means any portion of a Contribution which is not software. </text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P2">2. Grant of Rights</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P3">2.1 Copyright Assignment</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">(a) At the time the Contribution is Submitted, You assign to Us all right, title, and interest worldwide in all Copyright covering the Contribution; provided that this transfer is conditioned upon compliance with Section 2.3.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:soft-page-break/>(b) To the extent that any of the rights in Section 2.1(a) cannot be assigned by You to Us, You grant to Us a perpetual, worldwide, exclusive, royalty-free, transferable, irrevocable license under such non-assigned rights, with rights to sublicense through multiple tiers of sublicensees, to practice such non-assigned rights, including, but not limited to, the right to reproduce, modify, display, perform and distribute the Contribution; provided that this license is conditioned upon compliance with Section 2.3.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">(c) To the extent that any of the rights in Section 2.1(a) can neither be assigned nor licensed by You to Us, You irrevocably waive and agree never to assert such rights against Us, any of our successors in interest, or any of our licensees, either direct or indirect; provided that this agreement not to assert is conditioned upon compliance with Section 2.3.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">(d) Upon such transfer of rights to Us, to the maximum extent possible, We immediately grant to You a perpetual, worldwide, non-exclusive, royalty-free, transferable, irrevocable license under such rights covering the Contribution, with rights to sublicense through multiple tiers of sublicensees, to reproduce, modify, display, perform, and distribute the Contribution. The intention of the parties is that this license will be as broad as possible and to provide You with rights as similar as possible to the owner of the rights that You transferred. This license back is limited to the Contribution and does not provide any rights to the Material.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P3">2.2 Patent License</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">For patent claims including, without limitation, method, process, and apparatus claims which You [or Your Affiliates] own, control or have the right to grant, now or in the future, You grant to Us a perpetual, worldwide, non-exclusive, transferable, royalty-free, irrevocable patent license, with the right to sublicense these rights to multiple tiers of sublicensees, to make, have made, use, sell, offer for sale, import and otherwise transfer the Contribution and the Contribution in combination with the Material (and portions of such combination). This license is granted only to the extent that the exercise of the licensed rights infringes such patent claims; and provided that this license is conditioned upon compliance with Section 2.3.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P3">2.3 Outbound License</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">Based on the grant of rights in Sections 2.1 and 2.2, if We include Your Contribution in a Material, We may license the Contribution under any license, including copyleft, permissive, commercial, or proprietary licenses. As a condition on the exercise of this right, We agree to also license the Contribution under the terms of the license or licenses which We are using for the Material on the Submission Date.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">2.4 Moral Rights. If moral rights apply to the Contribution, to the maximum extent permitted by law, You waive and agree not to assert such moral rights against Us or our successors in interest, or any of our licensees, either direct or indirect.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">2.5 Our Rights. You acknowledge that We are not obligated to use Your Contribution as part of the Material and may decide to include any Contribution We consider appropriate.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">2.6 Reservation of Rights. Any rights not expressly assigned or licensed under this section are <text:soft-page-break/>expressly reserved by You.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P2">3. Agreement</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">You confirm that:</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">(a) You have the legal authority to enter into this Agreement.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">(b) You own the Copyright and patent claims covering the Contribution which are required to grant the rights under Section 2. <text:s/></text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">(c) The grant of rights under Section 2 does not violate any grant of rights which You have made to third parties, including Your employer. <text:s/>If You are an employee, You have had Your employer approve this Agreement or sign the Entity version of this document. <text:s/>If You are less than eighteen years old, please have Your parents or guardian sign the Agreement.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P2">4. Disclaimer</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">EXCEPT FOR THE EXPRESS WARRANTIES IN SECTION 3, THE CONTRIBUTION IS PROVIDED &quot;AS IS&quot;. MORE PARTICULARLY, ALL EXPRESS OR IMPLIED WARRANTIES INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE EXPRESSLY DISCLAIMED BY YOU TO US AND BY US TO YOU. TO THE EXTENT THAT ANY SUCH WARRANTIES CANNOT BE DISCLAIMED, SUCH WARRANTY IS LIMITED IN DURATION TO THE MINIMUM PERIOD PERMITTED BY LAW.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P2">5. Consequential Damage Waiver</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL YOU OR US BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF ANTICIPATED SAVINGS, LOSS OF DATA, INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL AND EXEMPLARY DAMAGES ARISING OUT OF THIS AGREEMENT REGARDLESS OF THE LEGAL OR EQUITABLE THEORY (CONTRACT, TORT OR OTHERWISE) UPON WHICH THE CLAIM IS BASED.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P2">6. Miscellaneous</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">6.1 This Agreement will be governed by and construed in accordance with the laws of <text:span text:style-name="T3">the State of California within the United States of America,</text:span> excluding its conflicts of law provisions. Under certain circumstances, the governing law in this section might be superseded by the United Nations Convention on Contracts for the International Sale of Goods (&quot;UN Convention&quot;) and the parties intend to avoid the application of the UN Convention to this Agreement and, thus, exclude the application of the UN Convention in its entirety to this Agreement.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">6.2 This Agreement sets out the entire agreement between You and Us for Your Contributions to Us and overrides all other agreements or understandings.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:soft-page-break/>6.3 <text:s/>If You or We assign the rights or obligations received through this Agreement to a third party, as a condition of the assignment, that third party must agree in writing to abide by all the rights and obligations in the Agreement.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">6.4 The failure of either party to require performance by the other party of any provision of this Agreement in one situation shall not affect the right of a party to require such performance at any time in the future. A waiver of performance under a provision in one situation shall not be considered a waiver of the performance of the provision in the future or a waiver of the provision in its entirety.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard">6.5 If any provision of this Agreement is found void and unenforceable, such provision will be replaced to the extent possible with a provision that comes closest to the meaning of the original provision and which is enforceable. <text:s/>The terms and conditions set forth in this Agreement shall apply notwithstanding any failure of essential purpose of this Agreement or any limited remedy to the maximum extent possible under law.</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P5">You</text:p>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P6"><text:span text:style-name="T3">Signature: </text:span>________________________________________________</text:p>
+   <text:p text:style-name="P6"/>
+   <text:p text:style-name="P4"><text:tab/>Name:<text:tab/><text:tab/><text:tab/>________________________</text:p>
+   <text:p text:style-name="P6"><text:span text:style-name="T3"><text:tab/>Pseudonym</text:span>:<text:tab/><text:tab/><text:tab/>________________________</text:p>
+   <text:p text:style-name="P6"><text:tab/><text:span text:style-name="T3">GitHub Account Name:<text:tab/>________________________</text:span></text:p>
+   <text:p text:style-name="P7"><text:tab/>Email Address: <text:s text:c="4"/><text:tab/><text:tab/>________________________</text:p>
+   <text:p text:style-name="P4"><text:tab/><text:span text:style-name="T3">Mail </text:span>Address:<text:tab/><text:tab/>________________________</text:p>
+   <text:p text:style-name="P4"><text:tab/><text:tab/><text:tab/><text:tab/><text:tab/>________________________</text:p>
+   <text:p text:style-name="P6"><text:tab/><text:tab/><text:tab/><text:tab/><text:tab/>________________________</text:p>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P8">Us</text:p>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P6"><text:span text:style-name="T3">Signature: </text:span>________________________________________________</text:p>
+   <text:p text:style-name="P6"/>
+   <text:p text:style-name="P4"><text:tab/><text:span text:style-name="T3">Roy Laurie, CPO</text:span></text:p>
+   <text:p text:style-name="P4"><text:tab/>Asmov LLC</text:p>
+   <text:p text:style-name="P4"><text:tab/><text:a xlink:type="simple" xlink:href="https://asmov.software/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://asmov.software</text:a></text:p>
+   <text:p text:style-name="P4"><text:tab/>development.pub@asmov.software</text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:soft-page-break/></text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="P9"><draw:frame draw:style-name="fr1" draw:name="graphics1" text:anchor-type="paragraph" svg:width="0.9165in" svg:height="0.3228in" draw:z-index="0"><draw:image draw:mime-type="image/png">
+      <office:binary-data>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
+       Jf//Gi78DQTsmV/0ECayAAAAAElFTkSuQmCC
+      </office:binary-data>
+     </draw:image>
+    </draw:frame>This work is licensed under a <text:a xlink:type="simple" xlink:href="http://creativecommons.org/licenses/by/3.0/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Creative Commons Attribution 3.0 Unported License</text:a>.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
