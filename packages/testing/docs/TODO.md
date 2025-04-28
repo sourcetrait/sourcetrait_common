@@ -8,44 +8,40 @@ In Progress
 Task Pool
 ------------------------------------------------------
 
-# Replace Module::local_group() with GroupBuilder::nonstatic()
+# Rewrite
 
-# Unit Test: namepath.rs
+## Groups
+Group isn't very useful in a heirarchy. It would be better to make groups
+act like standalone bundles of resources and configurations.
 
-# Integrate Clippy!
+- Remove module dependency on Group
+- Modules build with `using_group(namepath)`
+- Modules retrieve groups with `group(namepath)`
+- Tests build with `inherit_groups()` (from the Module) and `using_group(namepath)` as a one-off
+- Tests retrieve groups with `group(namepath)`
+- Tests retrieve group fixture dirs with `group_fixture_dir(namepath)`
+- Tests retrieve group tmp dirs with `group_tmp_dir(namepath)`
 
-- Formatting standardization.
-- Documentation standardization.
-  + Licensing
+Much more useful this way.
 
-# Macro: Attribute macro for the crate, applied to test functions
+## Const Namepaths
+It's tedious to LazyLock static namepaths. It would be better to use them as const
+with any locking performed internally.
 
-Specifying `#[testing]` should include:
-- `#[test]`
-- `#[named]`
+## Macro
+`#[testing]` implies `#[named]`
 
-## Macro: Extend attribute macro with variables
+## Temp dir defaults to cargo's target dir
+Another breaking change. The user should be able to select either System, Target,
+or Custom(..) as a base tempdir.
 
-Something like `#[testing(module = {variable}, group = {variable}, ...]` would create a Test variable named "TEST" local to that function.
+## Tooling
+Diffing directories is common and there should be a utility for it.
 
-Depending on what is possible, the `module` attribute could be autofilled if a variable named "TESTING" exists or if there is only one static `module` model in that test's module.
+Likewise with sha256 hashing directories.
 
-Attributes could include:
-- `using_` and `inherit_` for temporary and fixture directories
+Tar without attributes/permissions should be standardized.
 
-Possibly use `test!()` to access the variable so that we're not forcing the user to use "magic" variable names.
+A bash lib for these, as such should be provided somehow, for fixture setup.
 
-# Extensions: A testing `Extension` model/interface to handle library types of setup/teardown
-
-Actual name TBD. For use as a library for the Module/Group/Test suite that sets up, tears down.
-
-They have their own builders.
-
-Anything beyond trait bound use should be accessed through an inspected method that casts.
-
-This is for use with common test requirements across test modules or across crates.
-
-An example might be:
-- The ability to setup / teardown a connection to a SQL database. A library.
-- Setup / teardown a connection to a specific SQL database. Common configuration use said library.
-
+Some common uutil operations like touch, should be wrapped.
