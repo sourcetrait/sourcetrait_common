@@ -1,349 +1,266 @@
-use std::{path::{PathBuf, Path}, hash::Hash};
-use crate::{Module, Group, UseCase};
+use std::{fmt::Display, hash::Hash, path::{Path, PathBuf}, sync::LazyLock};
+use crate::*;
 
-pub trait NamepathTrait {
-    fn module_path(&self) -> &str;
-    fn path(&self) -> &str;
-    fn testing_path(&self) -> &str;
-
-    fn components(&self) -> Vec<&str> {
-        split(&self.path())
-    }
-
-    fn dir(&self) -> PathBuf {
-        PathBuf::from_iter(split(&self.path()))
-    }
-
-    fn testing_dir(&self) -> PathBuf {
-        PathBuf::from_iter(split(&self.testing_path()))
-    }
-
-    fn squash(&self) -> String {
-        squash(self.path())
-    }
-}
-
-#[derive(PartialEq, Eq, Debug, Clone, Hash)]
-pub enum Namepath {
-    Module(ModuleNamepath),
-    Group(GroupNamepath),
-    Test(TestNamepath),
-}
-
-#[derive(PartialEq, Eq, Debug, Clone, Hash)]
-pub struct ModuleNamepath {
-    module_path: String,
-    testing_path: String
-}
-
-impl NamepathTrait for ModuleNamepath {
-    fn module_path(&self) -> &str {
-        &self.module_path
-    }
-
-    fn path(&self) -> &str {
-        &self.module_path
-    }
-
-    fn testing_path(&self) -> &str {
-        &self.testing_path
-    }
-}
-
-// Strips the crate name prefix and the test/tests suffix from a module_path!().
-// If the path is from lib.rs, the crate name is returned. 
-fn make_testing_path(use_case: UseCase, path: &str) -> Option<&str> {
-    static REGEX_INTEGRATION: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
-    static REGEX_UNIT: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
-    let regex_integration = REGEX_INTEGRATION.get_or_init(|| {
-        regex::Regex::new(r"^(.+?)(?:::tests)?$").unwrap()
-    });
-    let regex_unit= REGEX_UNIT.get_or_init(|| {
-        regex::Regex::new(r"^\w+::(.+?)(?:::tests)?$").unwrap()
-    });
-
-    let captures = match use_case {
-        UseCase::Integration | UseCase::Benchmark => regex_integration.captures(path),
-        UseCase::Unit => regex_unit.captures(path)
-    };
-
-    match captures {
-        Some(captures) => Some(captures.get(1).unwrap().as_str()),
-        None => None
-    }
-}
-
-impl ModuleNamepath {
-    pub fn new(use_case: UseCase, module_path: String) -> Self {
-        let testing_path = make_testing_path(use_case, &module_path)
-            .expect(&format!("Unable to form namepath from {} module path: {module_path}", use_case.to_str()));
-
-        Self {
-            testing_path: String::from(testing_path),
-            module_path
-        }
-    }
-}
-
-#[derive(PartialEq, Eq, Debug, Clone, Hash)]
-pub struct GroupNamepath {
-    module_path: String,
-    name: String,
-    path: String,
-    testing_path: String
-}
-
-impl NamepathTrait for GroupNamepath {
-    fn module_path(&self) -> &str {
-        &self.module_path
-    }
-
-    fn path(&self) -> &str {
-        &self.path
-    }
-
-    fn testing_path(&self) -> &str {
-        &self.testing_path
-    }
-}
-
-impl GroupNamepath {
-    pub fn new(module: &Module, name: String) -> Self {
-        let module_path = module.namepath().module_path().to_owned();
-        let testing_path = make_testing_path(module.use_case, &module_path)
-            .expect(&format!("Unable to form group namepath from module path: {module_path}"));
-
-        Self {
-            path: join(&module_path, &name),
-            testing_path: join(testing_path, &name),
-            module_path,
-            name
-        }
-    }
-
-    pub fn name(&self) -> &str {
-        &self.name
-    }
-
-    fn testing_path(&self) -> &str {
-        &self.testing_path
-    }
-}
-
-#[derive(PartialEq, Eq, Debug, Clone, Hash)]
-pub struct TestNamepath {
-    module_path: String,
-    group_name: Option<String>,
-    name: String,
-    path: String,
-    testing_path: String
-}
-
-impl NamepathTrait for TestNamepath {
-    fn module_path(&self) -> &str {
-        &self.module_path
-    }
-
-    fn path(&self) -> &str {
-        &self.path
-    }
-
-    fn testing_path(&self) -> &str {
-        &self.testing_path
-    }
-}
-
-impl TestNamepath {
-    pub fn new(module: &Module, group: Option<&Group>, name: String) -> Self {
-        let module_path = module.namepath().module_path().to_owned();
-        let module_testing_path = make_testing_path(module.use_case, &module_path)
-            .expect(&format!("Unable to form test namepath from module path: {module_path}"));
-        let group_name;
-        let path;
-        let testing_path;
-        
-        match group {
-            Some(group) => {
-                let grp_name = group.name().to_owned();
-                path = join_three(&module_path, &grp_name, &name);
-                testing_path = join_three(module_testing_path, &grp_name, &name);
-                group_name = Some(grp_name);
-            },
-            None =>  {
-                group_name = None;
-                path = join(&module_path, &name);
-                testing_path = join(module_testing_path, &name);
-            }
-        }
-
-        Self {
-            path,
-            module_path,
-            group_name,
-            name ,
-            testing_path
-        }
-    }
-
-    pub fn name(&self) -> &str {
-        &self.name
-    }
-
-    pub fn group_name(&self) -> Option<&str>{
-        self.group_name.as_deref()
-    }
+/// Describes the normalized namepath of a [TestModule], [TestGroup], or [Test].
+///
+/// Module and Test reflect their [Rust path](https://doc.rust-lang.org/reference/paths.html).
+///
+/// Group uses an arbitrary path.
+///
+/// Components such as '::tests' are removed.
+///
+/// Module: Created using [module_path!()]
+///
+/// Test: Created using [module_path!()] and [function_name]
+///
+/// Group: Created using an arbitrary slash-separated slug (e.g., "foo/hat-cat")
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Namepath {
+    pub(crate) full_path: PathBuf,
+    pub(crate) raw: RawNamepath
 }
 
 impl Namepath {
-    pub fn module(use_case: UseCase, module_path: String) -> Self {
-        Self::Module(ModuleNamepath::new(use_case, module_path))
+    pub fn new_module(package_name: &'static str, use_case: UseCase, module_path: &'static str) -> anyhow::Result<Self> {
+        let raw = RawNamepath {
+            kind: TestingKind::Module,
+            use_case,
+            package_name,
+            path: module_path,
+            name: None,
+        };
+
+        let full_path = normalize_path(&raw)?;
+
+        Ok(Self {
+            full_path,
+            raw,
+        })
     }
 
-    pub fn group(module: &Module, name: String) -> Self {
-        Self::Group(GroupNamepath::new(module, name))
+    pub fn new_group(package_name: &'static str, use_case: UseCase, path: &'static str) -> anyhow::Result<Self> {
+        let raw = RawNamepath {
+            kind: TestingKind::Group,
+            use_case,
+            package_name,
+            path,
+            name: None,
+        };
+
+        let full_path = normalize_path(&raw)?;
+
+        Ok(Self {
+            full_path,
+            raw,
+        })
     }
 
-    pub fn test(module: &Module, group: Option<&Group>, name: String) -> Self {
-        Self::Test(TestNamepath::new(module, group, name))
+    pub fn new_test(package_name: &'static str, use_case: UseCase, module_path: &'static str, function_name: &'static str) -> anyhow::Result<Self> {
+        let raw = RawNamepath {
+            kind: TestingKind::Test,
+            use_case,
+            package_name,
+            path: module_path,
+            name: Some(function_name),
+        };
+
+        let full_path = normalize_path(&raw)?;
+
+        Ok(Self {
+            full_path,
+            raw,
+        })
+    }
+
+    /// The normalized path.
+    /// Eg., `use-case/module-path../function-name`
+    pub fn path(&self) -> &Path {
+        let mut components = self.full_path.components();
+        components.next();
+        components.as_path()
+    }
+
+    /// The normalized path, including its package name.
+    /// Eg., `package-name/use-case/module-path../function-name`
+    pub fn full_path(&self) -> &Path {
+        &self.full_path
+    }
+
+    pub fn full_path_to_squashed_slug(&self) -> String {
+        self.full_path
+            .to_str().expect("Invalid namepath")
+            .replace("/", "-")
+    }
+
+    /// The crate name or equivalent
+    pub fn package_name(&self) -> &str {
+        self.full_path.components()
+            .next().expect("Invalid path")
+            .as_os_str().to_str().expect("Invalid path")
+    }
+
+    /// The kind of testing model this namepath refers to
+    pub fn kind(&self) -> TestingKind {
+        self.raw.kind
+    }
+
+    // The testing use-case
+    pub fn use_case(&self) -> UseCase {
+        self.raw.use_case
+    }
+
+    /// The base name
+    /// Eg., a path of `unit/mymod/foo/bar` has the name: `bar`
+    pub fn name(&self) -> &str {
+        self.full_path.components()
+            .last().expect("Invalid namepath")
+            .as_os_str().to_str().expect("Invalid path")
+    }
+
+    pub fn raw(&self) -> &RawNamepath {
+        &self.raw
     }
 }
 
-impl NamepathTrait for Namepath {
-    fn module_path(&self) -> &str {
-        match self {
-            Namepath::Module(module) => module.module_path(),
-            Namepath::Group(group) => group.module_path(),
-            Namepath::Test(test) => test.module_path(),
+impl Display for Namepath {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.path().display().fmt(f)
+    }
+}
+
+impl Hash for Namepath {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.full_path().hash(state);
+    }
+}
+
+/// Retains the original elements used to construct a [Namepath]
+///
+/// Primarily used for debugging namepath problems.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RawNamepath {
+    pub kind: TestingKind,
+    pub use_case: UseCase,
+    pub package_name: &'static str,
+    pub path: &'static str,
+    pub name: Option<&'static str>
+}
+
+impl Display for RawNamepath {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{};{};{};{}", self.kind, self.use_case, self.package_name, self.path)?;
+
+        if let Some(name) = &self.name {
+            write!(f, ";{}", name)?;
         }
-    }
 
-    fn path(&self) -> &str {
-        match self {
-            Namepath::Module(module) => module.path(),
-            Namepath::Group(group) => group.path(),
-            Namepath::Test(test) => test.path(),
+        Ok(())
+    }
+}
+
+/// Sanitizes paths if they've been created using module_path!() and function_name!().
+/// Strips the crate name prefix and the test/tests suffix.
+/// If the path is from lib.rs, the crate name is returned.
+/// Primarily for module and Test. Group uses plain strings.
+fn normalize_path(raw: &RawNamepath) -> anyhow::Result<PathBuf> {
+    static REGEX_NAMESPACE_INTEGRATION: LazyLock<regex::Regex> = LazyLock::new(|| {
+        regex::Regex::new(r"^(.+?)(?:::tests)?$").unwrap()
+    });
+
+    static REGEX_NAMESPACE_UNIT: LazyLock<regex::Regex> = LazyLock::new(|| {
+        regex::Regex::new(r"^\w+::(.+?)(?:::tests)?$").unwrap()
+    });
+
+    // Group doesn't use a module_path!() / function_name!()
+    let path = if raw.kind == TestingKind::Group {
+        &raw.path
+    } else {
+        let captures = match raw.use_case {
+            UseCase::Integration => REGEX_NAMESPACE_INTEGRATION.captures(&raw.path),
+            UseCase::Unit => REGEX_NAMESPACE_UNIT.captures(&raw.path)
+        };
+
+        match captures {
+            Some(captures) => captures.get(1).unwrap().as_str(),
+            None => ""
         }
-    }
+    };
 
-    fn components(&self) -> Vec<&str> {
-        match self {
-            Namepath::Module(module) => module.components(),
-            Namepath::Group(group) => group.components(),
-            Namepath::Test(test) => test.components(),
-        }
-    }
+    let full_path = format!("{package}/{use_case}/{path}{slash_name}",
+        package = &raw.package_name,
+        use_case = &raw.use_case,
+        path = &path
+            .replace("::", "/")
+            .replace("_", "-"),
+        slash_name = raw.name.as_ref()
+            .map(|name| format!("/{}", name.replace("_", "-")))
+            .unwrap_or_default()
+    );
 
-    fn dir(&self) -> PathBuf {
-        match self {
-            Namepath::Module(module) => module.dir(),
-            Namepath::Group(group) => group.dir(),
-            Namepath::Test(test) => test.dir(),
-        }
-    }
-
-    fn testing_path(&self) -> &str {
-        match self {
-            Namepath::Module(module) => module.testing_path(),
-            Namepath::Group(group) => group.testing_path(),
-            Namepath::Test(test) => test.testing_path(),
-        }
-    }
+    Ok(PathBuf::from(full_path))
 }
-
-mod strings {
-    pub const SEPARATOR: &str = "::";
-    pub const SQUASH_SEPARATOR: &str = "_";
-}
-
-// Splits a namepath by its delimiters
-pub fn split(path: &str) -> Vec<&str> {
-    path.split(strings::SEPARATOR).into_iter().collect()
-}
-
-// Replaces all delimiters with with an underscore
-pub fn squash(path: &str) -> String {
-    path.replace(strings::SEPARATOR, strings::SQUASH_SEPARATOR)
-}
-
-// Creates a Path object representing a namepath as a directory heirarchy
-pub fn dir(base_dir: &Path, path: &str) -> PathBuf {
-    PathBuf::from(base_dir).join(PathBuf::from_iter(split(path)))
-}
-// Catencates a preceding namepath with another token: { base_namepath }::{ token }
-pub fn join(left: &str, right: &str) -> String { 
-    format!("{left}{}{right}", strings::SEPARATOR)
-}
-
-// Catencates a preceding namepath with two other tokens token: { base_namepath }::{ token }
-pub fn join_three(first: &str, second: &str, third: &str) -> String { 
-    format!("{first}{}{second}{}{third}", strings::SEPARATOR, strings::SEPARATOR)
-}
-
-pub fn join_all(items: &[&str]) -> String {
-    items.join(strings::SEPARATOR)
-}
-
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::prelude::*;
 
-    // Should split strings by "::".
+    // NAMEPATH TESTING
+    // See the namepaths.rs integration test for the master copy
+    static TESTING: testing::Module = testing::module!(Unit);
+
+    const GROUP_NAME: &'static str = "namepath-group/uno/dos";
+    static GROUP: testing::Group = testing::group!(GROUP_NAME, Unit);
+
+    #[named]
     #[test]
-    fn test_split() {
-        const INPUT: &str = "foo::bar::jar";
-        const EXPECTED: [&str;3] = [
-            "foo",
-            "bar",
-            "jar",
-        ];
+    fn test_unit_namepath() {
+        const EXPECTED_PACKAGE_NAME: &'static str = "asmov-common-testing";
+        const EXPECTED_USE_CASE: testing::UseCase = testing::UseCase::Unit;
 
-        assert_eq!(EXPECTED, split(INPUT).as_slice(), 
-            "Should split strings by '::'.");
-    }
+        const EXPECTED_MODULE_KIND: testing::TestingKind = testing::TestingKind::Module;
+        const EXPECTED_MODULE_FULL_PATH: &'static str = "asmov-common-testing/unit/namepath";
+        const EXPECTED_MODULE_PATH: &'static str = "unit/namepath";
+        const EXPECTED_MODULE_NAME: &'static str = "namepath";
+        const EXPECTED_MODULE_RAW: &'static str = "module;unit;asmov-common-testing;asmov_common_testing::namepath::tests";
 
-    // Should convert "::" into underscores.
-    #[test]
-    fn test_squash() {
-        const INPUT: &str = "foo::bar::jar";
-        const EXPECTED: &str = "foo_bar_jar";
+        const EXPECTED_GROUP_KIND: testing::TestingKind = testing::TestingKind::Group;
+        const EXPECTED_GROUP_FULL_PATH: &'static str = "asmov-common-testing/unit/namepath-group/uno/dos";
+        const EXPECTED_GROUP_PATH: &'static str = "unit/namepath-group/uno/dos";
+        const EXPECTED_GROUP_NAME: &'static str = "dos";
+        const EXPECTED_GROUP_RAW: &'static str = "group;unit;asmov-common-testing;namepath-group/uno/dos";
 
-        assert_eq!(EXPECTED, squash(INPUT),
-            "Should convert '::' into underscores.");
+        const EXPECTED_TEST_KIND: testing::TestingKind = testing::TestingKind::Test;
+        const EXPECTED_TEST_FULL_PATH: &'static str = "asmov-common-testing/unit/namepath/test-unit-namepath";
+        const EXPECTED_TEST_PATH: &'static str = "unit/namepath/test-unit-namepath";
+        const EXPECTED_TEST_NAME: &'static str = "test-unit-namepath";
+        const EXPECTED_TEST_RAW: &'static str = "test;unit;asmov-common-testing;asmov_common_testing::namepath::tests;test_unit_namepath";
 
-    }
+        // Module
+        assert_eq!(EXPECTED_PACKAGE_NAME, TESTING.namepath().package_name());
+        assert_eq!(EXPECTED_MODULE_KIND, TESTING.namepath().kind());
+        assert_eq!(EXPECTED_USE_CASE, TESTING.namepath().use_case());
+        assert_eq!(EXPECTED_MODULE_FULL_PATH, TESTING.namepath().full_path().to_string_lossy());
+        assert_eq!(EXPECTED_MODULE_PATH, TESTING.namepath().path().to_string_lossy());
+        assert_eq!(EXPECTED_MODULE_NAME, TESTING.namepath().name());
+        assert_eq!(EXPECTED_MODULE_RAW, TESTING.namepath().raw().to_string());
 
-    // Should convert a module path into a directory relative to the specified base.
-    #[test]
-    fn test_dir() {
-        let input_base_dir = std::env::temp_dir();
-        const INPUT_PATH: &str = "foo::bar::jar";
-        let expected = PathBuf::from(&input_base_dir).join("foo").join("bar").join("jar");
+        // Group
+        assert_eq!(EXPECTED_PACKAGE_NAME, GROUP.namepath().package_name());
+        assert_eq!(EXPECTED_GROUP_KIND, GROUP.namepath().kind());
+        assert_eq!(EXPECTED_USE_CASE, GROUP.namepath().use_case());
+        assert_eq!(EXPECTED_GROUP_FULL_PATH, GROUP.namepath().full_path().to_string_lossy());
+        assert_eq!(EXPECTED_GROUP_PATH, GROUP.namepath().path().to_string_lossy());
+        assert_eq!(EXPECTED_GROUP_NAME, GROUP.namepath().name());
+        assert_eq!(EXPECTED_GROUP_RAW, GROUP.namepath().raw().to_string());
 
-        assert_eq!(expected, dir(&input_base_dir, INPUT_PATH),
-            "Should convert a module path into a directory relative to the specified base.");
-    }
-
-    // Should join two string using "::".
-    #[test]
-    fn test_join() {
-        const INPUT_LEFT: &str = "foo";
-        const INPUT_RIGHT: &str = "bar";
-        const EXPECTED: &str = "foo::bar";
-
-        assert_eq!(EXPECTED, join(INPUT_LEFT, INPUT_RIGHT),
-            "Should join two strings using '::'.");
-    }
-
-    // Should join multiple strings using "::".
-    #[test]
-    fn test_join_heirarchy() {
-        const INPUT_FIRST: &str = "foo";
-        const INPUT_SECOND: &str = "bar";
-        const INPUT_THIRD: &str = "jar";
-        const EXPECTED: &str = "foo::bar::jar";
-
-        assert_eq!(EXPECTED, join_three(INPUT_FIRST, INPUT_SECOND, INPUT_THIRD),
-            "Should join two strings using '::'.");
+        // Test
+        let test = testing::test!();
+        assert_eq!(EXPECTED_PACKAGE_NAME, test.namepath().package_name());
+        assert_eq!(EXPECTED_TEST_KIND, test.namepath().kind());
+        assert_eq!(EXPECTED_USE_CASE, test.namepath().use_case());
+        assert_eq!(EXPECTED_TEST_FULL_PATH, test.namepath().full_path().to_string_lossy());
+        assert_eq!(EXPECTED_TEST_PATH, test.namepath().path().to_string_lossy());
+        assert_eq!(EXPECTED_TEST_NAME, test.namepath().name());
+        assert_eq!(EXPECTED_TEST_RAW, test.namepath().raw().to_string());
     }
 }

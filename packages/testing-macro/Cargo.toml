@@ -1,0 +1,19 @@
+[package]
+name = "asmov-common-testing-macro"
+version = "1.0.0"
+description = "Macro exports for Asmov Common Testing"
+authors = ["Asmov LLC <development.pub@asmov.software>"]
+repository = "https://github.com/asmov/common"
+homepage = "https://asmov.software"
+license = "AGPL-3.0-or-later"
+keywords = ["asmov", "common"]
+categories = []
+edition = "2024"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1"
+syn = { version = "2", features=["full"] }
+quote = "1"

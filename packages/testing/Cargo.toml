@@ -1,7 +1,7 @@
 [package]
 name = "asmov-common-testing"
-version = "2.1.8"
-description = "Structured unit and integration testing library"
+version = "3.0.0"
+description = "Structured testing in sequence with fixture and temp directories"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/asmov/common"
@@ -11,19 +11,17 @@ keywords = ["integration", "unit", "benchmark", "test", "tests"]
 edition = "2024"
 
 [dependencies]
+asmov-common-testing-macro = { version="1.0.0", path = "../testing-macro" }
 anyhow = "1"
 function_name = "0.3"
-futures = "0.3"
-lazy_static = "1"
-once_cell = "1"
 rand = "0.9"
 regex = "1"
 shutdown_hooks = "0.1"
-sysinfo = "0.34"
-
-[dev-dependencies]
-lazy_static = "1.5.0"
+chrono = "0.4"
+tar = "0.4"
+filetime = "0.2"
+uu_touch = "0.0.30"
 
 [[example]]
-name = "typical"
+name = "example-fibonacci"
 test = true

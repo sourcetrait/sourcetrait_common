@@ -1,68 +1,36 @@
-use std::{collections::HashMap, path::{PathBuf, Path}};
-use anyhow::Context;
+use std::{ffi::OsStr, ops::Deref, path::{Path, PathBuf}, sync::LazyLock};
+use crate::*;
 
-use crate::{Testable, Module, TestBuilder, Namepath };
-
-pub struct Group<'module,'func> {
-    pub(crate) module: &'module Module,
+/// Standalone top-level testing group.
+///
+/// Lives outside of the Module -> Test heirarchy.
+///
+/// Useful for grouping common fixtures, setup/teardown, and temp file operations.
+pub struct TestGroup {
+    pub(crate) use_case: UseCase,
     pub(crate) namepath: Namepath,
     pub(crate) temp_dir: Option<PathBuf>,
+    pub(crate) base_temp_dir: Option<PathBuf>,
     pub(crate) fixture_dir: Option<PathBuf>,
-    pub(crate) imported_fixture_dirs: Option<HashMap<Namepath, PathBuf>>,
-    pub(crate) teardown_func: Option<Box<dyn FnOnce(&mut Group) + Sync + Send + 'func>>,
 }
 
-impl<'module,'func> Group<'module,'func> {
-    pub fn module(&self) -> &Module {
-        &self.module
+impl TestGroup {
+    pub fn base_temp_dir(&self) -> &Path {
+        &self.base_temp_dir.as_ref().context("Module `base temp dir` is not configured").unwrap()
+    }
+}
+
+impl Testing for TestGroup {
+    fn use_case(&self) -> UseCase {
+         self.use_case
     }
 
-    pub fn test(&self, name: &str) -> TestBuilder {
-        TestBuilder::new(&self.module, Some(&self), name)
-    }
-
-    pub fn name(&self) -> &str {
-        match &self.namepath {
-            Namepath::Group(namepath) => &namepath.name(),
-            _ => panic!("GroupNamepath")
-        }
-    }
-
-    pub fn namepath(&self) -> &Namepath {
+    fn namepath(&self) -> &Namepath {
         &self.namepath
     }
 
-    pub(crate) fn try_imported_fixture_dir(&self, namepath: &Namepath) -> anyhow::Result<&Path> {
-        if let Some(imported_fixture_dirs) = self.imported_fixture_dirs.as_ref() {
-            if let Some(dir) = imported_fixture_dirs.get(namepath) {
-                return Ok(dir.as_path());
-            }
-        }
-
-        self.module.try_imported_fixture_dir(namepath)
-            .context("Group: `imported fixture dirs` is not configured")
-    }
-
-    fn teardown(&mut self) {
-        if let Some(teardown_func) = self.teardown_func.take() {
-            teardown_func(self);
-        }
-
-        if let Some(dir) = self.temp_dir.take() {
-            if dir.exists() && std::fs::remove_dir_all(&dir).is_err() {
-                eprintln!("Unable to delete temp dir: {}", dir.to_str().unwrap());
-            }
-        }
-    }
-}
-
-impl<'module, 'func> Testable for Group<'module, 'func> {
     fn fixture_dir(&self) -> &Path {
         &self.fixture_dir.as_ref().context("Group `fixture dir` is not configured").unwrap()
-    }
-    
-    fn imported_fixture_dir(&self, namepath: &Namepath) -> &Path {
-        self.try_imported_fixture_dir(namepath).unwrap()
     }
 
     fn temp_dir(&self) -> &Path {
@@ -70,376 +38,227 @@ impl<'module, 'func> Testable for Group<'module, 'func> {
     }
 }
 
-impl<'module,'func> Drop for Group<'module,'func> {
-    fn drop(&mut self) {
-        self.teardown();
-    }
-}
-
-pub struct GroupBuilder<'module,'func> {
-    pub(crate) is_static: bool,
-    pub(crate) module: &'module Module,
-    pub(crate) name: String,
+/// Constructs a [TestGroup]
+pub struct GroupBuilder<'func> {
+    pub(crate) package_name: &'static str,
+    pub(crate) use_case: UseCase,
+    pub(crate) group_path: &'static str,
+    pub(crate) base_temp_dir: PathBuf,
     pub(crate) using_temp_dir: bool,
-    pub(crate) inherit_temp_dir: bool,
     pub(crate) using_fixture_dir: bool,
-    pub(crate) inherit_fixture_dir: bool,
-    pub(crate) imported_fixture_dirs: Option<HashMap<Namepath, PathBuf>>,
-    pub(crate) setup_func: Option<Box<dyn FnOnce(&mut Group) + 'func>>,
-    pub(crate) teardown_func: Option<Box<dyn FnOnce(&mut Group) + Sync + Send + 'func>>,
-    pub(crate) static_teardown_func: Option<Box<extern fn()>>,
+    pub(crate) setup_func: Option<Box<dyn FnOnce(&mut TestGroup) + 'func>>,
+    pub(crate) static_teardown_func: Option<extern "C" fn()>,
 }
 
-impl<'module,'func> GroupBuilder<'module,'func> {
-    pub(crate) fn new(module: &'module Module, name: &str, is_static: bool) -> Self {
-        debug_assert!(!name.contains(':') && !name.contains('/') && !name.contains('.'),
-            "Group name should be a single non-delimited token.");
-
+impl<'func> GroupBuilder<'func> {
+    pub fn new(package_name: &'static str, use_case: UseCase, group_path: &'static str) -> Self {
         Self {
-            is_static,
-            module: module,
-            name: String::from(name), 
+            package_name,
+            use_case,
+            group_path,
+            base_temp_dir: std::env::temp_dir(),
             using_temp_dir: false,
-            inherit_temp_dir: false,
             using_fixture_dir: false,
-            inherit_fixture_dir: false,
-            imported_fixture_dirs: None,
             setup_func: None,
-            teardown_func: None,
             static_teardown_func: None,
         }
     }
 
-    pub fn build(self) -> Group<'module,'func> {
-        let namepath = Namepath::group(&self.module, self.name);
+    pub fn build(mut self) -> TestGroup {
+        let namepath = Namepath::new_group(self.package_name, self.use_case, self.group_path)
+            .expect("Invalid namepath");
 
+        let base_temp_dir;
         let temp_dir = if self.using_temp_dir {
-            Some(crate::build_temp_dir(&namepath, &self.module.base_temp_dir()))
-        } else if self.inherit_temp_dir {
-            Some(self.module.temp_dir().to_owned())
+            let dirname = namepath.full_path_to_squashed_slug();
+            base_temp_dir = Some(create_random_subdir(&self.base_temp_dir, &dirname) // todo: use squashed prefix
+                .context(format!("Unable to create temporary directory in base: {}", &self.base_temp_dir.to_str().unwrap()))
+                .unwrap() );
+
+            Some(build_temp_dir(&namepath, &base_temp_dir.as_ref().unwrap()) )
         } else {
+            base_temp_dir = None;
             None
         };
 
         let fixture_dir = if self.using_fixture_dir {
-            Some(crate::build_fixture_dir(&namepath, self.module.use_case))
-        } else if self.inherit_fixture_dir {
-            Some(self.module.fixture_dir().to_owned())
+            Some(build_fixture_dir(&namepath))
         } else {
             None
         };
 
-        let imported_fixture_dirs = self.imported_fixture_dirs;
-
-        let mut group = Group {
-            module: self.module,
-            namepath: namepath,
+        let mut group = TestGroup {
+            namepath,
+            use_case: self.use_case,
+            base_temp_dir,
             temp_dir,
             fixture_dir,
-            imported_fixture_dirs,
-            teardown_func: self.teardown_func
         };
 
         if let Some(setup_func) = self.setup_func {
             setup_func(&mut group);
         }
 
-        if let Some(teardown_fn) = self.static_teardown_func {
-            shutdown_hooks::add_shutdown_hook(*teardown_fn);
-        }
+        let teardown = Teardown {
+            base_temp_dir: group.base_temp_dir.clone(),
+            func: self.static_teardown_func.take()
+        };
+
+        teardown_queue_push(teardown);
 
         group
     }
 
-    pub fn using_temp_dir(mut self) -> Self {
-        assert!(!self.inherit_temp_dir);
-        if self.module.temp_dir.is_none() {
-            panic!("Group cannot use a temporary directory unless its parent Module uses one");
-        }
+    pub fn base_temp_dir<P>(mut self, dir: &P) -> Self
+    where
+        P: ?Sized + AsRef<OsStr>
+    {
+        let dir = PathBuf::from(dir);
+        let dir = dir.canonicalize()
+            .context(format!("Base temporary directory does not exist: {}", &dir.to_str().unwrap()))
+            .unwrap();
 
-        self.using_temp_dir = true;
-        
+        self.base_temp_dir = dir;
         self
     }
 
-    pub fn inherit_temp_dir(mut self) -> Self {
-        assert!(!self.using_temp_dir);
-        if self.module.temp_dir.is_none() {
-            panic!("Group cannot use a temporary directory unless its parent Module uses one");
-        }
 
-        self.inherit_temp_dir = true;
+    pub fn using_temp_dir(mut self) -> Self {
+        self.using_temp_dir = true;
         self
     }
 
     pub fn using_fixture_dir(mut self) -> Self {
-        assert!(!self.inherit_fixture_dir);
         self.using_fixture_dir = true;
         self
     }
 
-    pub fn import_fixture_dir(mut self, namepath: &Namepath) -> Self {
-        let dir = crate::build_fixture_dir(&namepath, self.module.use_case);
-        let dir = dir.canonicalize()
-            .context(format!("Imported fixture dir does not exist: {}", &dir.to_str().unwrap()))
-            .unwrap();
-
-        if self.imported_fixture_dirs.is_none() {
-            self.imported_fixture_dirs = Some(HashMap::new());
-        }
-
-        self.imported_fixture_dirs.as_mut().expect("Option should exist")
-            .insert(namepath.to_owned(), dir);
-        
-        self
-    }
-
-    pub fn inherit_fixture_dir(mut self) -> Self {
-        assert!(!self.using_fixture_dir);
-        self.inherit_fixture_dir = true;
-        self
-    }
-
-    pub fn setup(mut self, func: impl FnOnce(&mut Group) + 'func) -> Self {
+    pub fn setup(mut self, func: impl FnOnce(&mut TestGroup) + 'func) -> Self {
         self.setup_func = Some(Box::new(func));
         self
     }
 
-    pub fn teardown(mut self, func: impl FnOnce(&mut Group) + Sync + Send + 'func) -> Self {
-        assert!(!self.is_static, "Static Group must use `teardown_static`");
-        self.teardown_func = Some(Box::new(func));
-        self
-    }
-
-    pub fn teardown_static(mut self, func: extern fn()) -> Self {
-        assert!(self.is_static, "Only static Group should use `teardown_static`");
-        self.static_teardown_func = Some(Box::new(func));
+    pub fn teardown_static(mut self, func: extern "C" fn()) -> Self {
+        self.static_teardown_func = Some(func);
         self
     }
 }
 
+/// Lazy-locked wrapper for [TestGroup]
+///
+/// Typically constructed using the [group!()] macro.
+///
+/// Statically associated with a Rust module.
+pub struct Group(LazyLock<TestGroup>);
+
+impl Deref for Group {
+    type Target = LazyLock<TestGroup>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Group {
+    pub const fn new(func: fn() -> TestGroup) -> Self {
+        Self(LazyLock::new(func))
+    }
+}
+
+/// Constructs a [TestGroup] and wraps it in [Group]
+#[macro_export]
+macro_rules! group {
+    ($n:expr, $u:tt, {$($b:tt)+}) => {
+        $crate::Group::new(|| {
+            $crate::GroupBuilder::new(env!("CARGO_PKG_NAME"), $crate::UseCase::$u, $n)
+            $($b)+
+                .build()
+        })
+    };
+    ($n:expr, $u:tt) => {
+        $crate::Group::new(|| {
+            $crate::GroupBuilder::new(env!("CARGO_PKG_NAME"), $crate::UseCase::$u, $n).build()
+        })
+    };
+}
+
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
-    use crate::{self as testing, prelude::*, UseCase, NamepathTrait, Namepath, Group};
+    use super::*;
 
-    static MODULE_BASIC: testing::StaticModule = testing::module(|| {
-        testing::unit(module_path!())
+    static _GROUP_NEW: Group = Group::new(|| {
+        GroupBuilder::new(env!("CARGO_PKG_NAME"), UseCase::Unit, "group/builder")
+            .setup(|_| {
+                println!("setup called");
+            })
             .build()
     });
 
-    static MODULE_WITH_DIRS: testing::StaticModule = testing::module(|| {
-        testing::unit(module_path!())
-            .using_fixture_dir()
-            .using_temp_dir()
-            .build()
+    static _GROUP_MACRO: Group = group!("group/macro", Unit, {
+        .using_temp_dir()
+        .setup(|_| {})
     });
 
-    #[test] #[named]
-    fn test_module() {
-        let testgroup = MODULE_BASIC.local_group(function_name!()).build();
-        assert_eq!(&*MODULE_BASIC, testgroup.module(),
-            "Parent module should be retrievable");
+    static GROUP_BASIC: Group = group!("group/basic", Unit);
+
+    static GROUP_WITH_DIRS: Group = group!("group/with-dirs", Unit, {
+        .using_fixture_dir()
+        .using_temp_dir()
+    });
+
+    // Group not configured with a temp dir should panic when attempting to access it
+    #[test] #[should_panic]
+    fn test_temp_dir_unconfigured_access() {
+        GROUP_BASIC.temp_dir();  // should panic
     }
 
     #[test]
-    #[named]
-    fn test_name() {
-        let testgroup = MODULE_BASIC.local_group(function_name!()).build();
-        assert_eq!(function_name!(), testgroup.name(),
-            "Name should be awesome");
-    }
-
-    // Group name should not contain namepath separator tokens: "::", '/', '.'
-    #[test] #[should_panic]
-    fn test_name_invalid() {
-        MODULE_BASIC.test("foo/bar").build();  // should panic
-    }
-
-    // Group namepath should reflect: `Group.module().namepath()` / `Group.name()`
-    #[test] #[named]
-    fn test_namepath() {
-        let expected_namepath = concat!(module_path!(), "::", function_name!());
-        let testgroup = MODULE_BASIC.local_group(function_name!()).build();
-
-        assert_eq!(expected_namepath, testgroup.namepath().path(),
-            "Group namepath should reflect: `Group.module().namepath()` / `Group.name()`");
-    }
-
-    // Group not configured with a temp dir should panic when attempting to access it 
-    #[test] #[should_panic] #[named]
-    fn test_temp_dir_unconfigured_access() {
-        let testgroup = MODULE_BASIC.local_group(function_name!()).build();
-        testgroup.temp_dir();  // should panic
-    }
-
-    // Group should not allow configuration with `using_temp_dir()` if its parent Module is not using a temp dir.
-    #[test] #[should_panic] #[named]
-    fn test_temp_dir_using_unconfigured_module() {
-        MODULE_BASIC.local_group(function_name!())
-            .using_temp_dir()  // should panic
-            .build();
-    }
-
-    // Group should not allow configuration with `inherit_temp_dir()` if its parent Module is not using a temp dir.
-    #[test] #[should_panic] #[named]
-    fn test_temp_dir_inherited_unconfigured_module() {
-        MODULE_BASIC.local_group(function_name!())
-            .inherit_temp_dir()  // should panic
-            .build();
-    }
-
-    // Group configured with `using_tmp_dir()` should have a temp path of: `Module.tmp_dir()` + `Group.name()`
-    // Group configured with `using_temp_dir()` should create the directory on construction if it does not exist.
-    #[test] #[named]
     fn test_temp_dir_using() {
-        let testgroup = MODULE_WITH_DIRS.local_group(function_name!())
-            .using_temp_dir()
-            .build();
-
-        assert_eq!(MODULE_WITH_DIRS.temp_dir().join(function_name!()), testgroup.temp_dir(),
-            "Group configured with `using_tmp_dir()` should have a temp path of: `Module.tmp_dir()` + `Group.name()`");
-
-        assert!(testgroup.temp_dir().exists(), 
+        assert!(GROUP_WITH_DIRS.temp_dir().exists(),
             "Group configured with `using_temp_dir()` should create the directory on construction if it does not exist.");
     }
 
-    // Group configured to `inherit_temp_dir()` should have the same temp path as its parent.
-    #[test] #[named]
-    fn test_temp_dir_inherited() {
-        let testgroup = MODULE_WITH_DIRS.local_group(function_name!())
-            .inherit_temp_dir()
-            .build();
-
-        assert_eq!(MODULE_WITH_DIRS.temp_dir(), testgroup.temp_dir(),
-            "Group configured to `inherit_temp_dir()` should have the same temp path as its parent.");
-    }
-
-    // Group not configured with a fixture dir should panic when attempting to access it 
-    #[test] #[should_panic] #[named]
+    // Group not configured with a fixture dir should panic when attempting to access it
+    #[test] #[should_panic]
     fn test_fixture_dir_unconfigured_access() {
-        let testgroup = MODULE_WITH_DIRS.local_group(function_name!()).build();
-        testgroup.fixture_dir(); // should panic
+        GROUP_BASIC.fixture_dir(); // should panic
     }
 
-    // Group should not allow configuration with `using_fixture_dir()` if its parent Module is not using a fixture dir.
-    #[test] #[should_panic] #[named]
-    fn test_fixture_dir_using_unconfigured_module() {
-        MODULE_BASIC.local_group(function_name!())
-            .using_fixture_dir()  // should panic
-            .build();
-    }
-
-    // Group should not allow configuration with `inherit_fixture_dir()` if its parent Module is not using a fixture dir.
-    #[test] #[should_panic] #[named]
-    fn test_fixture_dir_inherited_unconfigured_module() {
-        MODULE_BASIC.local_group(function_name!())
-            .inherit_fixture_dir()  // should panic
-            .build();
-    }
-
-
-    // Group configured with `using_fixture_dir()` should have a path of: `Module.fixture_dir()` + `Group.name()`
     // Fixture path should exist for Group configured with `using_fixture_dir()`
-     #[test] #[named]
+     #[test]
     fn test_fixture_dir_using() {
-        let testgroup = MODULE_WITH_DIRS.local_group(function_name!())
-            .using_fixture_dir()
-            .build();
-
-        assert_eq!(MODULE_WITH_DIRS.fixture_dir().join(function_name!()), testgroup.fixture_dir(),
-            "Group configured with `using_fixture_dir()` should have a path of: `Module.fixture_dir()` + `Group.name()`");
-
-        assert!(testgroup.fixture_dir().exists(),
+        assert!(GROUP_WITH_DIRS.fixture_dir().exists(),
             "Fixture path should exist for Group configured with `using_fixture_dir()`");
     }
 
-    // Group configured to `inherit_fixture_dir()` should have a fixture path that is the same as its Module.
-    // Fixture path should exist for Group configured with `inherit_fixture_dir()`
-    #[test] #[named]
-    fn test_fixture_dir_inherited() {
-        let testgroup = MODULE_WITH_DIRS.local_group(function_name!())
-            .inherit_fixture_dir()
-            .build();
-
-        assert_eq!(MODULE_WITH_DIRS.fixture_dir(), testgroup.fixture_dir(),
-            "Group configured to `inherit_fixture_dir()` should have a fixture path that is the same as its Module.");
-
-        assert!(testgroup.fixture_dir().exists(),
-            "Fixture path should exist for Group configured with `inherit_fixture_dir()`");
-    }
-
-    #[test] #[named]
-    fn test_import_fixture_dir() {
-        let testgroup = MODULE_BASIC.local_group(function_name!())
-            .import_fixture_dir(&MODULE_WITH_DIRS.namepath())
-            .build();
-
-        assert_eq!(MODULE_WITH_DIRS.fixture_dir(), testgroup.imported_fixture_dir(MODULE_WITH_DIRS.namepath()),
-            "Group should import external fixture dir");
-    }
-
-    #[test] #[named] #[should_panic]
-    fn test_import_fixture_dir_fail() {
-        let testgroup = MODULE_BASIC.local_group(function_name!())
-            .build();
-
-        testgroup.imported_fixture_dir(MODULE_WITH_DIRS.namepath()); // should panic
-    }
-
-    fn unit_module_namepath() -> Namepath {
-        Namepath::module(UseCase::Unit, "asmov_testing::module".to_string())
-    }
-
-    fn expected_unit_module_fixture_dir() -> PathBuf {
-        PathBuf::from(crate::strings::TESTING).join(crate::strings::FIXTURES)
-            .join(UseCase::Unit.to_str())
-            .join("module")
-            .canonicalize()
-            .unwrap()
-    }
-
-    #[test] #[named]
-    fn test_module_lookup_imported_fixture_dir() {
-        let namepath = unit_module_namepath();
-        let test_module = testing::unit(module_path!())
-            .import_fixture_dir(&namepath)
-            .nonstatic()
-            .build();
-        let test_group = test_module.local_group(function_name!())
-            .build();
-
-        assert_eq!(expected_unit_module_fixture_dir(), test_group.imported_fixture_dir(&namepath),
-            "Group should lookup external fixture dir in parent module");
-    }
-
-     
-    // unsafe: This can only be called once, by `test_setup_function()`. Not thread safe.
+    // SAFETY: This can only be called once, by `test_setup_function()`. Not thread safe.
     static mut SETUP_FUNC_CALLED: bool = false;
-    fn setup_func(_group: &mut Group) {
+    fn setup_func(_group: &mut TestGroup) {
         unsafe {
             SETUP_FUNC_CALLED = true;
         }
     }
 
+    static GROUP_WITH_SETUP: Group = group!("group/with-setup", Unit, {
+        .setup(setup_func)
+    });
+
     // Group setup function should be ran on construction.
-    #[test] #[named]
+    #[test]
     fn test_setup_function() {
-        let _testgroup = MODULE_BASIC.local_group(function_name!())
-            .setup(setup_func)
-            .build();
+        let _ = GROUP_WITH_SETUP.use_case(); // lazy initialize
 
         unsafe {
             assert!(SETUP_FUNC_CALLED,
                 "Group setup function should be ran on construction.");
         }
     }
- 
+
     // Group setup closure should be ran on construction.
-    #[test] #[named]
+    #[test]
     fn test_setup_closure() {
         let mut setup_closure_called = false;
-        MODULE_BASIC.local_group(function_name!())
+        let _group: TestGroup = GroupBuilder::new(env!("CARGO_PKG_NAME"), UseCase::Unit, "group/with-closure")
             .setup(|_| {
                 setup_closure_called = true;
             })
@@ -448,82 +267,19 @@ mod tests {
         assert!(setup_closure_called,
             "Group setup closure should be ran on construction.");
     }
- 
-    // unsafe: This can only be called once, by `test_setup_function()`. Not thread safe.
-    static mut TEARDOWN_FUNC_CALLED: bool = false;
-    fn teardown_func(_group: &mut Group) {
-        unsafe {
-            TEARDOWN_FUNC_CALLED = true;
-        }
+
+    // only way to test this is using `cargo test -- --show-output`
+    extern "C" fn teardown_func() {
+        println!("STATIC_GROUP: teardown_static() ran");
     }
+
+    static GROUP_WITH_TEARDOWN: Group = group!("group/with-teardown", Unit, {
+        .teardown_static(teardown_func)
+    });
 
     // Group teardown function should be ran on destruction.
-    #[test] #[named]
-    fn test_teardown_function() {
-        {
-            MODULE_BASIC.local_group(function_name!())
-            .teardown(teardown_func)
-            .build();
-        }
-
-        unsafe {
-            assert!(TEARDOWN_FUNC_CALLED,
-                "Group teardown function should be ran on destruction.");
-        }
-    }
- 
-    // Group teardown closure should be ran on destruction.
-    #[test] #[named]
-    fn test_teardown_closure() {
-        let mut teardown_closure_called = false;
-        {
-            MODULE_BASIC.local_group(function_name!())
-                .teardown(|_| {
-                    teardown_closure_called = true;
-                })
-                .build();
-        }
-
-        assert!(teardown_closure_called,
-            "Group teardown closure should be ran on destruction.");
-
-    }
-
-    extern fn static_teardown_fn() {
-        println!("STATIC_GROUP: {}::teardown_static() ran", STATIC_GROUP.namepath().path())
-    }
-
-    static STATIC_GROUP: testing::StaticGroup = testing::group(|| {
-        MODULE_BASIC.group("group_basic")
-            .teardown_static(static_teardown_fn)
-            .build()
-    });
-   
-    // Static Group teardown should be ran on process exist.
-    //
-    // NOTE: This will always pass and must be visually verified.
-    //       The unit test should print the "STATIC GROUP:" line at the end of testing.
-    //       An integration test is needed to automating testing of this.
     #[test]
-    fn test_teardown_static() {
-        STATIC_GROUP.namepath();
+    fn test_teardown_function() {
+        let _ = GROUP_WITH_TEARDOWN.use_case(); // force lazy init
     }
-
-    // Group constructed using `Module::local_group()` should not allow static teardown functions.
-    #[test] #[named] #[should_panic]
-    fn test_teardown_local_static_mismatch() {
-        MODULE_BASIC.local_group(function_name!())
-            .teardown_static(static_teardown_fn)  // should panic
-            .build();
-    }
-
-    // Group constructed using `Module::group()` should not allow non-static teardown functions.
-    #[test] #[named] #[should_panic]
-    fn test_teardown_static_local_mismatch() {
-        MODULE_BASIC.group(function_name!())
-            .teardown(|_| {}) // should panic
-            .build();
-    }
-
-
 }

@@ -1,35 +1,5 @@
-Asmov Common Testing
-===============================================================================
-[![Latest Version]][crates.io]
+pub fn main(){}
 
-[Latest Version]: https://img.shields.io/crates/v/asmov-common-testing.svg
-[crates.io]: https://crates.io/crates/asmov-common-testing
-
-*Structured testing in sequence with fixture and temp directories*
-
-## Features
-- Structure tests into inheritable heirarchies: Module -> Test
-- Bundle common assets outside of heirarchies using Group
-- Setup and teardown callbacks for each Module, Test, and Group 
-- Module and Group setup occurs before Test
-- Categorize based on use-case: Unit and Integration
-- Standardized paths for fixture and temp directories 
-- Miscellaneous helper functions for common tasks
-
-## Restrictions
-- One Module per Rust test module
-- One Test per Rust test function
-- Module and Group are static to a Rust module
-- Test is instantiated non-static inside of the Rust test function
-- Unit tests live in `src`
-- Integration tests live in `tests` or `example`
-- Fixture asset files live in `testing`
-
-## Standard paths
-> *use-case / module_path / function_name*
-
-## Example
-```rust
 // Just something to test against
 pub fn fibonacci(n: u8) -> Option<u128> {
     if n == 0 {
@@ -168,45 +138,3 @@ mod tests {
         assert_eq!(fib100, fibonacci(100).unwrap());
     }
 }
-```
-
-## Documentation
-Refer to [docs.rs/asmov-common-testing](https://docs.rs/asmov-common-testing/latest/asmov_common_testing)
-
-Repository
---------------------------------------------------------------------------------
-Contributors, please review [ASMOV.md](./ASMOV.md).  
-
-Found a bug? Search for an existing issue on GitHub.  
-If an issue exists, chime in to add weight to it.  
-If an issue does not exist, create one and tell us how to reproduce the bug. 
-
-
-License (AGPL3)
---------------------------------------------------------------------------------
-Asmov Common Testing: Structured testing in sequence with fixture and temp directories  
-Copyright (C) 2024-2025 [Asmov LLC](https://asmov.software)  
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a [copy](./LICENSE-AGPL-3.txt) of the
-GNU Affero General Public License along with this program.
-If not, see https://www.gnu.org/licenses/.
-
-
-Third-Party Licenses
--------------------------------------------------------------------------------
-## crate: [function_name](https://crates.io/crates/function_name)
-
->Our library publically exports the **named** macro from [Daniel Henry-Mantilla](https://github.com/danielhenrymantilla)'s crate: [function_name](https://github.com/danielhenrymantilla/rust-function_name). It is available for use from our crate as `asmov_common_testing::named`.
-
-**License (MIT):**  
-[Copyright (c) 2019 Daniel Henry-Mantilla](./docs/licenses/danielhenrymantilla/function_name/LICENSE.txt)
