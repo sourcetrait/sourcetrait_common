@@ -1,0 +1,20 @@
+[package]
+name = "{{package.slug}}"
+version = "0.0.0"
+description = "{{package.subline}}"
+authors = ["Asmov LLC <development.pub@asmov.software>"]
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/asmov/{{package.repository_name}}"
+homepage = "https://asmov.software"
+categories = []
+keywords = ["asmov"]
+edition = "2024"
+
+[dependencies]
+
+[dev-dependencies]
+asmov-common-testing = "3"
+
+[[example]]
+name = "example"
+test = true

@@ -1,0 +1,8 @@
+year = 2025
+
+# eg. Asmov Project
+workspace.name = ""
+# eg. asmov-project
+workspace.slug = ""
+# eg. This is an Asmov project
+workspace.subline = ""

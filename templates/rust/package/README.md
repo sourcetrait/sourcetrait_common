@@ -1,11 +1,11 @@
-Asmov Project
+{{package.name}}
 ================================================================================
 [![Latest Version]][crates.io]
 
-[Latest Version]: https://img.shields.io/crates/v/asmov-project.svg
-[crates.io]: https://crates.io/crates/asmov-project
+[Latest Version]: https://img.shields.io/crates/v/{{package.slug}}.svg
+[crates.io]: https://crates.io/crates/{{package.slug}}
 
-*This is an Asmov project*
+*{{package.subline}}*
 
 
 Repository
@@ -19,8 +19,8 @@ If an issue does not exist, create one and tell us how to reproduce the bug.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-Asmov Project: This is an Asmov project  
-Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
+{{package.name}}: {{package.subline}} 
+Copyright (C) {{year}} [Asmov LLC](https://asmov.software)  
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as

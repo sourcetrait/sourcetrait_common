@@ -1,0 +1,11 @@
+year = 2025
+
+# eg. Asmov Project
+package.name = ""
+# eg. asmov-project
+package.slug = ""
+# eg. This is an Asmov project
+package.subline = ""
+# Appended to: https://github.com/asmov/
+# eg. common
+package.repository_name = ""
