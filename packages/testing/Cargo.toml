@@ -1,6 +1,6 @@
 [package]
 name = "asmov-common-testing"
-version = "3.1.0"
+version = "3.1.1"
 description = "Structured testing with setup, teardown, and standardized fixture and temp directories"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 license = "AGPL-3.0-or-later"
@@ -12,7 +12,7 @@ edition = "2024"
 
 [dependencies]
 asmov-common-testing-macro = { version="1.0.0", path = "../testing-macro" }
-asmov-common-tooling = { optional = true, version="0.0.1" }
+asmov-common-tooling = { optional = true, version="0.0.2", path="../tooling" }
 anyhow = "1"
 function_name = "0.3"
 rand = "0.9"

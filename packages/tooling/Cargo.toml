@@ -1,13 +1,13 @@
 [package]
 name = "asmov-common-tooling"
-version = "0.0.1"
+version = "0.0.2"
 description = "Cross-platform system utilities"
 authors = ["Asmov LLC <development.pub@asmov.software>"]
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/asmov/common"
 homepage = "https://asmov.software"
 categories = []
-keywords = ["asmov"]
+keywords = ["asmov","common"]
 edition = "2024"
 
 [dependencies]
@@ -17,4 +17,4 @@ filetime = "0.2"
 uu_touch = "0.0.30"
 
 [dev-dependencies]
-asmov-common-testing = { version="3", features=[] }
+asmov-common-testing = { version="3", features=[], path="../testing" }
