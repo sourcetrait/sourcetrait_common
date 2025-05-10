@@ -91,7 +91,7 @@ impl<'func> ModuleBuilder<'func> {
         let base_temp_dir;
         let temp_dir = if self.using_temp_dir {
             let dirname = namepath.full_path_to_squashed_slug();
-            base_temp_dir = Some(tooling::create_random_subdir(&self.base_temp_dir, &dirname) // todo: use squashed prefix
+            base_temp_dir = Some(create_random_subdir(&self.base_temp_dir, &dirname) // todo: use squashed prefix
                 .context(format!("Unable to create temporary directory in base: {}", &self.base_temp_dir.to_str().unwrap()))
                 .unwrap() );
 

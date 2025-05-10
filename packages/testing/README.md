@@ -5,7 +5,7 @@ Asmov Common Testing
 [Latest Version]: https://img.shields.io/crates/v/asmov-common-testing.svg
 [crates.io]: https://crates.io/crates/asmov-common-testing
 
-*Structured testing in sequence with fixture and temp directories*
+*Structured testing with setup, teardown, and standardized fixture and temp directories*
 
 ## Features
 - Structure tests into inheritable heirarchies: Module -> Test

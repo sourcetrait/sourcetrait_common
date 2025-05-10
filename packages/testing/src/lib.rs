@@ -12,7 +12,6 @@ mod module;
 mod testing;
 mod util;
 mod teardown;
-pub mod tooling;
 
 pub use crate::{
     namepath::{Namepath, RawNamepath},
@@ -23,15 +22,20 @@ pub use crate::{
 };
 
 
-pub(crate) use crate::{teardown::*, util::*, tooling::*};
+pub(crate) use crate::{teardown::*, util::*};
 pub(crate) use anyhow::{bail, Context};
+
+#[cfg(feature = "tooling")]
+pub use asmov_common_tooling as tooling;
 
 pub mod prelude {
     pub use crate as testing;
-    pub use crate::tooling as tooling;
     pub use crate::Testing;
     pub use function_name::named;
     pub use asmov_common_testing_macro::tested;
+
+    #[cfg(feature = "tooling")]
+    pub use crate::tooling as tooling;
 }
 
 pub(crate) mod strings {
