@@ -1,17 +1,8 @@
 SrcTrait Common
 ================================================================================
-[![License Badge]][License]
+[![Crate Badge]][Crate] [![Docs Badge]][Docs] [![License Badge]][License]
 
-*Common libraries and tools for SourceTrait projects*
-
-
-Packages
---------------------------------------------------------------------------------
-
-### [SrcTrait Common Testing](./packages/testing/srctrait-common-testing)
-[![Testing Crate Badge]][Testing Crate] [![Docs Badge]][Testing Docs]
-
-*Structured testing with setup, teardown, and standardized fixture and temp directories*
+*Common libraries for SourceTrait projects*
 
 
 Repository
@@ -25,7 +16,7 @@ If not, create one and let us know.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-SrcTrait Common: Common libraries and tools for SourceTrait projects  
+SrcTrait Common: Common libraries for SourceTrait projects  
 Developed by [SourceTrait](https://sourcetrait.com)  
 Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
 
@@ -43,11 +34,9 @@ You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
 If not, see https://www.gnu.org/licenses/.
 
-
-[License]: #License-AGPL3
-[License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg
-
-[Testing Crate]: https://crates.io/crates/srctrait-common-testing
-[Testing Crate Badge]: https://img.shields.io/crates/v/srctrait-common-testing.svg
-[Testing Docs]: https://docs.rs/srctrait-common-testing
+[Crate]: https://crates.io/crates/srctrait-common
+[Crate Badge]: https://img.shields.io/crates/v/srctrait-common.svg
+[Docs]: https://docs.rs/srctrait-common
 [Docs Badge]: https://img.shields.io/badge/docs-blue
+[License]: (#License-AGPL3)
+[License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg

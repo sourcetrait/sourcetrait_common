@@ -1,0 +1,16 @@
+[package]
+name = "srctrait-common-stdx"
+version = "1.0.0"
+description = "Standard library for SrcTrait Common"
+authors = ["SourceTrait <development@sourcetrait.com>"]
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/sourcetrait/common"
+homepage = "https://sourcetrait.com"
+categories = []
+keywords = ["sourcetrait", "srctrait", "common"]
+edition = "2024"
+
+[dependencies]
+
+[dev-dependencies]
+srctrait-common-testing = { version = "4", path = "../testing/srctrait-common-testing" }

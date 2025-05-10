@@ -1,0 +1,29 @@
+[package]
+name = "srctrait-common-testing"
+version = "4.0.0"
+description = "Structured testing with setup, teardown, and standardized fixture and temp directories"
+authors = ["SourceTrait <development@sourcetrait.com"]
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/sourcetrait/common"
+homepage = "https://sourcetrait.com"
+categories = ["development-tools::testing"]
+keywords = ["test", "unit", "integration"]
+edition = "2024"
+
+[dependencies]
+srctrait-common-testing-macro = { version="1", path = "../srctrait-common-testing-macro" }
+srctrait-common-tooling = { optional = true, version="1", path="../../srctrait-common-tooling" }
+anyhow = "1"
+function_name = "0.3"
+rand = "0.9"
+regex = "1"
+shutdown_hooks = "0.1"
+
+[features]
+#default = []
+default = ["tooling"]
+tooling = ["srctrait-common-tooling"]
+
+[[example]]
+name = "example-fibonacci"
+test = true

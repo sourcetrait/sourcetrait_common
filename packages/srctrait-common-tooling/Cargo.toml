@@ -1,0 +1,23 @@
+[package]
+name = "srctrait-common-tooling"
+version = "1.0.0"
+description = "Cross-platform system utilities"
+authors = ["SourceTrait <development@sourcetrait.com>"]
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/sourcetrait/srctrait-common"
+homepage = "https://sourcetrait.com"
+categories = []
+keywords = ["sourcetrait","srctrait","common","tooling"]
+edition = "2024"
+
+[dependencies]
+srctrait-common-stdx = { version="1", path="../srctrait-common-stdx" }
+chrono = "0.4"
+tar = "0.4"
+filetime = "0.2"
+uu_touch = "0.0.30"
+anyhow = "1"
+walkdir = "2.5"
+
+[dev-dependencies]
+srctrait-common-testing = { version="4", features=[], path="../testing/srctrait-common-testing" }

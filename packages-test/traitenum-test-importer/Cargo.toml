@@ -1,9 +1,0 @@
-[package]
-name = "asmov-common-traitenum-test-importer"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-asmov-common-traitenum-test-exporter = { path = "../traitenum-test-exporter" }
-asmov-common-traitenum-test-exporter-derive = { path = "../traitenum-test-exporter-derive" }
-asmov-common-traitenum = { path = "../../packages/traitenum" }

@@ -1,14 +1,9 @@
 [workspace]
 resolver = "2"
 members = [
-    "packages/testing",
-    "packages/testing-macro",
-    "packages/tooling",
-    "packages/traitenum",
-    "packages/traitenum-cargo",
-    "packages/traitenum-macro",
-    "packages/traitenum-parse",
-    "packages-test/traitenum-test-exporter",
-    "packages-test/traitenum-test-exporter-derive",
-    "packages-test/traitenum-test-importer",
+    "packages/srctrait-common",
+    "packages/srctrait-common-stdx",
+    "packages/testing/srctrait-common-testing",
+    "packages/testing/srctrait-common-testing-macro",
+    "packages/srctrait-common-tooling",
 ]
