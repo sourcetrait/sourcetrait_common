@@ -20,4 +20,4 @@ anyhow = "1"
 walkdir = "2.5"
 
 [dev-dependencies]
-srctrait-common-testing = { version="4", features=[], path="../testing/srctrait-common-testing" }
+srctrait-common-testing = { features=[], path="../testing/srctrait-common-testing" }

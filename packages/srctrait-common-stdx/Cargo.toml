@@ -13,4 +13,4 @@ edition = "2024"
 [dependencies]
 
 [dev-dependencies]
-srctrait-common-testing = { version = "4", path = "../testing/srctrait-common-testing" }
+srctrait-common-testing = { path = "../testing/srctrait-common-testing" }
