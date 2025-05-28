@@ -1,16 +1,19 @@
 [package]
-name = "srctrait-common-stdx"
+name = "srctrait-common-ronx"
 version = "1.0.0"
-description = "Standard library for SrcTrait Common"
+description = "Extended RON library for SrcTrait Common"
 authors = ["SourceTrait <development@sourcetrait.com>"]
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/sourcetrait/srctrait-common"
 homepage = "https://sourcetrait.com"
 categories = []
-keywords = ["sourcetrait", "srctrait", "common"]
+keywords = ["sourcetrait", "srctrait", "common", "ron"]
 edition = "2024"
 
 [dependencies]
+ron.workspace = true
+serde.workspace = true
+thiserror.workspace = true
 
 [dev-dependencies]
 srctrait-common-testing = { path = "../testing/srctrait-common-testing" }

@@ -3,7 +3,13 @@ resolver = "2"
 members = [
     "packages/srctrait-common",
     "packages/srctrait-common-stdx",
+    "packages/srctrait-common-ronx",
     "packages/testing/srctrait-common-testing",
     "packages/testing/srctrait-common-testing-macro",
     "packages/srctrait-common-tooling",
 ]
+
+[workspace.dependencies]
+ron = "0.10"
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
