@@ -34,6 +34,21 @@ You should have received a [copy](./LICENSE-AGPL-3.txt) of the
 GNU Affero General Public License along with this program.
 If not, see https://www.gnu.org/licenses/.
 
+### Linking Exception (Section 7)
+
+An additional linking permission is granted under GNU Affero GPL version 3,
+section 7.
+
+If you modify this Program, or any covered work, by linking or combining it with
+this Library (or a modified version of that library), containing parts covered
+by the terms of the AGPL3 license, the licensors of this Library grant you
+additional permission to convey the resulting work.
+
+Corresponding Source for a non-source form of such a combination shall include
+the source code for the parts of this Program used as well as that of the
+covered work.
+
+
 [Crate]: https://crates.io/crates/srctrait-common-tooling
 [Crate Badge]: https://img.shields.io/crates/v/srctrait-common-tooling.svg
 [Docs]: https://docs.rs/srctrait-common-tooling
