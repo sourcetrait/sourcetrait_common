@@ -1,6 +1,6 @@
 [package]
 name = "srctrait-common"
-version = "1.0.0"
+version = "1.0.1"
 description = "Common libraries for SourceTrait projects"
 authors = ["SourceTrait <development@sourcetrait.com"]
 license = "AGPL-3.0-or-later"

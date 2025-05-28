@@ -1,6 +1,6 @@
 [package]
 name = "srctrait-common-testing-macro"
-version = "1.0.0"
+version = "1.0.1"
 description = "Macro exports for SrcTrait Common Testing"
 authors = ["SourceTrait <development@sourcetrait.com>"]
 repository = "https://github.com/sourcetrait/srctrait-common"
