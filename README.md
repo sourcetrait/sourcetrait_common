@@ -1,6 +1,6 @@
 SrcTrait Common
 ================================================================================
-[![License Badge]][License]
+[![License Badge]][License] [![Linkable Badge]][Linkable]
 
 *Common libraries and tools for SourceTrait projects*
 
@@ -59,8 +59,11 @@ covered work.
 
 [License]: #License-AGPL3
 [License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg
+[Linkable]: #Linking-Exception-Section-7
+[Linkable Badge]: https://img.shields.io/badge/linkable-yes-green.svg
 
 [Testing Crate]: https://crates.io/crates/srctrait-common-testing
 [Testing Crate Badge]: https://img.shields.io/crates/v/srctrait-common-testing.svg
 [Testing Docs]: https://docs.rs/srctrait-common-testing
+
 [Docs Badge]: https://img.shields.io/badge/docs-blue

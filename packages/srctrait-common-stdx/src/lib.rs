@@ -3,5 +3,6 @@
 
 /// Path utilities
 pub mod path {
+    pub mod normalize;
     pub mod tree;
 }
