@@ -10,6 +10,7 @@ members = [
 ]
 
 [workspace.dependencies]
+srctrait-common-stdx = { path="packages/srctrait-common-stdx" }
 ron = "0.10"
 serde = { version = "1", features = ["derive"] }
 thiserror = "2"

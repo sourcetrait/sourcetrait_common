@@ -11,7 +11,7 @@ keywords = ["sourcetrait","srctrait","common","tooling"]
 edition = "2024"
 
 [dependencies]
-srctrait-common-stdx = { version="1", path="../srctrait-common-stdx" }
+srctrait-common-stdx.workspace = true
 chrono = "0.4"
 tar = "0.4"
 filetime = "0.2"
