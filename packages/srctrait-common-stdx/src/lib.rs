@@ -6,3 +6,8 @@ pub mod path {
     pub mod normalize;
     pub mod tree;
 }
+
+/// Filesystem utilities
+pub mod fs {
+    pub mod find;
+}

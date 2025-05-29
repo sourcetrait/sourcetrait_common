@@ -1,17 +1,9 @@
-SrcTrait Common
+SrcTrait Common Extended Chrono Library
 ================================================================================
-[![License Badge]][License] [![Linkable Badge]][Linkable]
+[![Crate Badge]][Crate] [![License Badge]][License] [![Linkable Badge]][Linkable]
+[![Docs Badge]][Docs] [![Changes Badge]][Changes]
 
-*Common libraries and tools for SourceTrait projects*
-
-
-Packages
---------------------------------------------------------------------------------
-
-### [SrcTrait Common Testing](./packages/testing/srctrait-common-testing)
-[![Testing Crate Badge]][Testing Crate] [![Docs Badge]][Testing Docs]
-
-*Structured testing with setup, teardown, and standardized fixture and temp directories*
+*Extended chrono library for SrcTrait Common*
 
 
 Repository
@@ -20,13 +12,12 @@ Contributors, please review [SRCTRAIT.md](./SRCTRAIT.md).
 
 Found a bug? Search for an existing issue on GitHub.  
 If an issue exists, chime in to add weight to it.  
-If not, create one and let us know. 
+If an issue does not exist, create one and tell us how to reproduce the bug. 
 
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-SrcTrait Common: Common libraries and tools for SourceTrait projects  
-Developed by [SourceTrait](https://sourcetrait.com)  
+SrcTrait Common Extended Chrono Library  
 Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
 
 This program is free software: you can redistribute it and/or modify
@@ -57,13 +48,14 @@ Corresponding Source for a non-source form of such a combination shall include
 the source code for the parts of this Library used as well as that of the
 covered work.
 
-[License]: #License-AGPL3
+
+[Crate]: https://crates.io/crates/srctrait-common-chronox
+[Crate Badge]: https://img.shields.io/crates/v/srctrait-common-chronox.svg
+[Docs]: https://docs.rs/srctrait-common-chronox
+[Docs Badge]: https://img.shields.io/badge/docs-blue
+[License]: (#License-AGPL3)
 [License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg
 [Linkable]: #Linking-Exception-Section-7
 [Linkable Badge]: https://img.shields.io/badge/linkable-yes-green.svg
-
-[Testing Crate]: https://crates.io/crates/srctrait-common-testing
-[Testing Crate Badge]: https://img.shields.io/crates/v/srctrait-common-testing.svg
-[Testing Docs]: https://docs.rs/srctrait-common-testing
-
-[Docs Badge]: https://img.shields.io/badge/docs-blue
+[Changes]: ./docs/CHANGES.md
+[Changes Badge]: https://img.shields.io/badge/changes-blue

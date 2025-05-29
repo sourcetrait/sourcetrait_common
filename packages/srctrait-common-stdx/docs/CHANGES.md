@@ -1,6 +1,10 @@
 CHANGES: SrcTrait Common Extended Standard Library
 ===============================================================================
 
+## v1.2
+### Added `fs::find`
+Methods for finding files and directories in parent directories.
+
 ## v1.1
 ### Added `path::normalize::NormalizePath`
 Extends `std::path::{Path, PathBuf}` with the `normalize_relative()` function,

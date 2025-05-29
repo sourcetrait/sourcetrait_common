@@ -46,7 +46,7 @@ by the terms of the AGPL3 license, the licensors of this Library grant you
 additional permission to convey the resulting work.
 
 Corresponding Source for a non-source form of such a combination shall include
-the source code for the parts of this Program used as well as that of the
+the source code for the parts of this Library used as well as that of the
 covered work.
 
 
