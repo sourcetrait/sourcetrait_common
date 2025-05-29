@@ -1,8 +1,9 @@
-SrcTrait Common Standard Library
+SrcTrait Common Extended Standard Library
 ================================================================================
-[![Crate Badge]][Crate] [![Docs Badge]][Docs] [![License Badge]][License]
+[![Crate Badge]][Crate] [![License Badge]][License] [![Linkable Badge]][Linkable]
+[![Docs Badge]][Docs] [![Changes Badge]][Changes]
 
-*Standard library for SrcTrait Common*
+*Extended standard library for SrcTrait Common*
 
 
 Repository
@@ -16,7 +17,7 @@ If not, create one and let us know.
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-SrcTrait Common Standard Library: Standard library for SrcTrait Common  
+SrcTrait Common Extended Standard Library  
 Developed by [SourceTrait](https://sourcetrait.com)  
 Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
 
@@ -55,3 +56,7 @@ covered work.
 [Docs Badge]: https://img.shields.io/badge/docs-blue
 [License]: (#License-AGPL3)
 [License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg
+[Linkable]: #Linking-Exception-Section-7
+[Linkable Badge]: https://img.shields.io/badge/linkable-yes-green.svg
+[Changes]: ./docs/CHANGES.md
+[Changes Badge]: https://img.shields.io/badge/changes-blue

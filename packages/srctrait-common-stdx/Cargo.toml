@@ -1,13 +1,13 @@
 [package]
 name = "srctrait-common-stdx"
 version = "1.1.0"
-description = "Standard library for SrcTrait Common"
+description = "Extended standard library for SrcTrait Common"
 authors = ["SourceTrait <development@sourcetrait.com>"]
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/sourcetrait/srctrait-common"
 homepage = "https://sourcetrait.com"
 categories = []
-keywords = ["sourcetrait", "srctrait", "common"]
+keywords = ["sourcetrait", "srctrait", "common", "stdx"]
 edition = "2024"
 
 [dependencies]
