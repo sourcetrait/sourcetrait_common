@@ -1,0 +1,24 @@
+Dir(
+    name: "srctrait-common",
+    children: [
+        Dir(
+            name: "packages",
+            children: [
+                Dir(
+                    name: "srctrait-common-ronx",
+                    children: [
+                        File(
+                            name: "SRCTRAIT.md",
+                        ),
+                        File(
+                            name: "SRCTRAIT",
+                            symlink: File(
+                                name: "SRCTRAIT.md",
+                            ),
+                        ),
+                    ],
+                ),
+            ],
+        ),
+    ],
+)

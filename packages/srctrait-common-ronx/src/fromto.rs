@@ -1,6 +1,7 @@
 //! Serializes and deserializes between strings and files for a Type.
 //!
 //! Uses options specifed in [ronx_options].
+//!
 
 use std::path::Path;
 use ron;
@@ -21,6 +22,20 @@ pub fn ronx_options() -> ron::Options {
 
 /// Serializes and deserializes between strings and files for a Type.
 /// Uses options specifed in [ronx_options].
+///
+/// ### Roundtrip
+/// For exact round-tripping on Option fields, use on each:
+///
+/// `#[serde(skip_serializing_if = "Option::is_none")]`
+///
+/// Even easier, use the `serde_with` crate against the type itself:
+///
+/// [docs.rs / serde_with / skip_serializing_none](https://docs.rs/serde_with/latest/serde_with/attr.skip_serializing_none.html)
+///
+/// Note that RON pretty serializing adds commas to everything, so you'll need
+/// those as well.
+///
+/// For an example, check out the integration test in this crate: `fromto.rs`
 pub trait FromRonToRon {
     /// Deserializes from a RON string to a Type
     fn from_ron(ron: &str) -> Result<Self>
@@ -46,8 +61,10 @@ pub trait FromRonToRon {
     where
         Self: serde::ser::Serialize
     {
-        let config = ::ron::ser::PrettyConfig::default();
-        let ron = ronx_options().to_string_pretty(self, config)?;
+        let options = ronx_options();
+        let config = ::ron::ser::PrettyConfig::default()
+            .extensions(options.default_extensions);
+        let ron = options.to_string_pretty(self, config)?;
         Ok(ron)
     }
 
