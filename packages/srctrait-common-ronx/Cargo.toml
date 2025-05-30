@@ -1,6 +1,6 @@
 [package]
 name = "srctrait-common-ronx"
-version = "1.0.1"
+version = "1.0.2"
 description = "Extended RON library for SrcTrait Common"
 authors = ["SourceTrait <development@sourcetrait.com>"]
 license = "AGPL-3.0-or-later WITH GPL-3.0-linking-source-exception"
