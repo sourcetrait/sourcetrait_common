@@ -49,9 +49,9 @@ the source code for the parts of this Library used as well as that of the
 covered work.
 
 
-[Crate]: https://crates.io/crates/srctrait-common-stdx
-[Crate Badge]: https://img.shields.io/crates/v/srctrait-common-stdx.svg
-[Docs]: https://docs.rs/srctrait-common-stdx
+[Crate]: https://crates.io/crates/srctrait-common-ronx
+[Crate Badge]: https://img.shields.io/crates/v/srctrait-common-ronx.svg
+[Docs]: https://docs.rs/srctrait-common-ronx
 [Docs Badge]: https://img.shields.io/badge/docs-blue
 [License]: (#License-AGPL3)
 [License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg
