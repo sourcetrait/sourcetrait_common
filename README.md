@@ -8,22 +8,22 @@ SrcTrait Common
 Packages
 --------------------------------------------------------------------------------
 
-### [SrcTrait Common Extended Chrono](./packages/testing/srctrait-common-chronox)
+### [SrcTrait Common Extended Chrono](./packages/srctrait-common-chronox)
 [![ChronoX Crate Badge]][ChronoX Crate] [![Docs Badge]][ChronoX Docs]
 
 *Extended Chrono library*
 
-### [SrcTrait Common Extended RON](./packages/testing/srctrait-common-ronx)
+### [SrcTrait Common Extended RON](./packages/srctrait-common-ronx)
 [![RonX Crate Badge]][RonX Crate] [![Docs Badge]][RonX Docs]
 
 *Extended RON library*
 
-### [SrcTrait Common Extended Standard](./packages/testing/srctrait-common-stdx)
+### [SrcTrait Common Extended Standard](./packages/srctrait-common-stdx)
 [![StdX Crate Badge]][StdX Crate] [![Docs Badge]][Stdx Docs]
 
 *Extended standard library*
 
-### [SrcTrait Common Tooling](./packages/testing/srctrait-common-testing)
+### [SrcTrait Common Tooling](./packages/srctrait-common-tooling)
 [![Tooling Crate Badge]][Tooling Crate] [![Docs Badge]][Tooling Docs]
 
 *Cross-platform system utilities*
