@@ -1,6 +1,6 @@
 //! Common data/time formatting options
 
-use chrono::NaiveDateTime;
+use chrono::{NaiveDate, NaiveDateTime};
 
 pub const FMT_LONG: &'static str = "%A, %B %d, %Y";
 pub const FMT_YMD_DASH: &'static str = "%Y-%m-%d";
@@ -60,6 +60,10 @@ impl DateTimeFormat {
 #[derive(Debug)]
 pub struct DateTimeDisplay(NaiveDateTime, DateTimeFormat);
 
+/// Provides Display for a date and a format
+#[derive(Debug)]
+pub struct DateDisplay(NaiveDate, DateTimeFormat);
+
 impl DateTimeDisplay {
     pub fn new(datetime: NaiveDateTime, format: DateTimeFormat) -> Self {
         Self ( datetime, format )
@@ -74,7 +78,27 @@ impl DateTimeDisplay {
     }
 }
 
+impl DateDisplay {
+    pub fn new(datetime: NaiveDate, format: DateTimeFormat) -> Self {
+        Self ( datetime, format )
+    }
+
+    pub fn date(&self) -> &NaiveDate {
+        &self.0
+    }
+
+    pub fn format(&self) -> &DateTimeFormat {
+        &self.1
+    }
+}
+
 impl std::fmt::Display for DateTimeDisplay {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0.format(self.1.strftime_format()))
+    }
+}
+
+impl std::fmt::Display for DateDisplay {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0.format(self.1.strftime_format()))
     }
