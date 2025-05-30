@@ -8,6 +8,26 @@ SrcTrait Common
 Packages
 --------------------------------------------------------------------------------
 
+### [SrcTrait Common Extended Chrono](./packages/testing/srctrait-common-chronox)
+[![ChronoX Crate Badge]][ChronoX Crate] [![Docs Badge]][ChronoX Docs]
+
+*Extended Chrono library*
+
+### [SrcTrait Common Extended RON](./packages/testing/srctrait-common-ronx)
+[![RonX Crate Badge]][RonX Crate] [![Docs Badge]][RonX Docs]
+
+*Extended RON library*
+
+### [SrcTrait Common Extended Standard](./packages/testing/srctrait-common-stdx)
+[![StdX Crate Badge]][StdX Crate] [![Docs Badge]][Stdx Docs]
+
+*Extended standard library*
+
+### [SrcTrait Common Tooling](./packages/testing/srctrait-common-testing)
+[![Tooling Crate Badge]][Tooling Crate] [![Docs Badge]][Tooling Docs]
+
+*Cross-platform system utilities*
+
 ### [SrcTrait Common Testing](./packages/testing/srctrait-common-testing)
 [![Testing Crate Badge]][Testing Crate] [![Docs Badge]][Testing Docs]
 
@@ -26,7 +46,7 @@ If not, create one and let us know.
 License (AGPL3)
 --------------------------------------------------------------------------------
 SrcTrait Common: Common libraries and tools for SourceTrait projects  
-Developed by [SourceTrait](https://sourcetrait.com)  
+[SourceTrait](https://sourcetrait.com)  
 Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
 
 This program is free software: you can redistribute it and/or modify
@@ -57,13 +77,30 @@ Corresponding Source for a non-source form of such a combination shall include
 the source code for the parts of this Library used as well as that of the
 covered work.
 
+
+[Docs Badge]: https://img.shields.io/badge/docs-blue
 [License]: #License-AGPL3
 [License Badge]: https://img.shields.io/badge/license-AGPL3-blue.svg
 [Linkable]: #Linking-Exception-Section-7
 [Linkable Badge]: https://img.shields.io/badge/linkable-yes-green.svg
 
+[ChronoX Crate]: https://crates.io/crates/srctrait-common-chronox
+[ChronoX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-chronox.svg
+[ChronoX Docs]: https://docs.rs/srctrait-common-chronox
+
+[RonX Crate]: https://crates.io/crates/srctrait-common-ronx
+[RonX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-ronx.svg
+[RonX Docs]: https://docs.rs/srctrait-common-ronx
+
+[StdX Crate]: https://crates.io/crates/srctrait-common-stdx
+[StdX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-stdx.svg
+[StdX Docs]: https://docs.rs/srctrait-common-stdx
+
+[Tooling Crate]: https://crates.io/crates/srctrait-common-tooling
+[Tooling Crate Badge]: https://img.shields.io/crates/v/srctrait-common-tooling.svg
+[Tooling Docs]: https://docs.rs/srctrait-common-tooling
+
 [Testing Crate]: https://crates.io/crates/srctrait-common-testing
 [Testing Crate Badge]: https://img.shields.io/crates/v/srctrait-common-testing.svg
 [Testing Docs]: https://docs.rs/srctrait-common-testing
 
-[Docs Badge]: https://img.shields.io/badge/docs-blue
