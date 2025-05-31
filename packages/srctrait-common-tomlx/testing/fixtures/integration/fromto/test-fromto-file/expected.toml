@@ -1,0 +1,25 @@
+[Dir]
+name = "srctrait-common"
+
+[[Dir.children]]
+
+[Dir.children.Dir]
+name = "packages"
+
+[[Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir]
+name = "srctrait-common-tomlx"
+
+[[Dir.children.Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir.children.File]
+name = "SRCTRAIT.md"
+
+[[Dir.children.Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir.children.File]
+name = "SRCTRAIT"
+
+[Dir.children.Dir.children.Dir.children.File.symlink.File]
+name = "SRCTRAIT.md"

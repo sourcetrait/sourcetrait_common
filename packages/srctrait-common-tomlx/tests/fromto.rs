@@ -3,7 +3,7 @@ mod tests {
     use std::fs;
 
     use srctrait_common_testing::prelude::*;
-    use srctrait_common_ronx::{self as ronx, prelude::*};
+    use srctrait_common_tomlx::{self as tomlx, prelude::*};
     use serde;
 
     static TESTING: testing::Module = testing::module!(Integration, {
@@ -32,19 +32,19 @@ mod tests {
         symlink: Option<Box<PathKind>>
     }
 
-    impl ronx::FromRonToRon for PathKind {}
-    impl ronx::FromRonToRon for PathKindDir {}
-    impl ronx::FromRonToRon for PathKindFile {}
+    impl tomlx::FromTomlToToml for PathKind {}
+    impl tomlx::FromTomlToToml for PathKindDir {}
+    impl tomlx::FromTomlToToml for PathKindFile {}
 
     #[tested]
     fn test_fromto_str() {
         let _test = testing::test!();
 
         let expected = expected();
-
-        assert_eq!(expected, PathKind::from_ron(EXPECTED_RON).unwrap());
-        let actual_ron = expected.to_ron().unwrap();
-        assert_eq!(EXPECTED_RON, actual_ron);
+println!("{}", expected.to_toml().unwrap());
+        assert_eq!(expected, PathKind::from_toml(EXPECTED_TOML).unwrap());
+        let actual_toml = expected.to_toml().unwrap();
+        assert_eq!(EXPECTED_TOML, actual_toml);
     }
 
     #[tested]
@@ -55,14 +55,14 @@ mod tests {
         });
 
         let expected = expected();
-        let fixture_file = test.fixture_dir().join("expected.ron");
-        let file_expected = PathKind::from_ron_file(&fixture_file).unwrap();
+        let fixture_file = test.fixture_dir().join("expected.toml");
+        let file_expected = PathKind::from_toml_file(&fixture_file).unwrap();
         // sanity check
         assert_eq!(expected, file_expected);
 
-        let tmp_file = test.temp_dir().join("actual.ron");
-        expected.to_ron_file(&tmp_file).unwrap();
-        let file_actual = PathKind::from_ron_file(&tmp_file).unwrap();
+        let tmp_file = test.temp_dir().join("actual.toml");
+        expected.to_toml_file(&tmp_file).unwrap();
+        let file_actual = PathKind::from_toml_file(&tmp_file).unwrap();
         assert_eq!(expected, file_actual);
         assert_eq!(fs::read_to_string(fixture_file).unwrap(), fs::read_to_string(tmp_file).unwrap());
     }
@@ -75,7 +75,7 @@ mod tests {
                     name: "packages".to_string(),
                     children: Vec::from([
                         PathKind::Dir(PathKindDir {
-                            name: "srctrait-common-ronx".to_string(),
+                            name: "srctrait-common-tomlx".to_string(),
                             children: Vec::from([
                                 PathKind::File(PathKindFile {
                                     name: "SRCTRAIT.md".to_string(),
@@ -96,31 +96,33 @@ mod tests {
         })
     }
 
-    /// how roundtrip implicit ron looks with pretty printing and options
-    const EXPECTED_RON: &'static str =
-r#"Dir(
-    name: "srctrait-common",
-    children: [
-        Dir(
-            name: "packages",
-            children: [
-                Dir(
-                    name: "srctrait-common-ronx",
-                    children: [
-                        File(
-                            name: "SRCTRAIT.md",
-                        ),
-                        File(
-                            name: "SRCTRAIT",
-                            symlink: File(
-                                name: "SRCTRAIT.md",
-                            ),
-                        ),
-                    ],
-                ),
-            ],
-        ),
-    ],
-)"#;
+    /// how roundtrip implicit toml looks with pretty printing and options
+    const EXPECTED_TOML: &'static str =
+r#"[Dir]
+name = "srctrait-common"
+
+[[Dir.children]]
+
+[Dir.children.Dir]
+name = "packages"
+
+[[Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir]
+name = "srctrait-common-tomlx"
+
+[[Dir.children.Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir.children.File]
+name = "SRCTRAIT.md"
+
+[[Dir.children.Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir.children.File]
+name = "SRCTRAIT"
+
+[Dir.children.Dir.children.Dir.children.File.symlink.File]
+name = "SRCTRAIT.md"
+"#;
 
 }

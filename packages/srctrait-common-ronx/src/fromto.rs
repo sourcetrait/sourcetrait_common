@@ -52,7 +52,7 @@ pub trait FromRonToRon {
         Self: serde::de::DeserializeOwned
     {
         let ron = std::fs::read_to_string(ron_filepath)?;
-        let this = ronx_options().from_str(&ron)?;
+        let this = Self::from_ron(&ron)?;
         Ok(this)
     }
 
@@ -73,8 +73,7 @@ pub trait FromRonToRon {
     where
         Self: serde::ser::Serialize
     {
-        let config = ::ron::ser::PrettyConfig::default();
-        let ron = ronx_options().to_string_pretty(self, config)?;
+        let ron = self.to_ron()?;
         std::fs::write(filepath, ron)?;
         Ok(())
     }

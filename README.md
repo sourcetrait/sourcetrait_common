@@ -23,6 +23,11 @@ Packages
 
 *Extended standard library*
 
+### [SrcTrait Common Extended TOML](./packages/srctrait-common-tomlx)
+[![TomlX Crate Badge]][TomlX Crate] [![Docs Badge]][TomlX Docs]
+
+*Extended TOML library*
+
 ### [SrcTrait Common Tooling](./packages/srctrait-common-tooling)
 [![Tooling Crate Badge]][Tooling Crate] [![Docs Badge]][Tooling Docs]
 
@@ -95,6 +100,10 @@ covered work.
 [StdX Crate]: https://crates.io/crates/srctrait-common-stdx
 [StdX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-stdx.svg
 [StdX Docs]: https://docs.rs/srctrait-common-stdx
+
+[TomlX Crate]: https://crates.io/crates/srctrait-common-tomlx
+[TomlX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-tomlx.svg
+[TomlX Docs]: https://docs.rs/srctrait-common-tomlx
 
 [Tooling Crate]: https://crates.io/crates/srctrait-common-tooling
 [Tooling Crate Badge]: https://img.shields.io/crates/v/srctrait-common-tooling.svg

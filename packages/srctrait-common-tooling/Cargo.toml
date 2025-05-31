@@ -7,7 +7,7 @@ license = "AGPL-3.0-or-later WITH GPL-3.0-linking-source-exception"
 repository = "https://github.com/sourcetrait/srctrait-common"
 homepage = "https://sourcetrait.com"
 categories = []
-keywords = ["sourcetrait","srctrait","common","tooling"]
+keywords = ["source-trait", "sourcetrait", "srctrait", "common", "tooling"]
 edition = "2024"
 
 [dependencies]
