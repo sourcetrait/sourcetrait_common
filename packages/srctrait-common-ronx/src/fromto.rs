@@ -1,7 +1,19 @@
 //! Serializes and deserializes between strings and files for a Type.
-//!
 //! Uses options specifed in [ronx_options].
 //!
+//! ### Roundtrip
+//! For exact round-tripping on Option fields, use on each:
+//!
+//! `#[serde(skip_serializing_if = "Option::is_none")]`
+//!
+//! Even easier, use the `serde_with` crate against the type itself:
+//!
+//! [docs.rs / serde_with / skip_serializing_none](https://docs.rs/serde_with/latest/serde_with/attr.skip_serializing_none.html)
+//!
+//! Note that RON pretty serializing adds commas to everything, so you'll need
+//! those as well.
+//!
+//! For an example, check out the integration test in this crate: `fromto.rs`
 
 use std::path::Path;
 use ron;
@@ -20,24 +32,11 @@ pub fn ronx_options() -> ron::Options {
     )
 }
 
-/// Serializes and deserializes between strings and files for a Type.
-/// Uses options specifed in [ronx_options].
-///
-/// ### Roundtrip
-/// For exact round-tripping on Option fields, use on each:
-///
-/// `#[serde(skip_serializing_if = "Option::is_none")]`
-///
-/// Even easier, use the `serde_with` crate against the type itself:
-///
-/// [docs.rs / serde_with / skip_serializing_none](https://docs.rs/serde_with/latest/serde_with/attr.skip_serializing_none.html)
-///
-/// Note that RON pretty serializing adds commas to everything, so you'll need
-/// those as well.
-///
-/// For an example, check out the integration test in this crate: `fromto.rs`
-pub trait FromRonToRon {
-    /// Deserializes from a RON string to a Type
+/// Deserializes from a RON string or file to Self
+/// 
+/// See [module](self) for details.
+pub trait FromRon {
+    /// Deserializes from a RON string to Self
     fn from_ron(ron: &str) -> Result<Self>
     where
         Self: serde::de::DeserializeOwned
@@ -46,7 +45,7 @@ pub trait FromRonToRon {
         Ok(this)
     }
 
-    /// Deserializes from a file (typically `.ron`) in RON format to a Type
+    /// Deserializes from a RON file (typically `.ron`) to Self
     fn from_ron_file(ron_filepath: &Path) -> Result<Self>
     where
         Self: serde::de::DeserializeOwned
@@ -55,8 +54,13 @@ pub trait FromRonToRon {
         let this = Self::from_ron(&ron)?;
         Ok(this)
     }
+}
 
-    /// Serializes from a Type to a RON string
+/// Serializes self to a RON string or file
+/// 
+/// See [module](self) for details.
+pub trait ToRon {
+    /// Serializes self to a RON string
     fn to_ron(&self) -> Result<String>
     where
         Self: serde::ser::Serialize
@@ -68,7 +72,7 @@ pub trait FromRonToRon {
         Ok(ron)
     }
 
-    /// Serializes from a Type to a file (typically `.ron`)
+    /// Serializes self to a RON file (typically `.ron`)
     fn to_ron_file(&self, filepath: &Path) -> Result<()>
     where
         Self: serde::ser::Serialize

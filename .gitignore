@@ -1,10 +1,4 @@
 /target
 /Cargo.lock
 .DS_Store
-
-# IDE
-.idea/
-.vscode/
-
-# SourceTrait
 /.local

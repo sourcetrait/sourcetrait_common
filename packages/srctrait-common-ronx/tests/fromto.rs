@@ -32,9 +32,12 @@ mod tests {
         symlink: Option<Box<PathKind>>
     }
 
-    impl ronx::FromRonToRon for PathKind {}
-    impl ronx::FromRonToRon for PathKindDir {}
-    impl ronx::FromRonToRon for PathKindFile {}
+    impl ronx::FromRon for PathKind {}
+    impl ronx::ToRon for PathKind {}
+    impl ronx::FromRon for PathKindDir {}
+    impl ronx::ToRon for PathKindDir {}
+    impl ronx::FromRon for PathKindFile {}
+    impl ronx::ToRon for PathKindFile {}
 
     #[tested]
     fn test_fromto_str() {

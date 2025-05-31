@@ -4,8 +4,8 @@
 pub mod error;
 pub mod fromto;
 
-pub use self::{error::*, fromto::FromTomlToToml};
+pub use self::{error::*, fromto::{FromToml, ToToml}};
 
 pub mod prelude {
-    pub use crate::fromto::FromTomlToToml;
+    pub use crate::fromto::{FromToml, ToToml};
 }

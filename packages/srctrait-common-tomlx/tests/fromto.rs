@@ -32,9 +32,12 @@ mod tests {
         symlink: Option<Box<PathKind>>
     }
 
-    impl tomlx::FromTomlToToml for PathKind {}
-    impl tomlx::FromTomlToToml for PathKindDir {}
-    impl tomlx::FromTomlToToml for PathKindFile {}
+    impl tomlx::FromToml for PathKind {}
+    impl tomlx::ToToml for PathKind {}
+    impl tomlx::FromToml for PathKindDir {}
+    impl tomlx::ToToml for PathKindDir {}
+    impl tomlx::FromToml for PathKindFile {}
+    impl tomlx::ToToml for PathKindFile {}
 
     #[tested]
     fn test_fromto_str() {

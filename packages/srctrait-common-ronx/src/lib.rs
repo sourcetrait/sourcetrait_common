@@ -7,9 +7,9 @@ pub mod fromto;
 
 pub use self::{
     error::{Error, Result},
-    fromto::FromRonToRon
+    fromto::{FromRon, ToRon}
 };
 
 pub mod prelude {
-    pub use crate::FromRonToRon;
+    pub use crate::{FromRon, ToRon};
 }
