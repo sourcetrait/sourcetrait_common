@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "packages/srctrait-common",
     "packages/srctrait-common-chronox",
+    "packages/srctrait-common-clapx",
     "packages/srctrait-common-ronx",
     "packages/srctrait-common-stdx",
     "packages/srctrait-common-tomlx",
@@ -12,6 +13,7 @@ members = [
 ]
 
 [workspace.dependencies]
+clap = "4.5"
 chrono = "0.4"
 ron = "0.10"
 serde = { version = "1", features = ["derive"] }
