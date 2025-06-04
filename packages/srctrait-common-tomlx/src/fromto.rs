@@ -11,7 +11,7 @@
 //!
 //! For an example, check out the integration test in this crate: `fromto.rs`
 
-use std::path::Path;
+use std::{fs, path::Path};
 use serde;
 use toml;
 use crate::*;
@@ -25,18 +25,19 @@ pub trait FromToml {
     where
         Self: serde::de::DeserializeOwned
     {
-        let this = toml::from_str(&toml)?;
-        Ok(this)
+        toml::from_str(&toml)
+            .map_err(|e| Error::DeserializeTOML("Unable to deserialize from TOML".to_string(), e))
     }
 
     /// Deserializes from a TOML file (typically `.toml`) to Self
-    fn from_toml_file(toml_filepath: &Path) -> Result<Self>
+    fn from_toml_file(toml_file: &Path) -> Result<Self>
     where
         Self: serde::de::DeserializeOwned
     {
-        let toml = std::fs::read_to_string(toml_filepath)?;
-        let this = Self::from_toml(&toml)?;
-        Ok(this)
+        let toml = fs::read_to_string(toml_file)
+            .map_err(|e| Error::Io(format!("Unable to read from TOML file: {}", toml_file.display()), e))?;
+        
+        Self::from_toml(&toml)
     }
 }
 
@@ -49,17 +50,19 @@ pub trait ToToml {
     where
         Self: serde::ser::Serialize
     {
-        let toml = toml::to_string_pretty(self)?;
-        Ok(toml)
+        toml::to_string_pretty(self)
+            .map_err(|e| Error::SerializeTOML(format!("Unable to serialize to TOML"), e))
     }
 
     /// Serializes self to a TOML file (typically `.toml`)
-    fn to_toml_file(&self, filepath: &Path) -> Result<()>
+    fn to_toml_file(&self, toml_file: &Path) -> Result<()>
     where
         Self: serde::ser::Serialize
     {
         let toml = Self::to_toml(&self)?;
-        std::fs::write(filepath, toml)?;
+        fs::write(toml_file, toml)
+            .map_err(|e| Error::Io(format!("Unable to write to TOML file: {}", toml_file.display()), e))?;
+        
         Ok(())
     }
 }
