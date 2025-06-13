@@ -14,3 +14,7 @@ pub use self::{
 pub mod prelude {
     pub use crate::fromto::{FromToml, ToToml};
 }
+
+pub(crate) const TOML: &'static str = "TOML";
+
+pub(crate) use srctrait_common_stdx as stdx;

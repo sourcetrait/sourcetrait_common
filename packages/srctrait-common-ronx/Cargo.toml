@@ -1,6 +1,6 @@
 [package]
 name = "srctrait-common-ronx"
-version = "2.0.0"
+version = "3.0.0"
 description = "Extended RON library for SrcTrait Common"
 authors = ["SourceTrait <development@sourcetrait.com>"]
 license = "AGPL-3.0-or-later WITH GPL-3.0-linking-source-exception"
@@ -14,6 +14,7 @@ edition = "2024"
 ron.workspace = true
 serde.workspace = true
 thiserror.workspace = true
+srctrait-common-stdx.workspace = true
 
 [dev-dependencies]
 srctrait-common-testing.workspace = true

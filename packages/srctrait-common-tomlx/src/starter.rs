@@ -15,6 +15,7 @@
 //! they know how to use split-view in that editor).
 
 use std::{fs, path::Path};
+use stdx::error::fs::FsErrMsg;
 use crate::*;
 
 pub trait ToStarterToml: ToToml {
@@ -31,11 +32,9 @@ pub trait ToStarterToml: ToToml {
     where
         Self: serde::ser::Serialize
     {
-        let toml = self.to_starter_toml(intro)?;
-        fs::write(toml_file, toml)
-            .map_err(|e| Error::Io(format!("Unable to write to TOML file: {}", toml_file.display()), e))?;
-        
-        Ok(())
+        self.to_starter_toml(intro)
+            .and_then(|toml| fs::write(toml_file, toml)
+                .map_err(|e| Error::Io(FsErrMsg::WriteFile(TOML), toml_file.to_path_buf(), e)))
     }
 }
 
@@ -48,13 +47,10 @@ pub fn trim_starter_toml_comments(toml: &str) -> String {
 }
 
 pub fn trim_starter_toml_file_comments(toml_file: &Path) -> Result<()> {
-    let toml = fs::read_to_string(toml_file)
-        .map_err(|e| Error::Io(format!("Unable to read from TOML file: {}", toml_file.display()), e))?;
-    
-    fs::write(toml_file, trim_starter_toml_comments(&toml))
-        .map_err(|e| Error::Io(format!("Unable to write to TOML file: {}", toml_file.display()), e))?;
-    
-    Ok(())
+    fs::read_to_string(toml_file)
+        .map_err(|e| Error::Io(FsErrMsg::ReadFile(TOML), toml_file.to_path_buf(), e))
+        .and_then(|toml| fs::write(toml_file, trim_starter_toml_comments(&toml))
+            .map_err(|e| Error::Io(FsErrMsg::WriteFile(TOML), toml_file.to_path_buf(), e)))
 }
 
 pub const GENERIC_INTRO: Option<&'static str> = Some("Uncomment the settings that you wish to change.\nThe rest will be removed after you save this file.");

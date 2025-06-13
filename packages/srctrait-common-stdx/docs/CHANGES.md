@@ -1,6 +1,10 @@
 CHANGES: SrcTrait Common Extended Standard Library
 ===============================================================================
 
+## v1.3
+### Added `error::fs`
+Added standardized error message enum for file operations.
+
 ## v1.2
 ### Added `fs::find`
 Methods for finding files and directories in parent directories.

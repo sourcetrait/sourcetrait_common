@@ -13,3 +13,5 @@ pub use self::{
 pub mod prelude {
     pub use crate::{FromRon, ToRon};
 }
+
+pub(crate) use srctrait_common_stdx as stdx;

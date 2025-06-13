@@ -15,9 +15,10 @@
 //!
 //! For an example, check out the integration test in this crate: `fromto.rs`
 
-use std::path::Path;
+use std::{fs, path::Path};
 use ron;
 use serde;
+use stdx::error::fs::FsErrMsg;
 use crate::*;
 
 /// RON options used to serialize / deserialize RON:
@@ -29,8 +30,11 @@ pub fn ronx_options() -> ron::Options {
         ron::extensions::Extensions::UNWRAP_NEWTYPES
         | ron::extensions::Extensions::UNWRAP_VARIANT_NEWTYPES
         | ron::extensions::Extensions::IMPLICIT_SOME
+        | ron::extensions::Extensions::EXPLICIT_STRUCT_NAMES
     )
 }
+
+const RON: &'static str = "RON";
 
 /// Deserializes from a RON string or file to Self
 /// 
@@ -41,8 +45,9 @@ pub trait FromRon {
     where
         Self: serde::de::DeserializeOwned
     {
-        let this = ronx_options().from_str(&ron)?;
-        Ok(this)
+        ronx_options()
+            .from_str(&ron)
+            .map_err(|e| Error::DeserializeRON(e))
     }
 
     /// Deserializes from a RON file (typically `.ron`) to Self
@@ -50,9 +55,9 @@ pub trait FromRon {
     where
         Self: serde::de::DeserializeOwned
     {
-        let ron = std::fs::read_to_string(ron_filepath)?;
-        let this = Self::from_ron(&ron)?;
-        Ok(this)
+        fs::read_to_string(ron_filepath)
+            .map_err(|e| Error::Io(FsErrMsg::ReadFile(RON), ron_filepath.to_path_buf(), e))
+            .and_then(|s| Self::from_ron(&s))
     }
 }
 
@@ -67,9 +72,11 @@ pub trait ToRon {
     {
         let options = ronx_options();
         let config = ::ron::ser::PrettyConfig::default()
+            .struct_names(true)
             .extensions(options.default_extensions);
-        let ron = options.to_string_pretty(self, config)?;
-        Ok(ron)
+        
+        options.to_string_pretty(self, config)
+            .map_err(|e| Error::SerializeRON(e))
     }
 
     /// Serializes self to a RON file (typically `.ron`)
@@ -77,8 +84,8 @@ pub trait ToRon {
     where
         Self: serde::ser::Serialize
     {
-        let ron = self.to_ron()?;
-        std::fs::write(filepath, ron)?;
-        Ok(())
+        self.to_ron()
+            .and_then(|ron| fs::write(filepath, ron)
+                .map_err(|e| Error::Io(FsErrMsg::WriteFile(RON), filepath.to_path_buf(), e)))
     }
 }

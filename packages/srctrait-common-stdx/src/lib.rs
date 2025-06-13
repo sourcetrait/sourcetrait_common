@@ -11,3 +11,8 @@ pub mod path {
 pub mod fs {
     pub mod find;
 }
+
+/// Error and Result utilities
+pub mod error {
+    pub mod fs;
+}
