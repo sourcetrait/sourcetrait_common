@@ -20,5 +20,5 @@ serde = { version = "1", features = ["derive"] }
 thiserror = "2"
 toml = "0.8"
 
-srctrait-common-stdx = { path="packages/srctrait-common-stdx" }
+srctrait-common-stdx = { version="1", path="packages/srctrait-common-stdx" }
 srctrait-common-testing = { path="packages/testing/srctrait-common-testing" }
