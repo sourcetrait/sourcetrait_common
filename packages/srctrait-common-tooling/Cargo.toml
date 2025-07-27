@@ -11,13 +11,13 @@ keywords = ["source-trait", "sourcetrait", "srctrait", "common", "tooling"]
 edition = "2024"
 
 [dependencies]
-srctrait-common-stdx.workspace = true
-chrono = "0.4"
-tar = "0.4"
+anyhow.workspace = true
+chrono.workspace = true
 filetime = "0.2"
+srctrait-common-stdx.workspace = true
+tar = "0.4"
 uu_touch = "0.0.30"
-anyhow = "1"
-walkdir = "2.5"
+walkdir.workspace = true
 
 [dev-dependencies]
 srctrait-common-testing.workspace = true
