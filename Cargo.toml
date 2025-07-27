@@ -1,9 +1,10 @@
 [workspace]
-resolver = "2"
 members = [
     "packages/srctrait-common",
+    "packages/srctrait-common-anygit",
     "packages/srctrait-common-chronox",
     "packages/srctrait-common-clapx",
+    "packages/srctrait-common-dotrepo",
     "packages/srctrait-common-ronx",
     "packages/srctrait-common-stdx",
     "packages/srctrait-common-tomlx",
@@ -11,14 +12,37 @@ members = [
     "packages/testing/srctrait-common-testing",
     "packages/testing/srctrait-common-testing-macro",
 ]
+resolver = "2"
 
 [workspace.dependencies]
-clap = { version="4.5", features = ["derive"] }
+anyhow = "1"
 chrono = "0.4"
+derive_builder = "0.20"
+indoc = "2"
 ron = "0.10"
-serde = { version = "1", features = ["derive"] }
 thiserror = "2"
 toml = "0.8"
+walkdir = "2.5"
 
-srctrait-common-stdx = { version="1", path="packages/srctrait-common-stdx" }
-srctrait-common-testing = { path="packages/testing/srctrait-common-testing" }
+[workspace.dependencies.clap]
+version = "4.5"
+features = ["derive"]
+
+[workspace.dependencies.semver]
+version = "1"
+features = ["serde"]
+
+[workspace.dependencies.serde]
+version = "1"
+features = ["derive"]
+
+[workspace.dependencies.srctrait-common-stdx]
+version = "1"
+path = "packages/srctrait-common-stdx"
+
+[workspace.dependencies.srctrait-common-testing]
+path = "packages/testing/srctrait-common-testing"
+
+[workspace.dependencies.strum]
+version = "0.27"
+features = ["derive"]
