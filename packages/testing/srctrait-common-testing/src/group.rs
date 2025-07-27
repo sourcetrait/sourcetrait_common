@@ -46,6 +46,7 @@ pub struct GroupBuilder<'func> {
     pub(crate) base_temp_dir: PathBuf,
     pub(crate) using_temp_dir: bool,
     pub(crate) using_fixture_dir: bool,
+    pub(crate) skip_temp_dir_teardown: bool,
     pub(crate) setup_func: Option<Box<dyn FnOnce(&mut TestGroup) + 'func>>,
     pub(crate) static_teardown_func: Option<extern "C" fn()>,
 }
@@ -59,6 +60,7 @@ impl<'func> GroupBuilder<'func> {
             base_temp_dir: std::env::temp_dir(),
             using_temp_dir: false,
             using_fixture_dir: false,
+            skip_temp_dir_teardown: false,
             setup_func: None,
             static_teardown_func: None,
         }
@@ -98,9 +100,22 @@ impl<'func> GroupBuilder<'func> {
         if let Some(setup_func) = self.setup_func {
             setup_func(&mut group);
         }
+        
+        let teardown_temp_dir = if self.skip_temp_dir_teardown {
+            if let Some(tmpdir) = &group.base_temp_dir {
+                // Log that we're skipping teardown of the temp dir
+                println!("TESTING: {} :: Skipped teardown of temp_dir:\n  {}",
+                    group.namepath,
+                    tmpdir.display());
+            }
+
+            None
+        } else {
+            group.base_temp_dir.clone()
+        };
 
         let teardown = Teardown {
-            base_temp_dir: group.base_temp_dir.clone(),
+            base_temp_dir: teardown_temp_dir,
             func: self.static_teardown_func.take()
         };
 
@@ -121,7 +136,11 @@ impl<'func> GroupBuilder<'func> {
         self.base_temp_dir = dir;
         self
     }
-
+    
+    pub fn skip_temp_dir_teardown(mut self, skip: bool) -> Self {
+        self.skip_temp_dir_teardown = skip;
+        self
+    }
 
     pub fn using_temp_dir(mut self) -> Self {
         self.using_temp_dir = true;

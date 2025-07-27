@@ -1,7 +1,11 @@
 CHANGES: SrcTrait Common Testing
 ===============================================================================
 
-## v4.1
+## v4.2.0
+### Added `GroupBuilder::skip_temp_dir_teardown()`
+Skips deletion of its temp_dir and logs the location. See docs for v4.1.0.
+
+## v4.1.0
 ### Added `ModuleBuilder::skip_temp_dir_teardown()`
 Skips deletion of its temp_dir and logs the location.
 

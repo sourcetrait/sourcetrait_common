@@ -1,6 +1,6 @@
 [package]
 name = "srctrait-common-testing"
-version = "4.1.0"
+version = "4.2.0"
 description = "Structured testing with setup, teardown, and standardized fixture and temp directories"
 authors = ["SourceTrait <development@sourcetrait.com"]
 license = "AGPL-3.0-or-later WITH GPL-3.0-linking-source-exception"
