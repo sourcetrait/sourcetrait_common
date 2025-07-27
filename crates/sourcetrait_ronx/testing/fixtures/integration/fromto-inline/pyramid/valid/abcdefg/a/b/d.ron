@@ -1,0 +1,9 @@
+Dir(
+    name: "d",
+    children: [
+        File(
+            name: "file-d-0.txt",
+        ),
+        include("a/b/d/file-d-1.ron"),
+    ],
+)

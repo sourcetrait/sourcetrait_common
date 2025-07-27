@@ -1,2 +1,2 @@
-DESIGN: SrcTrait Common
+DESIGN: SourceTrait Common
 ================================================================================

@@ -1,0 +1,6 @@
+Dir(
+    name: "abc",
+    children: [
+        include("a.ron"),
+    ],
+)

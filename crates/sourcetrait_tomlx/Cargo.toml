@@ -1,0 +1,22 @@
+[package]
+name = "sourcetrait_tomlx"
+version = "3.2.0"
+description = "Extended TOML library for SourceTrait Common"
+authors = ["SourceTrait <development@sourcetrait.com>"]
+license = "AGPL-3.0-or-later WITH GPL-3.0-linking-source-exception"
+repository = "https://github.com/sourcetrait/sourcetrait_common"
+homepage = "https://sourcetrait.com"
+categories = []
+keywords = ["sourcetrait", "common", "tomlx"]
+edition = "2024"
+
+[dependencies]
+thiserror.workspace = true
+toml.workspace = true
+serde.workspace = true
+sourcetrait_stdx.workspace = true
+
+[dev-dependencies]
+sourcetrait_testing.workspace = true
+toml.workspace = true
+serde.workspace = true

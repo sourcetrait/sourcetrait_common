@@ -1,4 +1,4 @@
-SrcTrait Common
+SourceTrait Common
 ================================================================================
 [![License Badge]][License] [![Linkable Badge]][Linkable]
 
@@ -8,32 +8,32 @@ SrcTrait Common
 Packages
 --------------------------------------------------------------------------------
 
-### [SrcTrait Common Extended Chrono](./packages/srctrait-common-chronox)
+### [SourceTrait Common Extended Chrono](./crates/sourcetrait_chronox)
 [![ChronoX Crate Badge]][ChronoX Crate] [![Docs Badge]][ChronoX Docs]
 
 *Extended Chrono library*
 
-### [SrcTrait Common Extended RON](./packages/srctrait-common-ronx)
+### [SourceTrait Common Extended RON](./crates/sourcetrait_ronx)
 [![RonX Crate Badge]][RonX Crate] [![Docs Badge]][RonX Docs]
 
 *Extended RON library*
 
-### [SrcTrait Common Extended Standard](./packages/srctrait-common-stdx)
+### [SourceTrait Common Extended Standard](./crates/sourcetrait_stdx)
 [![StdX Crate Badge]][StdX Crate] [![Docs Badge]][Stdx Docs]
 
 *Extended standard library*
 
-### [SrcTrait Common Extended TOML](./packages/srctrait-common-tomlx)
+### [SourceTrait Common Extended TOML](./crates/sourcetrait_tomlx)
 [![TomlX Crate Badge]][TomlX Crate] [![Docs Badge]][TomlX Docs]
 
 *Extended TOML library*
 
-### [SrcTrait Common Tooling](./packages/srctrait-common-tooling)
+### [SourceTrait Common Tooling](./crates/sourcetrait_tooling)
 [![Tooling Crate Badge]][Tooling Crate] [![Docs Badge]][Tooling Docs]
 
 *Cross-platform system utilities*
 
-### [SrcTrait Common Testing](./packages/testing/srctrait-common-testing)
+### [SourceTrait Common Testing](./crates/testing/sourcetrait_testing)
 [![Testing Crate Badge]][Testing Crate] [![Docs Badge]][Testing Docs]
 
 *Structured testing with setup, teardown, and standardized fixture and temp directories*
@@ -41,16 +41,22 @@ Packages
 
 Repository
 --------------------------------------------------------------------------------
-Contributors, please review [SRCTRAIT.md](./SRCTRAIT.md).  
 
-Found a bug? Search for an existing issue on GitHub.  
-If an issue exists, chime in to add weight to it.  
-If not, create one and let us know. 
+Found a bug? Let us know! Upvote an existing issue on GitHub or create one if it
+doesn't exist.
+
+### Contributors
+Contributors, please review [SOURCETRAIT.md](./SOURCETRAIT.md).  
+
+#### Copyright Assignment Agreement (CAA)
+By committing to this repository you agree to assign to
+[Asmov LLC](https://asmov.software) all right, title, and interest worldwide in
+all copyright covering your contribution.
 
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-SrcTrait Common: Common libraries and tools for SourceTrait projects  
+SourceTrait Common: Common libraries and tools for SourceTrait projects  
 [SourceTrait](https://sourcetrait.com)  
 Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
 
@@ -89,27 +95,27 @@ covered work.
 [Linkable]: #Linking-Exception-Section-7
 [Linkable Badge]: https://img.shields.io/badge/linkable-yes-green.svg
 
-[ChronoX Crate]: https://crates.io/crates/srctrait-common-chronox
-[ChronoX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-chronox.svg
-[ChronoX Docs]: https://docs.rs/srctrait-common-chronox
+[ChronoX Crate]: https://crates.io/crates/sourcetrait_chronox
+[ChronoX Crate Badge]: https://img.shields.io/crates/v/sourcetrait_chronox.svg
+[ChronoX Docs]: https://docs.rs/sourcetrait_chronox
 
-[RonX Crate]: https://crates.io/crates/srctrait-common-ronx
-[RonX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-ronx.svg
-[RonX Docs]: https://docs.rs/srctrait-common-ronx
+[RonX Crate]: https://crates.io/crates/sourcetrait_ronx
+[RonX Crate Badge]: https://img.shields.io/crates/v/sourcetrait_ronx.svg
+[RonX Docs]: https://docs.rs/sourcetrait_ronx
 
-[StdX Crate]: https://crates.io/crates/srctrait-common-stdx
-[StdX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-stdx.svg
-[StdX Docs]: https://docs.rs/srctrait-common-stdx
+[StdX Crate]: https://crates.io/crates/sourcetrait_stdx
+[StdX Crate Badge]: https://img.shields.io/crates/v/sourcetrait_stdx.svg
+[StdX Docs]: https://docs.rs/sourcetrait_stdx
 
-[TomlX Crate]: https://crates.io/crates/srctrait-common-tomlx
-[TomlX Crate Badge]: https://img.shields.io/crates/v/srctrait-common-tomlx.svg
-[TomlX Docs]: https://docs.rs/srctrait-common-tomlx
+[TomlX Crate]: https://crates.io/crates/sourcetrait_tomlx
+[TomlX Crate Badge]: https://img.shields.io/crates/v/sourcetrait_tomlx.svg
+[TomlX Docs]: https://docs.rs/sourcetrait_tomlx
 
-[Tooling Crate]: https://crates.io/crates/srctrait-common-tooling
-[Tooling Crate Badge]: https://img.shields.io/crates/v/srctrait-common-tooling.svg
-[Tooling Docs]: https://docs.rs/srctrait-common-tooling
+[Tooling Crate]: https://crates.io/crates/sourcetrait_tooling
+[Tooling Crate Badge]: https://img.shields.io/crates/v/sourcetrait_tooling.svg
+[Tooling Docs]: https://docs.rs/sourcetrait_tooling
 
-[Testing Crate]: https://crates.io/crates/srctrait-common-testing
-[Testing Crate Badge]: https://img.shields.io/crates/v/srctrait-common-testing.svg
-[Testing Docs]: https://docs.rs/srctrait-common-testing
+[Testing Crate]: https://crates.io/crates/sourcetrait_testing
+[Testing Crate Badge]: https://img.shields.io/crates/v/sourcetrait_testing.svg
+[Testing Docs]: https://docs.rs/sourcetrait_testing
 

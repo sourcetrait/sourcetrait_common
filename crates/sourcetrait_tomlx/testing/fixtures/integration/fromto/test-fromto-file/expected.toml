@@ -1,0 +1,25 @@
+[Dir]
+name = "sourcetrait_common"
+
+[[Dir.children]]
+
+[Dir.children.Dir]
+name = "packages"
+
+[[Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir]
+name = "sourcetrait_tomlx"
+
+[[Dir.children.Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir.children.File]
+name = "SOURCETRAIT.md"
+
+[[Dir.children.Dir.children.Dir.children]]
+
+[Dir.children.Dir.children.Dir.children.File]
+name = "SOURCETRAIT"
+
+[Dir.children.Dir.children.Dir.children.File.symlink.File]
+name = "SOURCETRAIT.md"
