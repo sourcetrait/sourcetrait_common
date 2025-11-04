@@ -19,7 +19,7 @@ regex.workspace = true
 hashlink = { version = "0.10.0", features = ["serde"] }
 erased-serde = "0.4.8"
 serde-value = "0.7.0"
-sourcetrait_ronx_macro = { path = "../sourcetrait_ronx_macro" }
+sourcetrait_ronx_macro = { path = "../sourcetrait_ronx_macro", version="1" }
 
 [dev-dependencies]
 sourcetrait_testing.workspace = true
