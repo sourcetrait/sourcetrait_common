@@ -57,7 +57,7 @@ all copyright covering your contribution.
 License (AGPL3)
 --------------------------------------------------------------------------------
 SourceTrait Common: Common libraries and tools for SourceTrait projects  
-[SourceTrait](https://sourcetrait.com)  
+Developed by [SourceTrait](https://sourcetrait.com), a division of **Asmov LLC**  
 Copyright (C) 2025 [Asmov LLC](https://asmov.software)  
 
 This program is free software: you can redistribute it and/or modify

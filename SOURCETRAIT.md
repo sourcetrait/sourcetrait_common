@@ -28,9 +28,9 @@ Apologies for the inconvenience, but this requirement allows us to distrubute ac
 
 ##
 
-Source Trait, a division of Asmov LLC  
+SourceTrait, a division of Asmov LLC  
 San Diego CA USA  
 [sourcetrait.com](https://sourcetrait.com)  
 [development@sourcetrait.com](mailto:development@sourcetrait.com)
 
-*Last updated: 2025-05-13*
+*Last updated: 2025-11-04*
