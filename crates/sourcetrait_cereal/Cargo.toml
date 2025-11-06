@@ -1,0 +1,19 @@
+[package]
+name = "sourcetrait_cereal"
+description = "Data Serialization / Deserialization"
+version.workspace    = true
+authors.workspace    = true
+license.workspace    = true
+edition.workspace    = true
+repository.workspace = true
+homepage.workspace   = true
+categories.workspace = true
+keywords.workspace   = true
+
+[dependencies]
+rkyv.workspace = true
+bitcode.workspace = true
+serde.workspace = true
+sourcetrait_cereal_macro = { path = "../sourcetrait_cereal_macro" }
+
+[dev-dependencies]

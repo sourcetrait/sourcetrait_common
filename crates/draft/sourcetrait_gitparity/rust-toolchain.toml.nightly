@@ -1,4 +1,0 @@
-# Rename this file to `rust-toolchain.toml` to use it.
-# Set cargo.toml features to 'nightly' to enable
-[toolchain]
-channel = "nightly"

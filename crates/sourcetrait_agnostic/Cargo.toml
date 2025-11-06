@@ -1,0 +1,43 @@
+[package]
+name = "sourcetrait_agnostic"
+description = "Platform-agnostic environment and system calls"
+version.workspace    = true
+authors.workspace    = true
+license.workspace    = true
+edition.workspace    = true
+repository.workspace = true
+homepage.workspace   = true
+categories.workspace = true
+keywords.workspace   = true
+
+[dependencies]
+directories.workspace = true
+snafu.workspace = true
+shellexpand.workspace = true
+sourcetrait_stdx.workspace = true
+sourcetrait_agnostic_bridge.workspace = true
+sourcetrait_twostr.workspace = true
+derive_more.workspace = true
+strum.workspace = true
+
+[target.'cfg(target_family = "unix")'.dependencies]
+sourcetrait_agnostic_unix = { path = "../../../sourcetrait_common_mono/unix/crates/sourcetrait_agnostic_unix" }
+#sourcetrait_agnostic_unix = { git = "https://github.com/sourcetrait/sourcetrait_common_mono", branch = "draft/roylaurie" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+sourcetrait_agnostic_linux = { path = "../../../sourcetrait_common_mono/linux/crates/sourcetrait_agnostic_linux" }
+#sourcetrait_agnostic_linux = { git = "https://github.com/sourcetrait/sourcetrait_common_mono", branch = "draft/roylaurie"}
+
+[target.'cfg(target_os = "macos")'.dependencies]
+sourcetrait_agnostic_macos = { git = "https://github.com/sourcetrait/sourcetrait_common_mono", branch = "draft/roylaurie" }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+sourcetrait_agnostic_windows = { git = "https://github.com/sourcetrait/sourcetrait_common_mono", branch = "draft/roylaurie" }
+
+[dev-dependencies]
+sourcetrait_testing.workspace = true
+
+[features]
+default = []
+test_with_gui = []
+test_with_terminal = []

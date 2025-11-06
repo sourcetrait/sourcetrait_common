@@ -11,7 +11,7 @@ mod tests {
     
     #[tested]
     fn test_example() {
-        const NAMEPATH: &'static str = "sourcetrait_testing/example/example-test/test-example";
+        const NAMEPATH: &'static str = "sourcetrait_testing/example/example_test/test_example";
         let test = testing::test!({
             .using_fixture_dir()
         });

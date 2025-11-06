@@ -1,4 +1,3 @@
-use std::{ffi::OsStr, ops::Deref, path::{Path, PathBuf}, sync::LazyLock};
 use crate::*;
 
 /// Standalone top-level testing group.
@@ -196,6 +195,27 @@ impl Group {
 }
 
 /// Constructs a [TestGroup] and wraps it in [Group]
+/// 
+/// ## Forms
+/// - Basic:
+///   - `group!(namepath: &str, use_case_variant: testing::UseCase::{Variant})`
+/// - Builder:
+///   - `group!(namepath: &str, use_case_variant: testing::UseCase::{Variant}, { builder method calls ... })`
+/// 
+/// ## Examples
+/// ### Basic 
+/// ```rust,ignore
+/// static MYGROUP: testing::Group = testing::group!("my/group", Integration);
+/// ```
+/// ### Builder
+/// ```rust,ignore
+/// static MYGROUP: testing::Group = testing::group!("my/group", Unit, {
+///     .using_fixture_dir()
+///     .setup(|_this| {
+///         dbg!("hello");
+///     })
+/// });
+/// ```
 #[macro_export]
 macro_rules! group {
     ($n:expr, $u:tt, {$($b:tt)+}) => {
@@ -231,7 +251,7 @@ mod tests {
 
     static GROUP_BASIC: Group = group!("group/basic", Unit);
 
-    static GROUP_WITH_DIRS: Group = group!("group/with-dirs", Unit, {
+    static GROUP_WITH_DIRS: Group = group!("group/with_dirs", Unit, {
         .using_fixture_dir()
         .using_temp_dir()
     });
@@ -269,7 +289,7 @@ mod tests {
         }
     }
 
-    static GROUP_WITH_SETUP: Group = group!("group/with-setup", Unit, {
+    static GROUP_WITH_SETUP: Group = group!("group/with_setup", Unit, {
         .setup(setup_func)
     });
 
@@ -288,7 +308,7 @@ mod tests {
     #[test]
     fn test_setup_closure() {
         let mut setup_closure_called = false;
-        let _group: TestGroup = GroupBuilder::new(env!("CARGO_PKG_NAME"), UseCase::Unit, "group/with-closure")
+        let _group: TestGroup = GroupBuilder::new(env!("CARGO_PKG_NAME"), UseCase::Unit, "group/with_closure")
             .setup(|_| {
                 setup_closure_called = true;
             })
@@ -303,7 +323,7 @@ mod tests {
         println!("STATIC_GROUP: teardown_static() ran");
     }
 
-    static GROUP_WITH_TEARDOWN: Group = group!("group/with-teardown", Unit, {
+    static GROUP_WITH_TEARDOWN: Group = group!("group/with_teardown", Unit, {
         .teardown_static(teardown_func)
     });
 

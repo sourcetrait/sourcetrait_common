@@ -1,0 +1,15 @@
+[package]
+name = "sourcetrait_agnostic_bridge"
+description = "Bridge between SourceTrait Agnostic and its platform drivers"
+version.workspace    = true
+authors.workspace    = true
+license.workspace    = true
+edition.workspace    = true
+repository.workspace = true
+homepage.workspace   = true
+categories.workspace = true
+keywords.workspace   = true
+
+[dependencies]
+snafu.workspace = true
+sourcetrait_twostr.workspace = true

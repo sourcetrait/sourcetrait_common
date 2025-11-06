@@ -42,13 +42,13 @@ mod tests {
     // Fixture dirs are enforced at runtime and panic if they don't exist.
     //
     // This module's namepath().full_path() will be:
-    //     sourcetrait_testing/integration/example-fibonacci
+    //     sourcetrait_testing/integration/example_fibonacci
     //
     // This module's namepath().path() will be:
-    //     integration/example-fibonacci
+    //     integration/example_fibonacci
     //
     // fixture dir: $CRATE/testing/fixtures/integration/example-fibonacci
-    // temp dir: $TMP/sourcetrait_testing-example-fibonacci.XXXXXXXX
+    // temp dir: $TMP/sourcetrait_testing_example_fibonacci.XXXXXXXX
     // 
     // As this is an example, using `testing::module!(Example, {...})`
     // would normally be more appropriate here. However, we're demonstrating
@@ -71,7 +71,7 @@ mod tests {
     });
 
     static FIBONACCI_U128_CSV_FILENAME: LazyLock<String> = LazyLock::new(||
-        "fibonacci-u128.csv".to_string());
+        "fibonacci_u128.csv".to_string());
 
     // Anything const or static can be used with static teardown functions,
     // including things like LazyLock.
@@ -87,10 +87,10 @@ mod tests {
     // They have their own tmp and fixture directories, setup, and teardown.
     //
     // This group's namepath().full_path() will be:
-    //     sourcetrait_testing/integration/example-fibonacci/100
+    //     sourcetrait_testing/integration/example_fibonacci/100
     // This group's namepath().path() will be:
-    //     integration/example-fibonacci/100
-    static GROUP_100: testing::Group = testing::group!("example-fibonacci/100", Integration, {
+    //     integration/example_fibonacci/100
+    static GROUP_100: testing::Group = testing::group!("example_fibonacci/100", Integration, {
         .using_fixture_dir()
     });
 
@@ -104,8 +104,8 @@ mod tests {
         //
         // Tests block on their module's setup. The tmp file needed here will exist.
         //
-        // fixture dir: $CRATE/testing/fixtures/integration/example-fibonacci/test-u128
-        // tmp dir: $TMP/sourcetrait_testing-example-fibonacci.XXXXXXXX
+        // fixture dir: $CRATE/testing/fixtures/integration/example_fibonacci/test_u128
+        // tmp dir: $TMP/sourcetrait_testing_example_fibonacci.XXXXXXXX
         let test = testing::test!({
             .using_fixture_dir()
             .inherit_temp_dir()
@@ -133,7 +133,7 @@ mod tests {
         let _test = testing::test!();
 
         // Groups will block on their setup.
-        let fib100_file = GROUP_100.fixture_dir().join("fib-100.txt");
+        let fib100_file = GROUP_100.fixture_dir().join("fib_100.txt");
 
         let fib100: u128 = fs::read_to_string(fib100_file)
             .map(|d| d.trim().parse().unwrap())

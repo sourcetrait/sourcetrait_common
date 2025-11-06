@@ -15,3 +15,13 @@ pub enum Error {
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
+
+impl Into<std::io::Error> for Error {
+    fn into(self) -> std::io::Error {
+        match self {
+            Error::Io(.., error) => error,
+            Error::DeserializeTOML(error) => std::io::Error::new(std::io::ErrorKind::InvalidData, error),
+            Error::SerializeTOML(error) => std::io::Error::new(std::io::ErrorKind::InvalidData, error),
+        }
+    }
+}

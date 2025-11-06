@@ -1,4 +1,6 @@
 /target
 /Cargo.lock
-.DS_Store
+/.once
 /.local
+.DS_Store
+*.profraw

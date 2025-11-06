@@ -1,9 +1,0 @@
-Dir(
-    name: "e",
-    children: [
-        File(
-            name: "file-e-0.txt",
-        ),
-        include("a/b/e/file-e-1.ron"),
-    ],
-)

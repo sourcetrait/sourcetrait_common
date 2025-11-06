@@ -1,4 +1,3 @@
-use std::path::{Path, PathBuf};
 use crate::*;
 
 /// Configuraiton for a single unit or integration test.
@@ -92,7 +91,7 @@ pub struct TestBuilder<'module,'func> {
 }
 
 impl<'module,'func> TestBuilder<'module,'func> {
-    pub fn new(module: &'module TestModule, name: &'static str) -> Self{
+    pub fn new(module: &'module TestModule, name: &'static str) -> Self {
         assert!(!name.contains("::") && !name.contains('/') && !name.contains('.'),
             "Test name should be a single non-delimited token.");
 
@@ -201,7 +200,95 @@ impl<'module,'func> TestBuilder<'module,'func> {
     }
 }
 
+pub struct TestWith<'module, 'func, H> {
+    inner: Test<'module, 'func>,
+    harness: &'module H,
+}
+
+impl<'module, 'func, H> TestWith<'module, 'func, H> {
+    pub fn harness(&self) -> &H {
+        self.harness
+    }
+}
+
+impl<'module, 'func, H> Deref for TestWith<'module, 'func, H> {
+    type Target = Test<'module, 'func>;
+    
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+pub struct TestBuilderWith<'module, 'func, H> {
+    inner: TestBuilder<'module, 'func>,
+    harness: &'module H,
+}
+
+impl<'module, 'func, H> TestBuilderWith<'module, 'func, H> {
+    pub fn new(module: &'module ModuleWith<H>, name: &'static str) -> Self {
+        let harness = module.harness();
+        let inner = TestBuilder::new(module, name);
+        Self { inner, harness }
+    }
+    
+    pub fn using_fixture_dir(mut self) -> Self {
+        self.inner = self.inner.using_fixture_dir();
+        self
+    }
+    
+    pub fn using_temp_dir(mut self) -> Self {
+        self.inner = self.inner.using_fixture_dir();
+        self
+    }
+    
+    pub fn inherit_temp_dir(mut self) -> Self {
+        self.inner = self.inner.inherit_fixture_dir();
+        self
+    }
+    
+    pub fn inherit_fixture_dir(mut self) -> Self {
+        self.inner = self.inner.inherit_fixture_dir();
+        self
+    }
+    
+    pub fn teardown(mut self, func: impl FnOnce(&mut Test) + 'func) -> Self {
+        self.inner = self.inner.teardown(func);
+        self
+    }
+    
+    pub fn build(self) -> TestWith<'module, 'func, H> {
+        let inner = self.inner.build();
+        let harness = self.harness;
+        
+        TestWith {
+            inner,
+            harness,
+        }
+    }
+}
+
 /// Constructs a [Test] using with a parent [TestModule] in scope named, "TESTING".
+/// 
+/// Requires that the test method is attributed with `#[tested]`.
+/// 
+/// ## Forms
+/// - Bare:
+///   - `test!()`
+/// - Builder:
+///   - `test!({ builder method calls ... })`
+/// 
+/// ## Examples
+/// ### Bare
+/// ```rust,ignore
+/// let test = testing::test!()
+/// ```
+/// ### Builder
+/// ```rust,ignore
+/// let test = testing::test!({
+///     .inherit_fixture_dir()
+///     .inherit_temp_dir()
+/// });
+/// ```
 #[macro_export]
 macro_rules! test {
     ({$($b:tt)+}) => {
@@ -214,9 +301,21 @@ macro_rules! test {
     };
 }
 
+#[macro_export]
+macro_rules! harness_test {
+    ({$($b:tt)+}) => {
+        $crate::TestBuilderWith::new(&TESTING, function_name!())
+        $($b)+
+            .build()
+    };
+    () => {
+        $crate::TestBuilderWith::new(&TESTING, function_name!()).build()
+    };
+}
+
 /// Constructs a [Test] using a custom ident for its parent [TestModule].
 #[macro_export]
-macro_rules! test_with {
+macro_rules! test_as {
     ($m:ident, {$($b:tt)+}) => {
         let builder = $crate::TestBuilder::new(&$m, function_name!());
         builder$($b)+
@@ -257,7 +356,7 @@ mod tests {
     #[test] #[named]
     fn test_name() {
         let test = MODULE_BASIC.test_builder(function_name!()).build();
-        assert_eq!("test-name", test.namepath().name(),
+        assert_eq!("test_name", test.namepath().name(),
             "Test name should be set.");
     }
 
@@ -271,7 +370,7 @@ mod tests {
     // Test with a parent Group should have a namepath of: `Test::group().namepath()` / `Test::name()`
     #[test] #[named]
     fn test_namepath() {
-        const EXPECTED_TEST_NAMEPATH: &'static str = "unit/test/test-namepath";
+        const EXPECTED_TEST_NAMEPATH: &'static str = "unit/test/test_namepath";
         let test = MODULE_BASIC.test_builder(function_name!()).build();
         assert_eq!(EXPECTED_TEST_NAMEPATH, test.namepath().to_string());
     }
@@ -309,7 +408,7 @@ mod tests {
             .build();
 
         assert!(test.temp_dir().exists());
-        assert_eq!(MODULE_WITH_DIRS.temp_dir().join("test-temp-dir-using"), test.temp_dir());
+        assert_eq!(MODULE_WITH_DIRS.temp_dir().join("test_temp_dir_using"), test.temp_dir());
     }
 
     // Test configured to `inherit_temp_dir()` should have the same temp path as its parent.
@@ -357,7 +456,7 @@ mod tests {
             .using_fixture_dir()
             .build();
 
-        assert_eq!(MODULE_WITH_DIRS.fixture_dir().join("test-fixture-dir-using"), test.fixture_dir(),
+        assert_eq!(MODULE_WITH_DIRS.fixture_dir().join("test_fixture_dir_using"), test.fixture_dir(),
             "Test configured with `using_fixture_dir()` should have a path of: `Module::fixture_dir()` + `Test::name()`");
         assert!(test.fixture_dir().exists(),
             "Fixture path should exist for Test configured as `using_fixture_dir()`");

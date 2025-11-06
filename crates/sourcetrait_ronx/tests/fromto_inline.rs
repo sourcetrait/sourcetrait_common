@@ -13,28 +13,28 @@ mod tests {
     });
     
     static GROUP_ABC: testing::Group = testing::group!(
-        "fromto-inline/pyramid/valid/abc",
+        "fromto_inline/pyramid/valid/abc",
         Integration, {
             .using_fixture_dir()
         }
     );
     
     static GROUP_ABCDEFG: testing::Group = testing::group!(
-        "fromto-inline/pyramid/valid/abcdefg",
+        "fromto_inline/pyramid/valid/abcdefg",
         Integration, {
             .using_fixture_dir()
         }
     );
     
     static GROUP_ABCDEFG_EC: testing::Group = testing::group!(
-        "fromto-inline/pyramid/valid/abcdefg-ec",
+        "fromto_inline/pyramid/valid/abcdefg_ec",
         Integration, {
             .using_fixture_dir()
         }
     );
     
     static GROUP_ABCDEFG_EC_GE: testing::Group = testing::group!(
-        "fromto-inline/pyramid/invalid/abcdefg-ec-ge",
+        "fromto_inline/pyramid/invalid/abcdefg_ec_ge",
         Integration, {
             .using_fixture_dir()
         }
@@ -164,7 +164,7 @@ mod tests {
                         name: "a".into(),
                         children: vec![
                             InlinedRon::Actual(PathKind::File(PathKindFile {
-                                name: "file-a-0.txt".into(),
+                                name: "file_a_0.txt".into(),
                             })),
                             InlinedRon::Included(RonIncluded(
                                 None,
@@ -173,13 +173,13 @@ mod tests {
                                     name: "b".into(),
                                     children: vec![
                                         InlinedRon::Actual(PathKind::File(PathKindFile {
-                                            name: "file-b-0.txt".into(),
+                                            name: "file_b_0.txt".into(),
                                         })),
                                         InlinedRon::Included(RonIncluded(
                                             None,
-                                            PathBuf::from("a/b/file-b-1.ron"),
+                                            PathBuf::from("a/b/file_b_1.ron"),
                                             PathKind::File(PathKindFile {
-                                                name: "file-b-1.txt".into(),
+                                                name: "file_b_1.txt".into(),
                                             }),
                                         )),
                                     ],
@@ -192,13 +192,13 @@ mod tests {
                                     name: "c".into(),
                                     children: vec![
                                         InlinedRon::Actual(PathKind::File(PathKindFile {
-                                            name: "file-c-0.txt".into(),
+                                            name: "file_c_0.txt".into(),
                                         })),
                                         InlinedRon::Included(RonIncluded(
                                             None,
-                                            PathBuf::from("a/c/file-c-1.ron"),
+                                            PathBuf::from("a/c/file_c_1.ron"),
                                             PathKind::File(PathKindFile {
-                                                name: "file-c-1.txt".into(),
+                                                name: "file_c_1.txt".into(),
                                             }),
                                         )),
                                     ],
@@ -222,7 +222,7 @@ mod tests {
                         name: "a".into(),
                         children: vec![
                             InlinedRon::Actual(PathKind::File(PathKindFile {
-                                name: "file-a-0.txt".into(),
+                                name: "file_a_0.txt".into(),
                             })),
                             InlinedRon::Included(RonIncluded(
                                 None,
@@ -231,13 +231,13 @@ mod tests {
                                     name: "b".into(),
                                     children: vec![
                                         InlinedRon::Actual(PathKind::File(PathKindFile {
-                                            name: "file-b-0.txt".into(),
+                                            name: "file_b_0.txt".into(),
                                         })),
                                         InlinedRon::Included(RonIncluded(
                                             None,
-                                            PathBuf::from("a/b/file-b-1.ron"),
+                                            PathBuf::from("a/b/file_b_1.ron"),
                                             PathKind::File(PathKindFile {
-                                                name: "file-b-1.txt".into(),
+                                                name: "file_b_1.txt".into(),
                                             }),
                                         )),
                                         InlinedRon::Included(RonIncluded(
@@ -247,13 +247,13 @@ mod tests {
                                                 name: "d".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-d-0.txt".into(),
+                                                        name: "file_d_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/b/d/file-d-1.ron"),
+                                                        PathBuf::from("a/b/d/file_d_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-d-1.txt".into(),
+                                                            name: "file_d_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],
@@ -266,13 +266,13 @@ mod tests {
                                                 name: "e".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-e-0.txt".into(),
+                                                        name: "file_e_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/b/e/file-e-1.ron"),
+                                                        PathBuf::from("a/b/e/file_e_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-e-1.txt".into(),
+                                                            name: "file_e_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],
@@ -288,13 +288,13 @@ mod tests {
                                     name: "c".into(),
                                     children: vec![
                                         InlinedRon::Actual(PathKind::File(PathKindFile {
-                                            name: "file-c-0.txt".into(),
+                                            name: "file_c_0.txt".into(),
                                         })),
                                         InlinedRon::Included(RonIncluded(
                                             None,
-                                            PathBuf::from("a/c/file-c-1.ron"),
+                                            PathBuf::from("a/c/file_c_1.ron"),
                                             PathKind::File(PathKindFile {
-                                                name: "file-c-1.txt".into(),
+                                                name: "file_c_1.txt".into(),
                                             }),
                                         )),
                                         InlinedRon::Included(RonIncluded(
@@ -304,13 +304,13 @@ mod tests {
                                                 name: "f".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-f-0.txt".into(),
+                                                        name: "file_f_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/c/f/file-f-1.ron"),
+                                                        PathBuf::from("a/c/f/file_f_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-f-1.txt".into(),
+                                                            name: "file_f_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],
@@ -323,13 +323,13 @@ mod tests {
                                                 name: "g".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-g-0.txt".into(),
+                                                        name: "file_g_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/c/g/file-g-1.ron"),
+                                                        PathBuf::from("a/c/g/file_g_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-g-1.txt".into(),
+                                                            name: "file_g_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],
@@ -356,7 +356,7 @@ mod tests {
                         name: "a".into(),
                         children: vec![
                             InlinedRon::Actual(PathKind::File(PathKindFile {
-                                name: "file-a-0.txt".into(),
+                                name: "file_a_0.txt".into(),
                             })),
                             InlinedRon::Included(RonIncluded(
                                 None,
@@ -365,13 +365,13 @@ mod tests {
                                     name: "b".into(),
                                     children: vec![
                                         InlinedRon::Actual(PathKind::File(PathKindFile {
-                                            name: "file-b-0.txt".into(),
+                                            name: "file_b_0.txt".into(),
                                         })),
                                         InlinedRon::Included(RonIncluded(
                                             None,
-                                            PathBuf::from("a/b/file-b-1.ron"),
+                                            PathBuf::from("a/b/file_b_1.ron"),
                                             PathKind::File(PathKindFile {
-                                                name: "file-b-1.txt".into(),
+                                                name: "file_b_1.txt".into(),
                                             }),
                                         )),
                                         InlinedRon::Included(RonIncluded(
@@ -381,13 +381,13 @@ mod tests {
                                                 name: "d".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-d-0.txt".into(),
+                                                        name: "file_d_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/b/d/file-d-1.ron"),
+                                                        PathBuf::from("a/b/d/file_d_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-d-1.txt".into(),
+                                                            name: "file_d_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],
@@ -400,13 +400,13 @@ mod tests {
                                                 name: "e".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-e-0.txt".into(),
+                                                        name: "file_e_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/b/e/file-e-1.ron"),
+                                                        PathBuf::from("a/b/e/file_e_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-e-1.txt".into(),
+                                                            name: "file_e_1.txt".into(),
                                                         }),
                                                     )),
                                                     InlinedRon::Included(RonIncluded(
@@ -416,13 +416,13 @@ mod tests {
                                                             name: "c".into(),
                                                             children: vec![
                                                                 InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                                    name: "file-c-0.txt".into(),
+                                                                    name: "file_c_0.txt".into(),
                                                                 })),
                                                                 InlinedRon::Included(RonIncluded(
                                                                     None,
-                                                                    PathBuf::from("a/c/file-c-1.ron"),
+                                                                    PathBuf::from("a/c/file_c_1.ron"),
                                                                     PathKind::File(PathKindFile {
-                                                                        name: "file-c-1.txt".into(),
+                                                                        name: "file_c_1.txt".into(),
                                                                     }),
                                                                 )),
                                                                 InlinedRon::Included(RonIncluded(
@@ -432,13 +432,13 @@ mod tests {
                                                                         name: "f".into(),
                                                                         children: vec![
                                                                             InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                                                name: "file-f-0.txt".into(),
+                                                                                name: "file_f_0.txt".into(),
                                                                             })),
                                                                             InlinedRon::Included(RonIncluded(
                                                                                 None,
-                                                                                PathBuf::from("a/c/f/file-f-1.ron"),
+                                                                                PathBuf::from("a/c/f/file_f_1.ron"),
                                                                                 PathKind::File(PathKindFile {
-                                                                                    name: "file-f-1.txt".into(),
+                                                                                    name: "file_f_1.txt".into(),
                                                                                 }),
                                                                             )),
                                                                         ],
@@ -451,13 +451,13 @@ mod tests {
                                                                         name: "g".into(),
                                                                         children: vec![
                                                                             InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                                                name: "file-g-0.txt".into(),
+                                                                                name: "file_g_0.txt".into(),
                                                                             })),
                                                                             InlinedRon::Included(RonIncluded(
                                                                                 None,
-                                                                                PathBuf::from("a/c/g/file-g-1.ron"),
+                                                                                PathBuf::from("a/c/g/file_g_1.ron"),
                                                                                 PathKind::File(PathKindFile {
-                                                                                    name: "file-g-1.txt".into(),
+                                                                                    name: "file_g_1.txt".into(),
                                                                                 }),
                                                                             )),
                                                                         ],
@@ -479,13 +479,13 @@ mod tests {
                                     name: "c".into(),
                                     children: vec![
                                         InlinedRon::Actual(PathKind::File(PathKindFile {
-                                            name: "file-c-0.txt".into(),
+                                            name: "file_c_0.txt".into(),
                                         })),
                                         InlinedRon::Included(RonIncluded(
                                             None,
-                                            PathBuf::from("a/c/file-c-1.ron"),
+                                            PathBuf::from("a/c/file_c_1.ron"),
                                             PathKind::File(PathKindFile {
-                                                name: "file-c-1.txt".into(),
+                                                name: "file_c_1.txt".into(),
                                             }),
                                         )),
                                         InlinedRon::Included(RonIncluded(
@@ -495,13 +495,13 @@ mod tests {
                                                 name: "f".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-f-0.txt".into(),
+                                                        name: "file_f_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/c/f/file-f-1.ron"),
+                                                        PathBuf::from("a/c/f/file_f_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-f-1.txt".into(),
+                                                            name: "file_f_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],
@@ -514,13 +514,13 @@ mod tests {
                                                 name: "g".into(),
                                                 children: vec![
                                                     InlinedRon::Actual(PathKind::File(PathKindFile {
-                                                        name: "file-g-0.txt".into(),
+                                                        name: "file_g_0.txt".into(),
                                                     })),
                                                     InlinedRon::Included(RonIncluded(
                                                         None,
-                                                        PathBuf::from("a/c/g/file-g-1.ron"),
+                                                        PathBuf::from("a/c/g/file_g_1.ron"),
                                                         PathKind::File(PathKindFile {
-                                                            name: "file-g-1.txt".into(),
+                                                            name: "file_g_1.txt".into(),
                                                         }),
                                                     )),
                                                 ],

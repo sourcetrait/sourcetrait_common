@@ -1,0 +1,28 @@
+[package]
+name = "sourcetrait_dotrepo"
+description = "Multi-tenant .repo directory structure for file repository systems"
+version.workspace    = true
+authors.workspace    = true
+license.workspace    = true
+edition.workspace    = true
+repository.workspace = true
+homepage.workspace   = true
+categories.workspace = true
+keywords.workspace   = true
+
+[dependencies]
+derive_builder.workspace = true
+ignore = "0.4"
+indoc.workspace = true
+semver.workspace = true
+serde.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+walkdir.workspace = true
+
+[dev-dependencies]
+sourcetrait_testing.workspace = true
+
+#[[example]]
+#name = "example"
+#test = true

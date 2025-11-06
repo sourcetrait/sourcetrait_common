@@ -1,0 +1,28 @@
+[package]
+name = "sourcetrait_sock"
+version = "0.1.0"
+edition = "2024"
+description = "Green thread subsystem framework"
+authors = ["SourceTrait <development@sourcetrait.com"]
+license = "AGPL-3.0-or-later WITH GPL-3.0-linking-source-exception"
+repository = "https://github.com/sourcetrait/sourcetrait_common"
+homepage = "https://sourcetrait.com"
+categories = []
+keywords = ["sourcetrait", "common", "sock"]
+
+[dependencies]
+bitcode.workspace = true
+rkyv.workspace = true
+serde.workspace = true
+snafu.workspace = true
+sourcetrait_agnostic.workspace = true
+tokio.workspace = true
+
+tokio-rustls = "0.26"
+subnetwork = "0.6"
+bytes = "1"
+webpki-roots = "1.0.5"
+
+[dev-dependencies]
+sourcetrait_testing.workspace = true
+sourcetrait_tomlx.workspace = true

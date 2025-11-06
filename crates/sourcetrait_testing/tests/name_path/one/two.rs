@@ -4,7 +4,7 @@ mod tests {
 
     static TESTING: testing::Module = testing::module!(Integration);
 
-    const GROUP_NAME: &'static str = "namepath-group/uno/dos";
+    const GROUP_NAME: &'static str = "namepath_group/uno/dos";
     static GROUP: testing::Group = testing::group!(GROUP_NAME, Integration);
 
     #[tested]
@@ -13,21 +13,21 @@ mod tests {
         const EXPECTED_USE_CASE: testing::UseCase = testing::UseCase::Integration;
 
         const EXPECTED_MODULE_KIND: testing::TestingKind = testing::TestingKind::Module;
-        const EXPECTED_MODULE_FULL_PATH: &'static str = "sourcetrait_testing/integration/namepaths/name-path/one/two";
-        const EXPECTED_MODULE_PATH: &'static str = "integration/namepaths/name-path/one/two";
+        const EXPECTED_MODULE_FULL_PATH: &'static str = "sourcetrait_testing/integration/namepaths/name_path/one/two";
+        const EXPECTED_MODULE_PATH: &'static str = "integration/namepaths/name_path/one/two";
         const EXPECTED_MODULE_NAME: &'static str = "two";
         const EXPECTED_MODULE_RAW: &'static str = "module;integration;sourcetrait_testing;namepaths::name_path::one::two::tests";
 
         const EXPECTED_GROUP_KIND: testing::TestingKind = testing::TestingKind::Group;
-        const EXPECTED_GROUP_FULL_PATH: &'static str = "sourcetrait_testing/integration/namepath-group/uno/dos";
-        const EXPECTED_GROUP_PATH: &'static str = "integration/namepath-group/uno/dos";
+        const EXPECTED_GROUP_FULL_PATH: &'static str = "sourcetrait_testing/integration/namepath_group/uno/dos";
+        const EXPECTED_GROUP_PATH: &'static str = "integration/namepath_group/uno/dos";
         const EXPECTED_GROUP_NAME: &'static str = "dos";
-        const EXPECTED_GROUP_RAW: &'static str = "group;integration;sourcetrait_testing;namepath-group/uno/dos";
+        const EXPECTED_GROUP_RAW: &'static str = "group;integration;sourcetrait_testing;namepath_group/uno/dos";
 
         const EXPECTED_TEST_KIND: testing::TestingKind = testing::TestingKind::Test;
-        const EXPECTED_TEST_FULL_PATH: &'static str = "sourcetrait_testing/integration/namepaths/name-path/one/two/test-namepath";
-        const EXPECTED_TEST_PATH: &'static str = "integration/namepaths/name-path/one/two/test-namepath";
-        const EXPECTED_TEST_NAME: &'static str = "test-namepath";
+        const EXPECTED_TEST_FULL_PATH: &'static str = "sourcetrait_testing/integration/namepaths/name_path/one/two/test_namepath";
+        const EXPECTED_TEST_PATH: &'static str = "integration/namepaths/name_path/one/two/test_namepath";
+        const EXPECTED_TEST_NAME: &'static str = "test_namepath";
         const EXPECTED_TEST_RAW: &'static str = "test;integration;sourcetrait_testing;namepaths::name_path::one::two::tests;test_namepath";
 
         // Module

@@ -1,4 +1,3 @@
-use std::{fmt::Display, path::Path};
 use crate::*;
 
 /// Common to all testing models: [TestModule], [TestGroup], and [Test].
@@ -20,7 +19,17 @@ pub trait Testing {
     
     /// The testing use-case
     fn use_case(&self)-> UseCase;
+    
+    /// Checks to see if the environment variable "TESTING_DBG" is set (to "1"
+    /// or "true").
+    /// 
+    /// Intended for printing additional debug output.
+    fn is_env_debugging(&self) -> bool {
+        std::env::var(ENV_TESTING_DBG).is_ok_and(|v| v == "1" || v.to_lowercase() == "true")
+    }
 }
+
+const ENV_TESTING_DBG: &'static str = "TESTING_DBG";
 
 /// The type of testing being performed
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -29,6 +38,8 @@ pub enum UseCase {
     Unit,
     /// Integration tests
     Integration,
+    /// System tests
+    System,
     /// Examples
     Example,
     /// Benchmarks
@@ -40,6 +51,7 @@ impl Display for UseCase {
         match self {
             UseCase::Unit => write!(f, "unit"),
             UseCase::Integration => write!(f, "integration"),
+            UseCase::System => write!(f, "system"),
             UseCase::Example => write!(f, "example"),
             UseCase::Benchmark => write!(f, "benchmark"),
         }

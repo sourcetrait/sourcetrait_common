@@ -1,4 +1,3 @@
-use std::{fmt::Display, hash::Hash, path::{Path, PathBuf}, sync::LazyLock};
 use crate::*;
 
 /// Describes the normalized namepath of a [TestModule], [TestGroup], or [Test].
@@ -89,7 +88,7 @@ impl Namepath {
     pub fn full_path_to_squashed_slug(&self) -> String {
         self.full_path
             .to_str().expect("Invalid namepath")
-            .replace("/", "-")
+            .replace("/", "_")
     }
 
     /// The crate name or equivalent
@@ -180,7 +179,8 @@ fn normalize_path(raw: &RawNamepath) -> anyhow::Result<PathBuf> {
         &raw.path
     } else {
         let captures = match raw.use_case {
-            UseCase::Integration | UseCase::Example => REGEX_NAMESPACE_INTEGRATION.captures(&raw.path),
+            UseCase::Integration | UseCase::System | UseCase::Example
+                => REGEX_NAMESPACE_INTEGRATION.captures(&raw.path),
             UseCase::Unit => REGEX_NAMESPACE_UNIT.captures(&raw.path),
             UseCase::Benchmark => REGEX_NAMESPACE_BENCHMARK.captures(&raw.path),
         };
@@ -191,14 +191,14 @@ fn normalize_path(raw: &RawNamepath) -> anyhow::Result<PathBuf> {
         }
     };
 
-    let full_path = format!("{package}/{use_case}/{path}{slash_name}",
+    let full_path = format!("{package}/{use_case}/{path}{snake_name}",
         package = &raw.package_name,
         use_case = &raw.use_case,
         path = &path
             .replace("::", "/")
-            .replace("_", "-"),
-        slash_name = raw.name.as_ref()
-            .map(|name| format!("/{}", name.replace("_", "-")))
+            .replace("-", "_"),
+        snake_name = raw.name.as_ref()
+            .map(|name| format!("/{}", name.replace("-", "_")))
             .unwrap_or_default()
     );
 
@@ -213,7 +213,7 @@ mod tests {
     // See the namepaths.rs integration test for the master copy
     static TESTING: testing::Module = testing::module!(Unit);
 
-    const GROUP_NAME: &'static str = "namepath-group/uno/dos";
+    const GROUP_NAME: &'static str = "namepath_group/uno/dos";
     static GROUP: testing::Group = testing::group!(GROUP_NAME, Unit);
 
     #[named]
@@ -229,15 +229,15 @@ mod tests {
         const EXPECTED_MODULE_RAW: &'static str = "module;unit;sourcetrait_testing;sourcetrait_testing::namepath::tests";
 
         const EXPECTED_GROUP_KIND: testing::TestingKind = testing::TestingKind::Group;
-        const EXPECTED_GROUP_FULL_PATH: &'static str = "sourcetrait_testing/unit/namepath-group/uno/dos";
-        const EXPECTED_GROUP_PATH: &'static str = "unit/namepath-group/uno/dos";
+        const EXPECTED_GROUP_FULL_PATH: &'static str = "sourcetrait_testing/unit/namepath_group/uno/dos";
+        const EXPECTED_GROUP_PATH: &'static str = "unit/namepath_group/uno/dos";
         const EXPECTED_GROUP_NAME: &'static str = "dos";
-        const EXPECTED_GROUP_RAW: &'static str = "group;unit;sourcetrait_testing;namepath-group/uno/dos";
+        const EXPECTED_GROUP_RAW: &'static str = "group;unit;sourcetrait_testing;namepath_group/uno/dos";
 
         const EXPECTED_TEST_KIND: testing::TestingKind = testing::TestingKind::Test;
-        const EXPECTED_TEST_FULL_PATH: &'static str = "sourcetrait_testing/unit/namepath/test-unit-namepath";
-        const EXPECTED_TEST_PATH: &'static str = "unit/namepath/test-unit-namepath";
-        const EXPECTED_TEST_NAME: &'static str = "test-unit-namepath";
+        const EXPECTED_TEST_FULL_PATH: &'static str = "sourcetrait_testing/unit/namepath/test_unit_namepath";
+        const EXPECTED_TEST_PATH: &'static str = "unit/namepath/test_unit_namepath";
+        const EXPECTED_TEST_NAME: &'static str = "test_unit_namepath";
         const EXPECTED_TEST_RAW: &'static str = "test;unit;sourcetrait_testing;sourcetrait_testing::namepath::tests;test_unit_namepath";
 
         // Module

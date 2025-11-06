@@ -1,4 +1,3 @@
-use std::{ffi::OsStr, ops::Deref, path::{Path, PathBuf}, sync::LazyLock};
 use crate::*;
 
 /// Represents a Rust module that contains tests.
@@ -215,19 +214,131 @@ impl Module {
     }
 }
 
+pub struct TestModuleWith<H> {
+    inner: TestModule,
+    harness: H,
+}
+
+impl<H> TestModuleWith<H> {
+    pub fn harness(&self) -> &H {
+        &self.harness
+    }
+}
+
+impl<H> Deref for TestModuleWith<H> {
+    type Target = TestModule;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+pub struct ModuleBuilderWith<'func, H> {
+    pub(crate) inner: ModuleBuilder<'func>,
+    pub(crate) harness_setup_fn: Option<Box<dyn FnOnce(&mut TestModule) -> H + 'func>>,
+}
+
+impl<'func, H> ModuleBuilderWith<'func, H> {
+    pub fn new(package_name: &'static str, use_case: UseCase, module_path: &'static str) -> Self {
+        let inner = ModuleBuilder::new(package_name, use_case, module_path);
+        Self {
+            inner,
+            harness_setup_fn: None,
+        }
+    }
+    
+    pub fn setup(mut self, func: impl FnOnce(&mut TestModule) -> H + 'func) -> Self {
+        self.harness_setup_fn = Some(Box::new(func));
+        self
+    }
+    
+    pub fn base_temp_dir<P>(mut self, dir: &P) -> Self
+    where
+        P: ?Sized + AsRef<OsStr>
+    {
+        self.inner = self.inner.base_temp_dir(dir);
+        self
+    }
+    
+    pub fn using_fixture_dir(mut self) -> Self {
+        self.inner = self.inner.using_fixture_dir();
+        self
+    }
+    pub fn using_temp_dir(mut self) -> Self {
+        self.inner = self.inner.using_temp_dir();
+        self
+    }
+
+    pub fn skip_temp_dir_teardown(mut self, skip: bool) -> Self {
+        self.inner = self.inner.skip_temp_dir_teardown(skip);
+        self
+    }
+
+    pub fn teardown_static(mut self, func: extern "C" fn()) -> Self {
+        self.inner = self.inner.teardown_static(func);
+        self
+    }
+
+    pub fn build(self) -> TestModuleWith<H> {
+        let mut inner = self.inner.build();
+        
+        let harness_fn = self.harness_setup_fn
+            .expect(".setup_harness() is required");
+        
+        let harness = (harness_fn)(&mut inner);
+
+        TestModuleWith {
+            inner,
+            harness,
+        }
+    }
+} 
+
+/// Lazy-locked wrapper for [TestHarnessModule].
+///
+/// Typically, it's constructed using the [module!()] macro. It can also be
+/// manually created by passing the result of [ModuleBuilder] to it.
+pub struct ModuleWith<H>(LazyLock<TestModuleWith<H>>);
+
+impl<H> Deref for ModuleWith<H> {
+    type Target = LazyLock<TestModuleWith<H>>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<H> ModuleWith<H> {
+    /// Creates a lazy-locked wrapper over [TestModule]
+    pub const fn new(func: fn() -> TestModuleWith<H>) -> Self {
+        Self(LazyLock::new(func))
+    }
+}
+
 /// Constructs a [TestModule] and wraps it inside a lazy-locked [Module]
+/// 
+/// The name of the static variable should be `TESTING` for standard interop.
 ///
-/// Simple usage: `module!(Unit)`
-///
-/// Complex usage:
+/// ## Forms
+/// - Basic:
+///   - `module!(use_case_variant: testing::UseCase::{Variant})`
+/// - Builder:
+///   - `module!(use_case_variant: testing::UseCase::{Variant}, { builder method calls ... })`
+/// 
+/// ## Examples
+/// ### Basic 
 /// ```rust,ignore
-/// module!(Integration, {
+/// static TESTING: testing::Module = testing::module!(Integration);
+/// ```
+/// ### Builder
+/// ```rust,ignore
+/// static TESTING: testing::Group = testing::module!(Unit, {
 ///     .using_fixture_dir()
-///     .using_tmp_dir()
-///     .setup(|module| {
-///         /* ... */
+///     .setup(|_this| {
+///         dbg!("hello");
 ///     })
-/// })
+/// });
+/// ```
 #[macro_export]
 macro_rules! module {
     ($u:tt, {$($b:tt)+}) => {
@@ -243,6 +354,23 @@ macro_rules! module {
         })
     };
 }
+
+#[macro_export]
+macro_rules! module_with {
+    ($u:tt, {$($b:tt)+}) => {
+        $crate::ModuleWith::new(|| {
+            $crate::ModuleBuilderWith::new(env!("CARGO_PKG_NAME"), $crate::UseCase::$u, module_path!())
+            $($b)+
+                .build()
+        })
+    };
+    ($u:tt) => {
+        $crate::ModuleWith::new(|| {
+            $crate::ModuleBuilderWith::new(env!("CARGO_PKG_NAME"), $crate::UseCase::$u, module_path!()).build()
+        })
+    };
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -277,7 +405,7 @@ mod tests {
     fn test_base_temp_dir() {
         static EXPECTED_BASE_TEMP_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
             let base_temp_dir = std::env::temp_dir()
-                .join("sourcetrait_testing-unit-module");
+                .join("sourcetrait_testing_unit_module");
 
             if !base_temp_dir.exists() {
                 std::fs::create_dir(&base_temp_dir).unwrap(); // needs manual teardown
@@ -345,7 +473,7 @@ mod tests {
     #[test]
     fn test_temp_dir_using() {
         const MODULE_PATH: &'static str = "sourcetrait_testing::module::test_temp_dir_using";
-        const EXPECTED_DIRNAME: &'static str = "unit/module/test-temp-dir-using";
+        const EXPECTED_DIRNAME: &'static str = "unit/module/test_temp_dir_using";
         let unit = ModuleBuilder::new(env!("CARGO_PKG_NAME"), UseCase::Unit, MODULE_PATH)
             .using_temp_dir().build();
         let expected_tmp_dir = PathBuf::from(&unit.base_temp_dir()).join(EXPECTED_DIRNAME);

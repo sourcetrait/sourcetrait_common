@@ -32,6 +32,12 @@ pub mod path {
     pub mod tree;
 }
 
+/// Process extensions
+pub mod process {
+    pub mod command;
+    pub use command::*;
+}
+
 pub mod str {
     pub mod as_str;
     

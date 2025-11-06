@@ -1,37 +1,39 @@
-#![doc = include_str!("../docs/DOC/1.head.md")]
-//! ## Example
-//! ```rust
-#![doc = include_str!("../examples/example-fibonacci.rs")]
-//! ```
-#![doc = include_str!("../docs/DOC/3.foot.md")]
-
-mod group;
-mod module;
-mod namepath;
-mod teardown;
-mod test;
-mod testing;
-mod stepper;
-mod util;
+pub(crate) mod group;
+pub(crate) mod helper {
+    pub(crate) mod process;
+}
+pub(crate) mod module;
+pub(crate) mod namepath;
+pub(crate) mod teardown;
+pub(crate) mod test;
+pub(crate) mod testing;
+pub(crate) mod stepper;
+pub(crate) mod util;
 
 pub use crate::{
     group::{TestGroup, GroupBuilder, Group},
-    module::{TestModule, ModuleBuilder, Module},
+    helper::{
+        process::TestOutputTrait,
+    },
+    module::{
+        TestModule, ModuleBuilder, Module,
+        TestModuleWith, ModuleBuilderWith, ModuleWith,
+    },
     namepath::{Namepath, RawNamepath},
-    test::{Test, TestBuilder},
+    test::{Test, TestBuilder, TestWith, TestBuilderWith},
     testing::{TestingKind, UseCase, Testing, Testable},
     stepper::{Stepper, StepperBuilder, StepState},
 };
-
-pub(crate) use crate::{teardown::*, util::*};
-pub(crate) use anyhow::{bail, Context};
 
 #[cfg(feature = "tooling")]
 pub use sourcetrait_tooling as tooling;
 
 pub mod prelude {
     pub use crate as testing;
-    pub use crate::Testing;
+    pub use crate::{
+        Testing,
+        TestOutputTrait,
+    };
     pub use function_name::named;
     pub use sourcetrait_testing_macro::{benched, tested};
 
@@ -43,3 +45,19 @@ pub(crate) mod strings {
     pub(crate) const TESTING: &'static str = "testing";
     pub(crate) const FIXTURES: &'static str = "fixtures";
 }
+
+pub(crate) use crate::{
+    teardown::*, util::*
+};
+
+pub(crate) use anyhow::{bail, Context};
+pub(crate) use indexmap::IndexMap;
+
+pub(crate) use std::{
+    ffi::OsStr,
+    fmt::Display,
+    hash::Hash,
+    ops::Deref,
+    path::{Path, PathBuf},
+    sync::{Arc, LazyLock, Mutex},
+};
