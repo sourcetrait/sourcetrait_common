@@ -214,7 +214,7 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
             StepState(state, git)
         })
         .step("cloned_pull_modified_filetxt", |_test, state, git| {
-            state.git_cloned().pull_fast().unwrap();
+            state.git_cloned().pull_forward().unwrap();
             
             // commits should match 
             let expected_commits = Vec::from([
@@ -274,7 +274,7 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
         .step("next_cloned_pull_next_init", |_test, state, git| {
             state.git_cloned().fetch_all().unwrap();
             state.git_cloned().switch_branch(NEXT).unwrap();
-            state.git_cloned().pull_fast().unwrap();
+            state.git_cloned().pull_forward().unwrap();
             
             let expected_commits = Vec::from([
                 COMMIT_NEXT_INIT.clone(),
@@ -366,7 +366,7 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
         .step("draft2_init", |_test, state, git| {
             let git_cloned = state.git_cloned();
             git_cloned.switch_branch("next").unwrap();
-            git_cloned.pull_fast().unwrap();
+            git_cloned.pull_forward().unwrap();
             git_cloned.branch_create("draft2").unwrap();
             git_cloned.switch_branch("draft2").unwrap();
             git_cloned.push_new().unwrap();            
@@ -385,18 +385,18 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
             git.fetch_all().unwrap();
             
             git.switch_branch("draft2").unwrap();
-            git.pull_fast().unwrap();
+            git.pull_forward().unwrap();
             
             git.switch_branch("draft1").unwrap();
-            git.pull_fast().unwrap();
+            git.pull_forward().unwrap();
             
             git.switch_branch(NEXT).unwrap();
-            git.pull_fast().unwrap();
+            git.pull_forward().unwrap();
             
-            let actual = git.merge_fast("draft1").unwrap();
+            let actual = git.merge_forward("draft1").unwrap();
             assert_eq!(Resolution::FastForwarded, actual);
             
-            assert!(git.merge_fast("draft2").is_err());
+            assert!(git.merge_forward("draft2").is_err());
             let actual = git.merge_auto("draft2").unwrap();
             assert_eq!(Resolution::AutoResolved, actual);
             git.commit("next_merge_draft2").unwrap();
@@ -405,7 +405,7 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
         })
         .step("next_merge_manual_drafts", |_test, state, git| {
             git.switch_branch("draft1").unwrap();
-            let actual = git.merge_fast(NEXT).unwrap();
+            let actual = git.merge_forward(NEXT).unwrap();
             assert_eq!(Resolution::FastForwarded, actual);
             
             stdx::fs::touch_file(&git.top_dir().join("draft2.txt"),
@@ -416,7 +416,7 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
             git.commit("draft1_conflict").unwrap();
             
             git.switch_branch("draft2").unwrap();
-            let actual = git.merge_fast(NEXT).unwrap();
+            let actual = git.merge_forward(NEXT).unwrap();
             assert_eq!(Resolution::FastForwarded, actual);
 
             stdx::fs::touch_file(&git.top_dir().join("draft2.txt"),
@@ -427,10 +427,10 @@ pub static DOWNSTREAM_REPO_ALPHA_STEPPER: LazyLock<StepperBuilder<DownstreamRepo
             git.commit("draft2_conflict").unwrap();
             
             git.switch_branch(NEXT).unwrap();
-            let actual = git.merge_fast("draft1").unwrap();
+            let actual = git.merge_forward("draft1").unwrap();
             assert_eq!(Resolution::FastForwarded, actual);
             
-            assert!(git.merge_fast("draft2").is_err());
+            assert!(git.merge_forward("draft2").is_err());
             assert!(git.merge_auto("draft2").is_err());
             
             let actual = git.merge("draft2").unwrap();

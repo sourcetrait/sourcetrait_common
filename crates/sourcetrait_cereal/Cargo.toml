@@ -11,9 +11,8 @@ categories.workspace = true
 keywords.workspace   = true
 
 [dependencies]
-rkyv.workspace = true
+rkyv.workspace    = true
 bitcode.workspace = true
-serde.workspace = true
-sourcetrait_cereal_macro = { path = "../sourcetrait_cereal_macro" }
+serde.workspace   = true
 
-[dev-dependencies]
+sourcetrait_cereal_macro.workspace = true

@@ -102,7 +102,7 @@ pub trait GitInterface {
         })
     }
     
-    fn merge_fast(&self, source_rev: &str) -> Result<Resolution> {
+    fn merge_forward(&self, source_rev: &str) -> Result<Resolution> {
         self.merge_with(source_rev, MergeOptions {
             fast_forward_only: true,
             ..Default::default()
@@ -119,11 +119,11 @@ pub trait GitInterface {
     
     fn pull_with(&self, options: PullOptions) -> Result<()>;
     
-    fn pull_fast(&self) -> Result<()> {
+    fn pull_forward(&self) -> Result<()> {
         self.pull_with(PullOptions { fast_forward_only: true, ..Default::default() })
     }
     
-    fn pull_fast_with(&self, mut options: PullOptions) -> Result<()> {
+    fn pull_forward_with(&self, mut options: PullOptions) -> Result<()> {
         options.fast_forward_only = true;
         self.pull_with(options)
     }

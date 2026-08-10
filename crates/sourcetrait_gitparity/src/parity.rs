@@ -3,25 +3,25 @@ use crate::*;
 
 pub enum GitParity {
     Cli(GitCli),
-    #[cfg(feature = "libc")]
-    LibC(GitLibC)
+    #[cfg(feature = "gitc")]
+    GitC(GitC)
 }
 
 #[derive(Debug, Clone, Copy, strum::Display)]
 #[strum(serialize_all = "kebab-case")]
 pub enum GitKind {
     Cli,
-    #[cfg(feature = "libc")]
-    #[strum(serialize = "libc")]
-    LibC,
+    #[cfg(feature = "gitc")]
+    #[strum(serialize = "gitc")]
+    GitC,
 }
 
 impl GitParity {
     pub fn clone(kind: GitKind, repository: &str, top_dir: PathBuf) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::clone(repository, top_dir)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::clone(repository, top_dir)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::clone(repository, top_dir)?),
         })
     }
     
@@ -33,8 +33,8 @@ impl GitParity {
     ) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::clone_with(repository, top_dir, options)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::clone_with(repository, top_dir, options)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::clone_with(repository, top_dir, options)?),
         })
     }
     
@@ -45,8 +45,8 @@ impl GitParity {
     ) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::init(top_dir, initial_branch_name)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::init(top_dir, initial_branch_name)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::init(top_dir, initial_branch_name)?),
         })
     }
     
@@ -58,8 +58,8 @@ impl GitParity {
     ) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::init_with(top_dir, initial_branch_name, options)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::init_with(top_dir, initial_branch_name, options)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::init_with(top_dir, initial_branch_name, options)?),
         })
     }
     
@@ -70,8 +70,8 @@ impl GitParity {
     ) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::init_bare(top_dir, initial_branch_name)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::init_bare(top_dir, initial_branch_name)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::init_bare(top_dir, initial_branch_name)?),
         })
     }
     
@@ -83,24 +83,24 @@ impl GitParity {
     ) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::init_bare_with(top_dir, initial_branch_name, options)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::init_bare_with(top_dir, initial_branch_name, options)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::init_bare_with(top_dir, initial_branch_name, options)?),
         })
     }
     
     pub fn open(kind: GitKind, path: PathBuf) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::open(path)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::open(path)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::open(path)?),
         })
     }
     
     pub fn open_with(kind: GitKind, path: PathBuf, options: OpenOptions) -> Result<Self> {
         Ok(match kind {
             GitKind::Cli => Self::Cli(GitCli::open_with(path, options)?),
-            #[cfg(feature = "libc")]
-            GitKind::LibC => Self::LibC(GitLibC::open_with(path, options)?),
+            #[cfg(feature = "gitc")]
+            GitKind::GitC => Self::GitC(GitC::open_with(path, options)?),
         })
     }
 }
@@ -112,8 +112,8 @@ impl Deref for GitParity {
     fn deref(&self) -> &Self::Target {
         match self {
             GitParity::Cli(cli) => cli,
-            #[cfg(feature = "libc")]
-            GitParity::LibC(lib) => lib,
+            #[cfg(feature = "gitc")]
+            GitParity::GitC(lib) => lib,
         }
     }
 }
@@ -123,8 +123,8 @@ impl DerefMut for GitParity {
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
             GitParity::Cli(cmd) => cmd,
-            #[cfg(feature = "libc")]
-            GitParity::LibC(lib) => lib,
+            #[cfg(feature = "gitc")]
+            GitParity::GitC(lib) => lib,
         }
     }
 }

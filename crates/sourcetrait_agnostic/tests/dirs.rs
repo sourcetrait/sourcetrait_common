@@ -1,6 +1,5 @@
 use sourcetrait_testing::prelude::*;
 use sourcetrait_agnostic::{self as agnostic, prelude::*};
-use std::{path::Path};
 
 static TESTING: testing::Module = testing::module!(Integration, {
     .using_temp_dir()

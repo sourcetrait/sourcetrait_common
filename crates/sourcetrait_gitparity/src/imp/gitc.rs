@@ -8,14 +8,14 @@ const ALL_REFSPECS: [&'static str; 0] = [];
 const FETCH_HEAD: &'static str = "FETCH_HEAD";
 const REFLOG_FAST_FORWARD: &'static str = "Fast-forward";
 
-pub struct GitLibC {
+pub struct GitC {
     top_dir: PathBuf,
     working_dir: PathBuf,
     env: GitEnv,
     repo: git2::Repository,
 }
 
-impl GitLibC {
+impl GitC {
     fn author_signature(&self) -> Result<git2::Signature<'_>> {
         let env = &self.env;
         let sig = if env.author_name().is_some() && env.author_email().is_some() {
@@ -34,7 +34,7 @@ impl GitLibC {
             }
         } else {
             let sig = self.repo.signature()
-                .map_err(|e| Error::Config("user".into(), ErrSrc::LibC(e)))?;
+                .map_err(|e| Error::Config("user".into(), ErrSrc::GitC(e)))?;
 
             let name = env.author_name();
             let name = name.as_deref()
@@ -51,7 +51,7 @@ impl GitLibC {
             }
         };
 
-        sig.map_err(|e| Error::Config("user".into(), ErrSrc::LibC(e)))
+        sig.map_err(|e| Error::Config("user".into(), ErrSrc::GitC(e)))
     }
 
     fn committer_signature(&self) -> Result<git2::Signature<'_>> {
@@ -72,7 +72,7 @@ impl GitLibC {
             }
         } else {
             let sig = self.repo.signature()
-                .map_err(|e| Error::Config("user".into(), ErrSrc::LibC(e)))?;
+                .map_err(|e| Error::Config("user".into(), ErrSrc::GitC(e)))?;
 
             let name = env.committer_name();
             let name = name.as_deref()
@@ -89,7 +89,7 @@ impl GitLibC {
             }
         };
 
-        sig.map_err(|e| Error::Config("user".into(), ErrSrc::LibC(e)))
+        sig.map_err(|e| Error::Config("user".into(), ErrSrc::GitC(e)))
     }
     
     fn enter_merge_mode(&self, merge_meta: MergeModeMeta) -> Result<()> {
@@ -101,14 +101,14 @@ impl GitLibC {
         MergeModeMeta::delete(self.top_dir())?;
         
         self.repo.cleanup_state()
-            .map_err(|e| Error::State(StateErr::UnexpectedStatus, ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::State(StateErr::UnexpectedStatus, ErrSrc::GitC(e)))?;
         
         Ok(())
     }
 
     fn head(&self) -> Result<git2::Reference<'_>> {
         self.repo.head()
-            .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::LibC(e)))
+            .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::GitC(e)))
     }
 
     fn head_name<'s:'a,'a>(&'s self, head: &'a git2::Reference<'a>) -> Result<&'a str> {
@@ -118,26 +118,26 @@ impl GitLibC {
 
     fn head_commit<'s:'a,'r:'a,'a>(&'s self, head: &'a git2::Reference<'r>) -> Result<git2::Commit<'r>> {
         head.peel_to_commit()
-            .map_err(|e| Error::State(StateErr::HeadCommitNotFound, ErrSrc::LibC(e)))
+            .map_err(|e| Error::State(StateErr::HeadCommitNotFound, ErrSrc::GitC(e)))
     }
 
     fn index(&self) -> Result<git2::Index> {
         self.repo.index()
-            .map_err(|e| Error::State(StateErr::IndexNotFound, ErrSrc::LibC(e)))
+            .map_err(|e| Error::State(StateErr::IndexNotFound, ErrSrc::GitC(e)))
     }
     
     fn upstream<'s:'r,'r:'a,'a>(&'s self, head: &'a git2::Reference<'r>) -> Result<Option<git2::Branch<'r>>> {
         let branch_name = self.head_name(head)?;
         
         self.repo.find_branch(branch_name, git2::BranchType::Local)
-            .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::LibC(e)))?
+            .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::GitC(e)))?
             .upstream()
             .map_or_else(
                 |e| {
                     if e.code() == git2::ErrorCode::NotFound {
                         Ok(None)
                     } else {
-                        Err(Error::State(StateErr::UpstreamNotFound, ErrSrc::LibC(e)))
+                        Err(Error::State(StateErr::UpstreamNotFound, ErrSrc::GitC(e)))
                     }
                 },
                 |u| Ok(Some(u))
@@ -167,7 +167,7 @@ impl GitLibC {
     
     fn remote_for_branch<'s:'r,'r:'a,'a>(&'s self, branch_name: &'a str) -> Result<Option<git2::Remote<'r>>> {
         let upstream = self.repo.find_branch(branch_name, git2::BranchType::Local)
-            .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::LibC(e)))?
+            .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::GitC(e)))?
             .upstream();
 
         let upstream = if let Ok(upstream) = upstream {
@@ -183,21 +183,21 @@ impl GitLibC {
 
         self.repo.find_remote(upstream_name.remote_name())
             .map(|r| Some(r))
-            .map_err(|e| Error::RemoteNotFound(upstream_name.remote_name().into(), ErrSrc::LibC(e)))
+            .map_err(|e| Error::RemoteNotFound(upstream_name.remote_name().into(), ErrSrc::GitC(e)))
     }
     
     fn get_rev_file_blob<'s:'r,'r:'a,'a>(&'s self, rev: &'a str, filepath: &'a Path) -> Result<git2::Blob<'r>> {
         let entry = self.repo.revparse_single(rev)
-            .map_err(|e| Error::RevNotFound(rev.into(), ErrSrc::LibC(e), None))?
+            .map_err(|e| Error::RevNotFound(rev.into(), ErrSrc::GitC(e), None))?
             .peel_to_commit()
-            .map_err(|e| Error::RevNotFound(rev.into(), ErrSrc::LibC(e), None))?
+            .map_err(|e| Error::RevNotFound(rev.into(), ErrSrc::GitC(e), None))?
             .tree()
-            .map_err(|e| Error::RevNotFound(rev.into(), ErrSrc::LibC(e), None))?
+            .map_err(|e| Error::RevNotFound(rev.into(), ErrSrc::GitC(e), None))?
             .get_path(filepath)
-            .map_err(|e| Error::PathNotFound(rev.into(), filepath.to_string_lossy().into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::PathNotFound(rev.into(), filepath.to_string_lossy().into(), ErrSrc::GitC(e), None))?;
         
         self.repo.find_blob(entry.id())
-            .map_err(|e| Error::PathNotFound(rev.into(), filepath.to_string_lossy().into(), ErrSrc::LibC(e), None))
+            .map_err(|e| Error::PathNotFound(rev.into(), filepath.to_string_lossy().into(), ErrSrc::GitC(e), None))
     }
     
     fn remote_callbacks<'a>() -> git2::RemoteCallbacks<'a> {
@@ -218,11 +218,11 @@ impl GitLibC {
     
     fn upstream_path_default_branch(path: &Path) -> Result<String> {
         let repo = git2::Repository::open_bare(path)
-            .map_err(|e| Error::Open(path.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Open(path.into(), ErrSrc::GitC(e), None))?;
         
         
         repo.find_reference(HEAD)
-            .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::LibC(e)))?
+            .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::GitC(e)))?
             .symbolic_target()
             .ok_or_else(|| Error::Open(path.into(), ErrSrc::None,
                 Some("HEAD does not have a symbolic target".into())
@@ -237,14 +237,14 @@ impl GitLibC {
     fn upstream_url_default_branch(url: url::Url) -> Result<String> {
         let repository = url.as_str();
         let mut remote = git2::Remote::create_detached(url.as_str())
-            .map_err(|e| Error::Connect(repository.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Connect(repository.into(), ErrSrc::GitC(e), None))?;
     
         remote.connect_auth(git2::Direction::Fetch, Some(Self::remote_callbacks()), None)
-            .map_err(|e| Error::Connect(repository.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Connect(repository.into(), ErrSrc::GitC(e), None))?;
     
         // refs/heads/...
         remote.default_branch()
-            .map_err(|e| Error::Connect(repository.into(), ErrSrc::LibC(e), None))?
+            .map_err(|e| Error::Connect(repository.into(), ErrSrc::GitC(e), None))?
             .as_str()
             .ok_or_else(|| Error::Connect(repository.into(), ErrSrc::None,
                 Some("Invalid default branch name".into())
@@ -258,7 +258,7 @@ impl GitLibC {
     
     fn config(&self) -> Result<git2::Config> {
         self.repo.config()
-            .map_err(|e| Error::Config(self.top_dir.to_string_lossy().into(), ErrSrc::LibC(e)))
+            .map_err(|e| Error::Config(self.top_dir.to_string_lossy().into(), ErrSrc::GitC(e)))
     }
     
     fn config_entry<'s, 'a, 'b>(&'s self, config: &'a git2::Config, key: &'b str) -> Result<Option<git2::ConfigEntry<'a>>> {
@@ -278,7 +278,7 @@ impl GitLibC {
     }
 }
 
-impl WorkingRepo for GitLibC {
+impl WorkingRepo for GitC {
     fn git_env(&self) -> &GitEnv {
         &self.env
     }
@@ -300,7 +300,7 @@ impl WorkingRepo for GitLibC {
     }
 }
 
-impl GitLibC {
+impl GitC {
     fn clone_impl(repository: &str, top_dir: PathBuf, options: Option<CloneOptions>) -> Result<Self> {
         if top_dir.exists() {
             return Err(Error::Open(top_dir.clone(), ErrSrc::None,
@@ -317,7 +317,7 @@ impl GitLibC {
         let repo = git2::build::RepoBuilder::new()
             .fetch_options(fetch_options)
             .clone(repository, &top_dir)
-            .map_err(|e| Error::Clone(top_dir.clone(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Clone(top_dir.clone(), ErrSrc::GitC(e), None))?;
         
         // lib2 doesn't respect default branch names as paramters properly,
         // including in the config file. so ...
@@ -335,14 +335,14 @@ impl GitLibC {
             
             // force refresh
             repo.config()
-                .map_err(|e| Error::Config(top_dir.to_string_lossy().into(), ErrSrc::LibC(e)))?;
+                .map_err(|e| Error::Config(top_dir.to_string_lossy().into(), ErrSrc::GitC(e)))?;
         }
         
         repo.find_remote(ORIGIN).unwrap().fetch(&ALL_REFSPECS, None, None)
-            .map_err(|e| Error::Clone(repository.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Clone(repository.into(), ErrSrc::GitC(e), None))?;
         
         repo.set_head(&["refs/heads/", &default_branch_name].concat())
-            .map_err(|e| Error::Clone(repository.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Clone(repository.into(), ErrSrc::GitC(e), None))?;
         
         Ok(Self {
             top_dir,
@@ -383,7 +383,7 @@ impl GitLibC {
         init_options.initial_head(initial_branch_name);
         
         let repo = git2::Repository::init_opts(&top_dir, &init_options)
-            .map_err(|e| Error::Init(top_dir.clone(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Init(top_dir.clone(), ErrSrc::GitC(e), None))?;
         
         Ok(Self {
             top_dir,
@@ -418,7 +418,7 @@ impl GitLibC {
                 .bare(true)
                 .initial_head(initial_branch_name)
             )
-            .map_err(|e| Error::Init(top_dir.clone(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Init(top_dir.clone(), ErrSrc::GitC(e), None))?;
 
         Ok(Self {
             top_dir,
@@ -435,7 +435,7 @@ impl GitLibC {
         let env = options.unwrap_or_default().env.unwrap_or_default();
 
         let repo = git2::Repository::open(&top_dir)
-            .map_err(|e| Error::Open(top_dir.clone(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Open(top_dir.clone(), ErrSrc::GitC(e), None))?;
 
         Ok(Self {
             top_dir,
@@ -464,10 +464,10 @@ impl GitLibC {
         
         let target = if let Some(to_rev) = options.to_rev {
             self.repo.revparse_single(to_rev)
-                .map_err(|e| Error::RevNotFound(to_rev.into(), ErrSrc::LibC(e), None))?
+                .map_err(|e| Error::RevNotFound(to_rev.into(), ErrSrc::GitC(e), None))?
         } else {
             self.head()?.peel(git2::ObjectType::Any)
-                .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::LibC(e)))?
+                .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::GitC(e)))?
         };
         
         let mut checkout = if options.kind == ResetKind::Hard {
@@ -477,13 +477,13 @@ impl GitLibC {
         };
         
         self.repo.reset(&target, kind, checkout.as_mut())
-            .map_err(|e| Error::Reset(None, ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Reset(None, ErrSrc::GitC(e), None))?;
 
         Ok(())
     }
 }
 
-impl GitInterfaceConstruct for GitLibC {
+impl GitInterfaceConstruct for GitC {
     fn clone(repository: &str, top_dir: PathBuf) -> Result<Self> {
         Self::clone_impl(repository, top_dir, None)
     }
@@ -517,26 +517,26 @@ impl GitInterfaceConstruct for GitLibC {
     }
 }
 
-impl GitLibC {
+impl GitC {
     fn add_impl(&self, pathspec: &str, _options: Option<AddOptions>) -> Result<()> {
         let mut index = self.index()?;
         
         if let Some(path) = pathspec_as_path(pathspec) && path.as_os_str() != "." {
             index.add_path(path)
-                .map_err(|e| Error::Add(pathspec.into(), ErrSrc::LibC(e), None))?;
+                .map_err(|e| Error::Add(pathspec.into(), ErrSrc::GitC(e), None))?;
         } else {
             index.add_all([pathspec].iter(), git2::IndexAddOption::DEFAULT, None)
-                .map_err(|e| Error::Add(pathspec.into(), ErrSrc::LibC(e), None))?;
+                .map_err(|e| Error::Add(pathspec.into(), ErrSrc::GitC(e), None))?;
         }
 
         index.write()
-            .map_err(|e| Error::Add(pathspec.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::Add(pathspec.into(), ErrSrc::GitC(e),
                 Some("Failed to write to index".into())
             ))?;
 
         index.write_tree()
             .map(|_| ())
-            .map_err(|e| Error::Add(pathspec.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::Add(pathspec.into(), ErrSrc::GitC(e),
                 Some("Failed to write to index tree".into())
             ))
     }
@@ -551,7 +551,7 @@ impl GitLibC {
        
         self.repo.branch(branch_name, &commit, false)
             .map(|_| ())
-            .map_err(|e| Error::BranchCreate(HEAD.into(), branch_name.into(), ErrSrc::LibC(e)))
+            .map_err(|e| Error::BranchCreate(HEAD.into(), branch_name.into(), ErrSrc::GitC(e)))
     }
 
     fn branch_current_impl(&self) -> Result<String> {
@@ -559,7 +559,7 @@ impl GitLibC {
             Ok(head) => Ok(self.head_name(&head)?.into()),
             Err(_) => {
                 self.repo.find_reference(HEAD)
-                    .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::LibC(e)))?
+                    .map_err(|e| Error::State(StateErr::HeadNotFound, ErrSrc::GitC(e)))?
                     .symbolic_target()
                     .ok_or_else(|| Error::State(StateErr::HeadNameNotFound, ErrSrc::None))
                     .and_then(|name| {
@@ -573,23 +573,23 @@ impl GitLibC {
 
     fn branch_delete_impl(&self, branch_name: &str, _force: bool, _delete_remote: bool) -> Result<()> {
         let mut branch = self.repo.find_branch(branch_name, git2::BranchType::Local)
-            .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::GitC(e)))?;
 
         branch.delete()
-            .map_err(|e| Error::BranchDelete(branch_name.into(), ErrSrc::LibC(e)))
+            .map_err(|e| Error::BranchDelete(branch_name.into(), ErrSrc::GitC(e)))
     }
 
     fn branch_list_impl(&self, filter: Option<git2::BranchType>) -> Result<Vec<String>> {
         let branches = self.repo.branches(filter)
-            .map_err(|e| Error::State(StateErr::BranchesNotFound, ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::State(StateErr::BranchesNotFound, ErrSrc::GitC(e)))?;
         
         let mut names = vec![];
         for branch in branches {
             let branch = branch
-                .map_err(|e| Error::State(StateErr::BranchesNotFound, ErrSrc::LibC(e)))?;
+                .map_err(|e| Error::State(StateErr::BranchesNotFound, ErrSrc::GitC(e)))?;
 
             let name = branch.0.name()
-                .map_err(|e| Error::State(StateErr::BranchesNotFound, ErrSrc::LibC(e)))?
+                .map_err(|e| Error::State(StateErr::BranchesNotFound, ErrSrc::GitC(e)))?
                 .ok_or_else(|| Error::State(StateErr::BranchesNotFound, ErrSrc::None))?;
 
             names.push(name.into());
@@ -605,18 +605,18 @@ impl GitLibC {
         let remote_branch_name = upstream.remote_branch_name();
 
         let mut config = self.repo.config()
-            .map_err(|e| Error::BranchConfigure(branch_name.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::BranchConfigure(branch_name.into(), ErrSrc::GitC(e),
                 Some("Cannot access configuration".into())
             ))?;
 
         config.set_str(&format!("branch.{branch_name}.remote"), remote_name)
-            .map_err(|e| Error::BranchConfigure(branch_name.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::BranchConfigure(branch_name.into(), ErrSrc::GitC(e),
                 Some("Cannot access configuration".into())
             ))?;
 
         config.set_str(&format!("branch.{branch_name}.merge"),
             &["refs/heads/", remote_branch_name].concat())
-            .map_err(|e| Error::BranchConfigure(branch_name.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::BranchConfigure(branch_name.into(), ErrSrc::GitC(e),
                 Some("Cannot access configuration".into())
             ))?;
         
@@ -627,11 +627,11 @@ impl GitLibC {
         let mut index = self.index()?;
         
         let tree_oid = index.write_tree()
-            .map_err(|e| Error::Commit(ErrSrc::LibC(e),
+            .map_err(|e| Error::Commit(ErrSrc::GitC(e),
                 Some("Failed to write to index tree".into())
             ))?;
         let tree = self.repo.find_tree(tree_oid)
-            .map_err(|e| Error::Commit(ErrSrc::LibC(e),
+            .map_err(|e| Error::Commit(ErrSrc::GitC(e),
                 Some("Tree OID not found after write".into())
             ))?;
         
@@ -647,9 +647,9 @@ impl GitLibC {
             if is_merging {
                 let merge_meta = MergeModeMeta::read(&self.top_dir())?;
                 let oid = git2::Oid::from_str(&merge_meta.head)
-                    .map_err(|e| Error::State(StateErr::InternalsFileIO, ErrSrc::LibC(e)))?;
+                    .map_err(|e| Error::State(StateErr::InternalsFileIO, ErrSrc::GitC(e)))?;
                 let commit = self.repo.find_commit(oid)
-                    .map_err(|e| Error::State(StateErr::ReferenceCommitNotFound, ErrSrc::LibC(e)))?;
+                    .map_err(|e| Error::State(StateErr::ReferenceCommitNotFound, ErrSrc::GitC(e)))?;
                 
                 commits.push(commit);
             }
@@ -672,7 +672,7 @@ impl GitLibC {
             &tree,
             &parents
         )
-        .map_err(|e| Error::Commit(ErrSrc::LibC(e),
+        .map_err(|e| Error::Commit(ErrSrc::GitC(e),
             Some("Failed to access index".into())
         ))?;
         
@@ -685,23 +685,23 @@ impl GitLibC {
 
     fn diff_revision_statuses_impl(&self, rev_lhs: &str, rev_rhs: &str, _options: Option<DiffStatusOptions>) -> Result<DiffStatus> {
         let tree_lhs = self.repo.revparse_single(rev_lhs)
-            .map_err(|e| Error::RevNotFound(rev_lhs.into(), ErrSrc::LibC(e), None))
+            .map_err(|e| Error::RevNotFound(rev_lhs.into(), ErrSrc::GitC(e), None))
             .map(|r|
                 r.peel_to_tree()
-                    .map_err(|e| Error::RevNotFound(rev_lhs.into(), ErrSrc::LibC(e), None))
+                    .map_err(|e| Error::RevNotFound(rev_lhs.into(), ErrSrc::GitC(e), None))
             )??;
         let tree_rhs = self.repo.revparse_single(rev_rhs)
-            .map_err(|e| Error::RevNotFound(rev_rhs.into(), ErrSrc::LibC(e), None))
+            .map_err(|e| Error::RevNotFound(rev_rhs.into(), ErrSrc::GitC(e), None))
             .map(|r|
                 r.peel_to_tree()
-                    .map_err(|e| Error::RevNotFound(rev_lhs.into(), ErrSrc::LibC(e), None))
+                    .map_err(|e| Error::RevNotFound(rev_lhs.into(), ErrSrc::GitC(e), None))
             )??;
         
         let mut diff_options = git2::DiffOptions::new();
         diff_options.include_typechange(true);
         
         let diff = self.repo.diff_tree_to_tree(Some(&tree_lhs), Some(&tree_rhs), Some(&mut diff_options))
-            .map_err(|e| Error::Diff(rev_lhs.into(), rev_rhs.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Diff(rev_lhs.into(), rev_rhs.into(), ErrSrc::GitC(e), None))?;
         
         let mut changes: HashMap<Arc<PathBuf>, PathDiffStatus> = HashMap::new();
         for delta in diff.deltas() {
@@ -752,7 +752,7 @@ impl GitLibC {
         } else {
             match self.repo.find_remote(ORIGIN) {
                 Ok(r) => r,
-                Err(e) => return Err(Error::Fetch(ErrSrc::LibC(e),
+                Err(e) => return Err(Error::Fetch(ErrSrc::GitC(e),
                     Some(format!("Upstream not configured for branch: {branch_name}"))
                 ))
             }
@@ -768,7 +768,7 @@ impl GitLibC {
 
         // todo: differentiate between options.all
         remote.fetch(&ALL_REFSPECS, Some(&mut fetch_options), None)
-            .map_err(|e| Error::Fetch(ErrSrc::LibC(e), None))
+            .map_err(|e| Error::Fetch(ErrSrc::GitC(e), None))
     }
 
     fn log_impl(&self, options: Option<LogOptions>) -> Result<Log> {
@@ -778,11 +778,11 @@ impl GitLibC {
         };
         
         let mut revwalk = self.repo.revwalk()
-            .map_err(|e| Error::Log(ErrSrc::LibC(e), Some("Failed to walk history".into())))?;
+            .map_err(|e| Error::Log(ErrSrc::GitC(e), Some("Failed to walk history".into())))?;
         revwalk.push_head()
-            .map_err(|e| Error::Log(ErrSrc::LibC(e), Some("Failed to walk history head".into())))?;
+            .map_err(|e| Error::Log(ErrSrc::GitC(e), Some("Failed to walk history head".into())))?;
         //revwalk.simplify_first_parent()
-        //    .map_err(|e| Error::Log(ErrSrc::LibC(e), Some("Failed to simplify first parent".into())))?;
+        //    .map_err(|e| Error::Log(ErrSrc::GitC(e), Some("Failed to simplify first parent".into())))?;
         
         let mut commits = Vec::new();
         let mut users: HashSet<Arc<GitUser>> = HashSet::new();
@@ -790,9 +790,9 @@ impl GitLibC {
         
         for commit_oid_result in revwalk {
             let commit_oid = commit_oid_result
-                .map_err(|e| Error::Log(ErrSrc::LibC(e), Some("Failed to get OID".into())))?;
+                .map_err(|e| Error::Log(ErrSrc::GitC(e), Some("Failed to get OID".into())))?;
             let commit = self.repo.find_commit(commit_oid)
-                .map_err(|e| Error::Log(ErrSrc::LibC(e), Some(format!("Failed to find logged commit: {commit_oid}"))))?;
+                .map_err(|e| Error::Log(ErrSrc::GitC(e), Some(format!("Failed to find logged commit: {commit_oid}"))))?;
             
             let author = commit.author();
             let author_time = DateTime::from_timestamp(author.when().seconds(), 0)
@@ -838,7 +838,7 @@ impl GitLibC {
                     Err(e) if e.code() == git2::ErrorCode::NotFound && e.class() == git2::ErrorClass::Object => {
                         None
                     },
-                    Err(e) => return Err(Error::Log(ErrSrc::LibC(e),
+                    Err(e) => return Err(Error::Log(ErrSrc::GitC(e),
                                 Some(format!("Failed to extract signature for commit: {commit_oid}"))))
                 };
             }
@@ -882,13 +882,13 @@ impl GitLibC {
         let mut head = self.head()?;
         let head_name = self.head_name(&head)?;
         let head_commit = head.peel_to_commit()
-            .map_err(|e| Error::State(StateErr::HeadCommitNotFound, ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::State(StateErr::HeadCommitNotFound, ErrSrc::GitC(e)))?;
         let source_branch = self.repo.find_branch(source_rev, git2::BranchType::Local)
-            .map_err(|e| Error::BranchNotFound(source_rev.into(), ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::BranchNotFound(source_rev.into(), ErrSrc::GitC(e)))?;
         let source_commit_oid = source_branch.get().target()
             .unwrap();
         let source_annotated = self.repo.find_annotated_commit(source_commit_oid)
-            .map_err(|e| Error::RevNotFound(source_rev.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::RevNotFound(source_rev.into(), ErrSrc::GitC(e),
                 Some("Failed to find annotated commit for revision".into())
             ))?;
         
@@ -919,7 +919,7 @@ impl GitLibC {
         }
         
         let mut index = self.repo.merge_commits(&head_commit, &source_commit, Some(&merge_opts))
-            .map_err(|e| Error::MergeAborted(source_rev.into(), ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::MergeAborted(source_rev.into(), ErrSrc::GitC(e), None))?;
         
         self.repo.checkout_index(
             Some(&mut index),
@@ -954,12 +954,12 @@ impl GitLibC {
     fn merge_abort_impl(&self) -> Result<()> {
         let head = self.head()?;
         let head_commit = head.peel_to_commit()
-            .map_err(|e| Error::State(StateErr::HeadCommitNotFound, ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::State(StateErr::HeadCommitNotFound, ErrSrc::GitC(e)))?;
         
         self.repo.reset(&head_commit.as_object(), git2::ResetType::Hard,
                 Some(git2::build::CheckoutBuilder::new().force())
             )
-            .map_err(|e| Error::State(StateErr::AbortFailed, ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::State(StateErr::AbortFailed, ErrSrc::GitC(e)))?;
         
         self.exit_merge_mode()?;
         Ok(())
@@ -978,21 +978,21 @@ impl GitLibC {
         index.remove_path(from)
             .map_err(|e| Error::Move(from.to_string_lossy().into_owned(),
                 to.to_string_lossy().into_owned(),
-                ErrSrc::LibC(e),
+                ErrSrc::GitC(e),
                 Some("Failed to remove path from index".into())
             ))?;
         
         index.add_path(to)
             .map_err(|e| Error::Move(from.to_string_lossy().into_owned(),
                 to.to_string_lossy().into_owned(),
-                ErrSrc::LibC(e),
+                ErrSrc::GitC(e),
                 Some("Failed to add path to index".into())
             ))?;
         
         index.write()
             .map_err(|e| Error::Move(from.to_string_lossy().into_owned(),
                 to.to_string_lossy().into_owned(),
-                ErrSrc::LibC(e),
+                ErrSrc::GitC(e),
                 None
             ))?;
         
@@ -1000,7 +1000,7 @@ impl GitLibC {
             .map(|_| ())
             .map_err(|e| Error::Move(from.to_string_lossy().into_owned(),
                 to.to_string_lossy().into_owned(),
-                ErrSrc::LibC(e),
+                ErrSrc::GitC(e),
                 None
             ))
         
@@ -1018,7 +1018,7 @@ impl GitLibC {
         let upstream_ref = upstream.get();
         let (upstream_name, _upstream_ref_name) = self.upstream_ref_name(&upstream_ref)?;
         let mut remote = self.repo.find_remote(upstream_name.remote_name())
-            .map_err(|e| Error::RemoteNotFound(upstream_name.remote_name().into(), ErrSrc::LibC(e)))?;
+            .map_err(|e| Error::RemoteNotFound(upstream_name.remote_name().into(), ErrSrc::GitC(e)))?;
         
         let mut callbacks = git2::RemoteCallbacks::new();
         callbacks.credentials(|_, username, _| {
@@ -1029,7 +1029,7 @@ impl GitLibC {
         fetch_options.remote_callbacks(callbacks);
         
         remote.fetch(&[upstream_name.remote_branch_name()], Some(&mut fetch_options), None)
-            .map_err(|e| Error::Pull(ErrSrc::LibC(e), Some("Failed to fetch".into())))?;
+            .map_err(|e| Error::Pull(ErrSrc::GitC(e), Some("Failed to fetch".into())))?;
         
         let fetch_head = self.repo.find_reference(FETCH_HEAD)
             .unwrap();
@@ -1037,7 +1037,7 @@ impl GitLibC {
             .unwrap();
         
         let (analysis, _) = self.repo.merge_analysis(&[&fetch_commit])
-            .map_err(|e| Error::Pull(ErrSrc::LibC(e), Some("Failed to analyze merge".into())))?;
+            .map_err(|e| Error::Pull(ErrSrc::GitC(e), Some("Failed to analyze merge".into())))?;
         
         if analysis.is_up_to_date() {
             return Ok(());
@@ -1076,7 +1076,7 @@ impl GitLibC {
                 
                 if index.has_conflicts() {
                     rebase.abort()
-                        .map_err(|e| Error::State(StateErr::AbortFailed, ErrSrc::LibC(e)))?;
+                        .map_err(|e| Error::State(StateErr::AbortFailed, ErrSrc::GitC(e)))?;
                     
                     return Err(Error::Conflict(PULL, head_name.into()));
                 }
@@ -1160,7 +1160,7 @@ impl GitLibC {
             Some(upstream) =>  {
                 let refspec = ["refs/heads/", branch_name, ":refs/heads/", upstream.remote_branch_name()].concat();
                 let remote = self.repo.find_remote(upstream.remote_name())
-                    .map_err(|e| Error::Push(ErrSrc::LibC(e),
+                    .map_err(|e| Error::Push(ErrSrc::GitC(e),
                         Some("Cannot find remote for ORIGIN".into())
                     ))?;
 
@@ -1172,7 +1172,7 @@ impl GitLibC {
                     let upstream_name = Upstream::from_ref_name(upstream_ref_name)?;
                     
                     let remote = self.repo.find_remote(upstream_name.remote_name())
-                        .map_err(|e| Error::RemoteNotFound(upstream_name.remote_name().into(), ErrSrc::LibC(e)))?;
+                        .map_err(|e| Error::RemoteNotFound(upstream_name.remote_name().into(), ErrSrc::GitC(e)))?;
                     let refspec = ["refs/heads/", branch_name, ":refs/heads/", upstream_name.remote_branch_name()].concat();
                     (remote, refspec)
                 } else {
@@ -1184,7 +1184,7 @@ impl GitLibC {
                         let remote_name = self.config_entry_str(remote_name_cfg)?;
                         let remote_branch_ref = self.config_entry_str(remote_branch_ref_cfg)?;
                         let remote = self.repo.find_remote(remote_name)
-                            .map_err(|e| Error::RemoteNotFound(remote_name.into(), ErrSrc::LibC(e)))?;
+                            .map_err(|e| Error::RemoteNotFound(remote_name.into(), ErrSrc::GitC(e)))?;
                         let refspec = ["refs/heads/", branch_name, ":", remote_branch_ref].concat();
                         (remote, refspec)
                     } else {
@@ -1207,7 +1207,7 @@ impl GitLibC {
         libc_options.remote_callbacks(callbacks);
         
         remote.push(&[&refspec], Some(&mut libc_options))
-            .map_err(|e| Error::Push(ErrSrc::LibC(e), None))?;
+            .map_err(|e| Error::Push(ErrSrc::GitC(e), None))?;
         
         Ok(())
     }
@@ -1320,30 +1320,30 @@ impl GitLibC {
             Err(e) if e.code() == git2::ErrorCode::NotFound && e.class() == git2::ErrorClass::Reference => {
                 let upstream = [ORIGIN, "/", branch_name].concat();
                 let remote_branch = self.repo.find_branch(&upstream, git2::BranchType::Remote)
-                    .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::LibC(e)))?;
+                    .map_err(|e| Error::BranchNotFound(branch_name.into(), ErrSrc::GitC(e)))?;
                 let commit = remote_branch.into_reference().peel_to_commit()
-                    .map_err(|e| Error::State(StateErr::ReferenceCommitNotFound, ErrSrc::LibC(e)))?;
+                    .map_err(|e| Error::State(StateErr::ReferenceCommitNotFound, ErrSrc::GitC(e)))?;
                 
                 let mut branch = self.repo.branch(branch_name, &commit, false)
-                    .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::LibC(e), None))?;
+                    .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::GitC(e), None))?;
                 
                 branch.set_upstream(Some(&upstream))
-                    .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::LibC(e), None))?;
+                    .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::GitC(e), None))?;
                 
                 branch
             },
-            Err(e) => return Err(Error::BranchNotFound(branch_name.into(), ErrSrc::LibC(e))),
+            Err(e) => return Err(Error::BranchNotFound(branch_name.into(), ErrSrc::GitC(e))),
         };
             
         let commit = branch.into_reference()
             .peel_to_commit()
-            .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::GitC(e),
                 Some("Failed to peel to commit".into())
             ))?
             .into_object();
         
         self.repo.set_head(&["refs/heads/", branch_name].concat())
-            .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::LibC(e),
+            .map_err(|e| Error::BranchSwitch(branch_name.into(), ErrSrc::GitC(e),
                 Some("Failed to set HEAD".into())
             ))?;
         
@@ -1355,12 +1355,12 @@ impl GitLibC {
                     Err(_) => Some("Also failed to abort".into()),
                 };
                 
-                Error::BranchSwitch(branch_name.into(), ErrSrc::LibC(e), msg)
+                Error::BranchSwitch(branch_name.into(), ErrSrc::GitC(e), msg)
             })
     }
 }
 
-impl GitInterface for GitLibC {
+impl GitInterface for GitC {
     fn add(&self, pathspec: &str) -> Result<()> {
         self.add_impl(pathspec, None)
     }

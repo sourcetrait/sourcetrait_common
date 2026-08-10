@@ -1,4 +1,6 @@
-///! Defines a subsystem that is will, upon request, either Add or Multiply a number by
+///! Defines a subsystem that will, upon request, either Add or Multiply a number
+///! by a specified operand and an internally accumulated number. The internal
+///! number is initialized by configuration.
 use sourcetrait_sysgreen::{ self as green, prelude::* };
 use sourcetrait_cereal as cereal;
 use sourcetrait_agnostic::{ self as agnostic, prelude::* };

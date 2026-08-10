@@ -22,12 +22,12 @@ static TESTING: testing::Module = testing::module!(Integration, {
 });
 
 #[tested]
-fn test_stepper_alpha_libc() {
+fn test_stepper_alpha_gitc() {
     let test = testing::test!({
         .using_temp_dir()
     });
     
-    test_stepper_alpha(&test, GitKind::LibC, GitKind::LibC);
+    test_stepper_alpha(&test, GitKind::GitC, GitKind::GitC);
 }
 
 #[tested]
@@ -41,22 +41,22 @@ fn test_stepper_alpha_cli() {
 
 #[ignore]
 #[tested]
-fn test_stepper_alpha_libc_to_cli() {
+fn test_stepper_alpha_gitc_to_cli() {
     let test = testing::test!({
         .using_temp_dir()
     });
     
-    test_stepper_alpha(&test, GitKind::LibC, GitKind::Cli);
+    test_stepper_alpha(&test, GitKind::GitC, GitKind::Cli);
 }
 
 #[ignore]
 #[tested]
-fn test_stepper_alpha_cli_to_libc() {
+fn test_stepper_alpha_cli_to_gitc() {
     let test = testing::test!({
         .using_temp_dir()
     });
     
-    test_stepper_alpha(&test, GitKind::Cli, GitKind::LibC);
+    test_stepper_alpha(&test, GitKind::Cli, GitKind::GitC);
 }
     
 fn test_stepper_alpha(test: &testing::Test, git_kind_up: GitKind, git_kind_down: GitKind) {

@@ -85,8 +85,8 @@ pub enum ErrSrc {
     None,
     Io(std::io::Error),
     Lib(Box<crate::Error>),
-    #[cfg(feature = "libc")]
-    LibC(git2::Error)
+    #[cfg(feature = "gitc")]
+    GitC(git2::Error)
 }
 
 impl std::error::Error for ErrSrc {
@@ -95,7 +95,7 @@ impl std::error::Error for ErrSrc {
             Self::None => None,
             Self::Io(e) => e.source(),
             Self::Lib(e) => e.source(),
-            Self::LibC(e) => e.source(),
+            Self::GitC(e) => e.source(),
         }
     }
 }
@@ -106,7 +106,7 @@ impl Display for ErrSrc {
             Self::None => Ok(()),
             Self::Io(e) => e.fmt(f),
             Self::Lib(e) => e.fmt(f),
-            Self::LibC(e) => e.fmt(f),
+            Self::GitC(e) => e.fmt(f),
         }
     }
 }

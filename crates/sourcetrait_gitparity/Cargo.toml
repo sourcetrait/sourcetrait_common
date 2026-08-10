@@ -17,18 +17,19 @@ derive_builder.workspace = true
 git2 = { version = "0.20", optional = true }
 indoc.workspace = true
 splitty = "1.0"
-sourcetrait_stdx.workspace = true
 strum.workspace = true
 thiserror.workspace = true
 url = "2.5.4"
 # testlib
-sourcetrait_testing = { workspace = true, optional = true }
 hex = "0.4.3"
 
+sourcetrait_stdx.workspace = true
+sourcetrait_testing = { workspace = true, optional = true }
+
 [features]
-default = [ "libc" ]
-#default = [ "libc", "nightly" ]
-libc = [ "dep:git2" ]
+default = [ "gitc" ]
+#default = [ "gitc", "nightly" ]
+gitc = [ "dep:git2" ]
 nightly = []
 testlib = ["dep:sourcetrait_testing"]
 

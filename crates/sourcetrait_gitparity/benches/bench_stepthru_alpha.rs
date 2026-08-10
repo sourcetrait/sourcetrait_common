@@ -38,7 +38,7 @@ mod benches {
             .using_temp_dir()
         });
         
-        b.iter(|| bench_stepper_alpha(&test, GitKind::LibC, GitKind::LibC));
+        b.iter(|| bench_stepper_alpha(&test, GitKind::GitC, GitKind::GitC));
     }
     
     #[benched]

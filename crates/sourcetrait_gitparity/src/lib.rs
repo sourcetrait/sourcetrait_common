@@ -3,8 +3,8 @@
 pub mod imp {
     pub mod cli;
     
-    #[cfg(feature = "libc")]
-    pub mod libc;
+    #[cfg(feature = "gitc")]
+    pub mod gitc;
 }
 
 pub mod error;
@@ -41,8 +41,8 @@ pub use crate::{
     },
 };
 
-#[cfg(feature = "libc")]
-pub use crate::imp::libc::*;
+#[cfg(feature = "gitc")]
+pub use crate::imp::gitc::*;
 
 pub const HEAD: &'static str = "HEAD";
 pub const MAIN: &'static str = "main";
