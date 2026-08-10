@@ -25,7 +25,7 @@ pub trait System: Sized + Send + 'static {
 
     fn send_channel_status_change(&mut self) -> impl Future<Output = UnitResult> {
         let msg = MsgFromSys::Green(FromGreenSys::StatusChange(
-            Packet::simplex(StatusChange(self.status()))
+            Packet::singular(StatusChange(self.status()))
         ));
         self.send_channel(msg)
     }
@@ -127,7 +127,7 @@ pub trait System: Sized + Send + 'static {
             if !self.is_paused() {
                 return self.send_channel(
                     MsgFromSys::Green(FromGreenSys::ControlResponse(
-                        Packet::new(
+                        Packet::response(
                             request_id,
                             ControlResponse {
                                 result: Succeed,
@@ -148,7 +148,7 @@ pub trait System: Sized + Send + 'static {
             
             self.inner_mut().status = status; 
             self.send_channel(MsgFromSys::Green(FromGreenSys::ControlResponse(
-                Packet::new(
+                Packet::response(
                     request_id,
                     ControlResponse {
                         result, 
@@ -163,7 +163,7 @@ pub trait System: Sized + Send + 'static {
             match self.status() {
                 Status::NotReady(NotReady::Stop {halt: false}) if !halt => {
                     self.send_channel(MsgFromSys::Green(FromGreenSys::ControlResponse(
-                        Packet::new(
+                        Packet::response(
                             request_id,
                             ControlResponse {
                                 result: Succeed,
@@ -179,8 +179,8 @@ pub trait System: Sized + Send + 'static {
     fn handle_control_request(&mut self, pkt: Packet<ControlRequest>) -> impl Future<Output = FlowResult<Self::Flow>> {
         async move {
             match pkt.msg.control {
-                Control::Resume => self.handle_resume_request(pkt.request_id).await,
-                Control::Stop {halt} => self.handle_stop_request(pkt.request_id, halt).await,
+                Control::Resume => self.handle_resume_request(pkt.id).await,
+                Control::Stop {halt} => self.handle_stop_request(pkt.id, halt).await,
                 Control::Drain => todo!(),
                 Control::Drop => todo!(),
                 Control::Refresh => todo!(),

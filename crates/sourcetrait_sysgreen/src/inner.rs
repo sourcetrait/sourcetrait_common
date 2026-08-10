@@ -37,7 +37,7 @@ impl<SYS: System> InnerSystem<SYS> {
         
         if !self.channel.tx.is_closed() && !halt {
             let msg = MsgFromSys::Green(
-                FromGreenSys::StatusChange(Packet::simplex(StatusChange(self.status))
+                FromGreenSys::StatusChange(Packet::singular(StatusChange(self.status))
             ));
             let _ = self.channel.tx.send(msg).await;
         }

@@ -23,9 +23,23 @@ pub enum MsgFromSys<T> {
     Green(FromGreenSys),
 }
 
+#[cereal::derived(Copy, Eq)]
+pub enum PacketNature {
+    Singular,
+    Request,
+    Response(MsgID),
+}
+
+impl PacketNature {
+    pub const fn response(to: MsgID) -> Self {
+        Self::Response(to)
+    }
+}
+
 #[cereal::derived]
 pub struct Packet<T> {
-    pub request_id: MsgID,
+    pub id: MsgID,
+    pub nature: PacketNature,
     pub msg: T,
 }
 
@@ -33,65 +47,70 @@ impl<T: Eq> Eq for Packet<T> {}
 impl<T: Copy> Copy for Packet<T> {}
 
 impl<T> Packet<T> {
-    pub const SIMPLEX_ID: MsgID = 0;
-    
-    pub const fn new(request_id: MsgID, msg: T) -> Self {
+    pub const fn new(id: MsgID, nature: PacketNature, msg: T) -> Self {
         Self {
-            request_id,
+            id,
+            nature,
             msg,
         }
     }
     
-    pub const fn simplex(msg: T) -> Self {
+    pub fn singular(msg: T) -> Self {
         Self {
-            request_id: Self::SIMPLEX_ID,
+            id: Self::next_id(),
+            nature: PacketNature::Singular,
             msg,
         }
     }
     
-    pub fn duplex(msg: T) -> Self {
+    pub fn request(msg: T) -> Self {
         Self {
-            request_id: Self::next_id(),
+            id: Self::next_id(),
+            nature: PacketNature::Request,
             msg,
         }
     }
     
-    pub fn respond<U>(self, msg: U) -> Packet<U> {
+    pub fn response(to: MsgID, msg: T) -> Self {
         Packet {
-            request_id: self.request_id,
+            id: Self::next_id(),
+            nature: PacketNature::response(to),
             msg,
         }
     }
     
-    pub const fn request_id(&self) -> MsgID {
-        self.request_id
+    pub fn respond<U>(&self, msg: U) -> Packet<U> {
+        Packet {
+            id: Self::next_id(),
+            nature: PacketNature::response(self.id),
+            msg,
+        }
     }
     
-    pub const fn msg(&self) -> &T {
-        &self.msg
+    pub const fn id(&self) -> MsgID { self.id }
+    
+    pub const fn msg(&self) -> &T { &self.msg }
+    
+    pub const fn is_singular(&self) -> bool {
+        matches!(self.nature, PacketNature::Singular)
     }
     
-    pub const fn is_simplex(&self) -> bool {
-        self.request_id == Self::SIMPLEX_ID
+    pub const fn is_request(&self) -> bool {
+        matches!(self.nature, PacketNature::Request)
     }
     
-    pub fn into_tuple(self) -> (MsgID, T) {
-        let Self { request_id, msg } = self;
-        ( request_id, msg )
+    pub const fn is_response(&self) -> bool {
+        matches!(self.nature, PacketNature::Response(_))
+    }
+    
+    pub fn into_tuple(self) -> (MsgID, PacketNature, T) {
+        let Self { id, nature, msg } = self;
+        ( id, nature, msg )
     }
     
     fn next_id() -> MsgID {
-        static NEXT_ID: AtomicU64 = AtomicU64::new(0);
+        static NEXT_ID: AtomicU64 = AtomicU64::new(1);
         NEXT_ID.fetch_add(1, std::sync::atomic::Ordering::SeqCst)
-    }
-}
-
-pub trait PacketData: Sized {
-    fn into_packet(self, request_id: MsgID) -> Packet<Self> {
-        Packet {
-            request_id,
-            msg: self
-        }
     }
 }
 

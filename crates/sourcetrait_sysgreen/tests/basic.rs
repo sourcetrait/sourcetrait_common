@@ -3,12 +3,13 @@ use sourcetrait_sysgreen::{ self as green, prelude::* };
 use sourcetrait_cereal as cereal;
 use sourcetrait_agnostic::{ self as agnostic, prelude::* };
 use sourcetrait_tomlx::{ self as tomlx, prelude::* };
+use sourcetrait_testing::prelude::*;
 use std::{
     path::PathBuf,
 };
 
-#[tokio::main]
-async fn main() {
+#[tested(tokio)]
+async fn test_basic() {
     let paths = ExampleSysPaths::default();
     let config = ExampleSysConfig::default();
     let params = ExampleSysParams { op: Operation::Mul };

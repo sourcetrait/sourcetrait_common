@@ -36,7 +36,6 @@ pub mod prelude {
     pub use crate::{
         error::ExitTrait,
         system::System,
-        PacketData,
     };
 }
 
