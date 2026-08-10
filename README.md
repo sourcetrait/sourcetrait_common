@@ -1,28 +1,31 @@
-SourceTrait Common
+SourceTrait Common Library
 ================================================================================
 [![License Badge]][License]
-
-*Common libraries and tools for SourceTrait projects*
 
 
 Repository
 --------------------------------------------------------------------------------
 
-Found a bug? Let us know! Upvote an existing issue on GitHub or create one if it
-doesn't exist.
+Found a bug?  
+Let us know! Upvote an existing issue or create one if not found.
+
+Have questions, concerns, ideas, or requests?  
+Upvote an existing discussion or create one if not found.
 
 ### Contributors
 Contributors, please review [SOURCETRAIT.md](./SOURCETRAIT.md).  
 
 #### Copyright Assignment Agreement (CAA)
-By committing to this repository you agree to assign to
-[Asmov LLC](https://asmov.software) all right, title, and interest worldwide in
-all copyright covering your contribution.
+By committing to this repository you
+[agree to assign](./docs/legal/Copyright_Assignment_Agreement.md)
+to [Asmov LLC](https://asmov.software)
+all right, title, and interest worldwide in all copyright covering your
+contribution.
 
 
 License (AGPL3)
 --------------------------------------------------------------------------------
-SourceTrait Common: Common libraries and tools for SourceTrait projects  
+SourceTrait Common Library  
 Developed by [SourceTrait](https://sourcetrait.com), a division of **Asmov LLC**  
 Copyright (C) 2026 [Asmov LLC](https://asmov.software)  
 
