@@ -1,0 +1,47 @@
+[package]
+name = "sourcetrait_common"
+description = "SourceTrait Common Library"
+version.workspace    = true
+authors.workspace    = true
+license.workspace    = true
+edition.workspace    = true
+repository.workspace = true
+homepage.workspace   = true
+categories.workspace = true
+keywords.workspace   = true
+
+[dependencies]
+sourcetrait_agnostic        = { workspace = true, optional = true }
+sourcetrait_agnostic_bridge = { workspace = true, optional = true }
+sourcetrait_cereal          = { workspace = true, optional = true }
+sourcetrait_cereal_macro    = { workspace = true, optional = true }
+sourcetrait_chronox         = { workspace = true, optional = true }
+sourcetrait_clapx           = { workspace = true, optional = true }
+sourcetrait_dotrepo         = { workspace = true, optional = true }
+sourcetrait_gitparity       = { workspace = true, optional = true }
+sourcetrait_ronx            = { workspace = true, optional = true }
+sourcetrait_ronx_macro      = { workspace = true, optional = true }
+sourcetrait_stdx            = { workspace = true, optional = true }
+sourcetrait_sysgreen        = { workspace = true, optional = true }
+sourcetrait_testing         = { workspace = true, optional = true }
+sourcetrait_testing_macro   = { workspace = true, optional = true }
+sourcetrait_tomlx           = { workspace = true, optional = true }
+sourcetrait_tooling         = { workspace = true, optional = true }
+sourcetrait_twostr          = { workspace = true, optional = true }
+
+[features]
+default = ["all"]
+all = ["agnostic","cereal","chronox","clapx","dotrepo","gitparity","ronx","stdx","sysgreen","testing","tomlx","tooling","twostr"]
+agnostic = ["dep:sourcetrait_agnostic", "dep:sourcetrait_agnostic_bridge"]
+cereal = ["dep:sourcetrait_cereal", "dep:sourcetrait_cereal_macro"]
+chronox = ["dep:sourcetrait_chronox"]
+clapx = ["dep:sourcetrait_clapx"]
+dotrepo = ["dep:sourcetrait_dotrepo"]
+gitparity = ["dep:sourcetrait_gitparity"]
+ronx = ["dep:sourcetrait_ronx", "dep:sourcetrait_ronx_macro"]
+stdx = ["dep:sourcetrait_stdx"]
+sysgreen = ["dep:sourcetrait_sysgreen"]
+testing = ["dep:sourcetrait_testing", "dep:sourcetrait_testing_macro"]
+tomlx = ["dep:sourcetrait_tomlx"]
+tooling = ["dep:sourcetrait_tooling"]
+twostr = ["dep:sourcetrait_twostr"]

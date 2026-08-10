@@ -1,23 +1,24 @@
 [workspace]
 resolver = "3"
 members = [
+    "crates/sourcetrait_agnostic",
+    "crates/sourcetrait_agnostic_bridge",
+    "crates/sourcetrait_cereal",
+    "crates/sourcetrait_cereal_macro",
     "crates/sourcetrait_chronox",
     "crates/sourcetrait_clapx",
+    "crates/sourcetrait_common",
+    "crates/sourcetrait_dotrepo",
+    "crates/sourcetrait_gitparity",
     "crates/sourcetrait_ronx",
     "crates/sourcetrait_ronx_macro",
     "crates/sourcetrait_stdx",
+    "crates/sourcetrait_sysgreen",
     "crates/sourcetrait_tomlx",
     "crates/sourcetrait_tooling",
     "crates/sourcetrait_testing",
     "crates/sourcetrait_twostr",
     "crates/sourcetrait_testing_macro",
-    "crates/sourcetrait_cereal",
-    "crates/sourcetrait_cereal_macro",
-    "crates/sourcetrait_agnostic",
-    "crates/sourcetrait_agnostic_bridge",
-    "crates/sourcetrait_dotrepo",
-    "crates/sourcetrait_gitparity",
-    "crates/sourcetrait_sysgreen",
     #"crates/draft/sourcetrait_jsonsql",
     #"crates/draft/sourcetrait_sock",
 ]
@@ -78,28 +79,22 @@ widestring = "1"
 xxhash-rust = { version = "0.8", features = ["xxh3"] }
 zerocopy = { version = "0.8", features = ["derive"] }
 
-sourcetrait_testing_macro = { path = "crates/sourcetrait_testing_macro" }
-sourcetrait_tooling = { path = "crates/sourcetrait_tooling" }
-sourcetrait_ronx_macro = { path = "crates/sourcetrait_ronx_macro" }
 
-[workspace.dependencies.sourcetrait_cereal]
-path = "crates/sourcetrait_cereal"
-
-[workspace.dependencies.sourcetrait_agnostic_bridge]
-path = "crates/sourcetrait_agnostic_bridge"
-
-[workspace.dependencies.sourcetrait_agnostic]
-path = "crates/sourcetrait_agnostic"
-
-[workspace.dependencies.sourcetrait_twostr]
-path = "crates/sourcetrait_twostr"
-
-[workspace.dependencies.sourcetrait_stdx]
-path = "crates/sourcetrait_stdx"
-
-[workspace.dependencies.sourcetrait_tomlx]
-path = "crates/sourcetrait_tomlx"
-
-[workspace.dependencies.sourcetrait_testing]
-path = "crates/sourcetrait_testing"
+sourcetrait_agnostic        = { path = "crates/sourcetrait_agnostic" }
+sourcetrait_agnostic_bridge = { path = "crates/sourcetrait_agnostic_bridge" }
+sourcetrait_cereal          = { path = "crates/sourcetrait_cereal" }
+sourcetrait_cereal_macro    = { path = "crates/sourcetrait_cereal_macro" }
+sourcetrait_chronox         = { path = "crates/sourcetrait_chronox" }
+sourcetrait_clapx           = { path = "crates/sourcetrait_clapx" }
+sourcetrait_dotrepo         = { path = "crates/sourcetrait_dotrepo" }
+sourcetrait_gitparity       = { path = "crates/sourcetrait_gitparity" }
+sourcetrait_ronx            = { path = "crates/sourcetrait_ronx" }
+sourcetrait_ronx_macro      = { path = "crates/sourcetrait_ronx_macro" }
+sourcetrait_stdx            = { path = "crates/sourcetrait_stdx" }
+sourcetrait_sysgreen        = { path = "crates/sourcetrait_sysgreen" }
+sourcetrait_testing         = { path = "crates/sourcetrait_testing" }
+sourcetrait_testing_macro   = { path = "crates/sourcetrait_testing_macro" }
+sourcetrait_tomlx           = { path = "crates/sourcetrait_tomlx" }
+sourcetrait_tooling         = { path = "crates/sourcetrait_tooling" }
+sourcetrait_twostr          = { path = "crates/sourcetrait_twostr" }
 
