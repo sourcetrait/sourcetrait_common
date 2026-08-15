@@ -25,9 +25,6 @@ pub use crate::{
     stepper::{Stepper, StepperBuilder, StepState},
 };
 
-#[cfg(feature = "tooling")]
-pub use sourcetrait_tooling as tooling;
-
 pub mod prelude {
     pub use crate as testing;
     pub use crate::{
@@ -36,9 +33,6 @@ pub mod prelude {
     };
     pub use function_name::named;
     pub use sourcetrait_testing_macro::{benched, tested};
-
-    #[cfg(feature = "tooling")]
-    pub use crate::tooling as tooling;
 }
 
 pub(crate) mod strings {

@@ -13,9 +13,10 @@ keywords.workspace   = true
 [dependencies]
 anyhow.workspace = true
 chrono.workspace = true
-sourcetrait_stdx.workspace = true
 tar.workspace = true
 walkdir.workspace = true
+
+sourcetrait_stdx.workspace = true
 
 [dev-dependencies]
 sourcetrait_testing.workspace = true

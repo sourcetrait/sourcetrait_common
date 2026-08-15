@@ -18,17 +18,15 @@ log.workspace = true
 rand.workspace = true
 regex.workspace = true
 shutdown_hooks.workspace = true
-sourcetrait_testing_macro.workspace = true
-sourcetrait_tooling = { workspace = true, optional = true }
 env_logger.workspace = true 
 tokio = { workspace = true, optional = true }
 
+sourcetrait_testing_macro.workspace = true
+
 [features]
-default = ["tooling", "test_all"]
-#default = ["tooling", "nightly"]
+default = ["test_all"]
 nightly = []
 test_all = ["tokio"]
-tooling = ["sourcetrait_tooling"]
 
 [[example]]
 name = "example-fibonacci"
