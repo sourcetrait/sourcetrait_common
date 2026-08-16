@@ -1,7 +1,6 @@
 pub(crate) mod channel;
 pub(crate) mod config;
 pub(crate) mod control;
-pub(crate) mod data;
 pub(crate) mod error;
 pub(crate) mod inner;
 pub(crate) mod param;
@@ -18,7 +17,6 @@ pub use crate::{
     channel::*,
     config::*,
     control::*,
-    data::*,
     error::*,
     inner::*,
     param::*,

@@ -18,5 +18,4 @@ pub use sourcetrait_cereal_macro::*;
 
 pub(crate) use std::{
     fmt::Debug,
-    hash::Hash,
 };

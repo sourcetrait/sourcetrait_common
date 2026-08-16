@@ -22,7 +22,7 @@ async fn main() {
     
     let request = green::Packet::request(ToExampleSys::MathRequest(
         MathRequest {
-            operand: 2,
+            operand: 2.,
         }
     ));
     let expected_request = green::Packet {
@@ -30,7 +30,7 @@ async fn main() {
         nature: green::PacketNature::Request,
         msg: ToExampleSys::MathRequest(
             MathRequest {
-                operand: 2,
+                operand: 2.,
             }
         ),
     };
@@ -42,14 +42,14 @@ async fn main() {
         id: 2,
         nature: green::PacketNature::Response(1),
         msg: FromExampleSys::MathResponse(MathResponse {
-            result: Ok(2),
+            result: Ok(2.),
         }),
     });
     assert_eq!(expected_response, response);
     
     let request = green::Packet::request(ToExampleSys::MathRequest(
         MathRequest {
-            operand: 3,
+            operand: 3.,
         }
     ));
     let expected_request = green::Packet {
@@ -57,7 +57,7 @@ async fn main() {
         nature: green::PacketNature::Request,
         msg: ToExampleSys::MathRequest(
             MathRequest {
-                operand: 3,
+                operand: 3.,
             }
         ),
     };
@@ -68,7 +68,7 @@ async fn main() {
         id: 4,
         nature: green::PacketNature::Response(3),
         msg: FromExampleSys::MathResponse(MathResponse {
-            result: Ok(6),
+            result: Ok(6.),
         }),
     });
     let response = sys.recv().await.unwrap();
@@ -78,7 +78,7 @@ async fn main() {
 pub struct ExampleSys {
     inner: green::InnerSystem<Self>,
     op: Operation,
-    num: u64,
+    num: f64,
 }
 
 // SYSTEM CHANNEL AND MESSAGES
@@ -94,24 +94,24 @@ pub enum MathFail {
     Error,
 }
 
-pub type MathResult = Result<u64, MathFail>;
+pub type MathResult = Result<f64, MathFail>;
 
-#[cereal::derived(Copy, Eq, Data)]
+#[cereal::derived(Copy, Data)]
 pub struct MathRequest {
-    operand: u64,
+    operand: f64,
 }
 
-#[cereal::derived(Copy, Eq, Data)]
+#[cereal::derived(Copy, Data)]
 pub enum ToExampleSys {
     MathRequest(MathRequest),
 }
 
-#[cereal::derived(Copy, Eq, Data)]
+#[cereal::derived(Copy, Data)]
 pub struct MathResponse {
     result: MathResult,
 }
 
-#[cereal::derived(Eq, Data)]
+#[cereal::derived(Data)]
 pub enum FromExampleSys {
     MathResponse(MathResponse),
 }
@@ -139,7 +139,7 @@ impl green::System for ExampleSys {
     async fn init(inner: green::InnerSystem<Self>, params: Self::Params) -> green::GreenResult<Self> {
         Ok(Self {
             op: params.op,
-            num: 1,
+            num: 1.,
             inner,
         })
     }
