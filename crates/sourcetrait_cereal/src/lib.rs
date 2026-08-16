@@ -1,4 +1,5 @@
 pub(crate) mod data;
+pub mod bitcoded;
 
 pub use crate::{
     data::*,
