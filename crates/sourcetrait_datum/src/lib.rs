@@ -1,21 +1,24 @@
 /// Encoding / Decoding
 pub(crate) mod code {
-    pub(crate) mod base62;
     pub(crate) mod nom;
+    pub(crate) mod nonce;
 }
 
 pub use crate::{
     code::{
-        base62::CodeBase62,
-        nom::Nom,
+        nom::{Nom,NomPair,NomStr},
+        nonce::{Nonce,NoncePair,NonceStr,NonceGenerator},
     },
 };
 
 pub(crate) use std::{
     path::{Path,PathBuf},
+    hash::Hash,
+    sync::atomic::{self, AtomicUsize},
+    time::{SystemTime, UNIX_EPOCH},
 };
 
 pub(crate) mod cereal {
+    pub(crate) use sourcetrait_cereal::*;
     pub(crate) use sourcetrait_cereal_macro::*;
 }
-pub(crate) use xxhash_rust::const_xxh3::xxh3_64 as xxh3_64;

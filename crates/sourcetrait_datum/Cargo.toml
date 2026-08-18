@@ -14,7 +14,6 @@ keywords.workspace   = true
 bitcode.workspace   = true
 rkyv.workspace      = true
 serde.workspace     = true
-xxhash-rust.workspace = true
 
 sourcetrait_cereal.workspace = true
 sourcetrait_cereal_macro.workspace = true

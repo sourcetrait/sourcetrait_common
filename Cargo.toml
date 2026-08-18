@@ -77,7 +77,7 @@ toml = "0.8"
 uzers = "0.12"
 walkdir = "2.5"
 widestring = "1"
-xxhash-rust = { version = "0.8", features = ["const_xxh3"] }
+xxhash-rust = { version = "0.8", features = ["xxh3", "const_xxh3"] }
 zerocopy = { version = "0.8", features = ["derive"] }
 
 

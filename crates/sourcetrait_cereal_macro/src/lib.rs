@@ -213,6 +213,8 @@ fn parse_attr(attrs: proc_macro2::TokenStream) -> syn::Result<CerealAttr> {
             })?;
         } else if ident == "Eq" {
             cereal_attrs.eq = AttrOpt::DERIVE;
+        } else if ident == "Hash" {
+            cereal_attrs.hash = AttrOpt::DERIVE;
         } else if ident == "Copy" {
             cereal_attrs.copy = AttrOpt::DERIVE;
         } else if ident == "Recursive" {

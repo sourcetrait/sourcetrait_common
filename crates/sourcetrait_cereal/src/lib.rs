@@ -1,4 +1,5 @@
 pub(crate) mod data;
+pub(crate) mod base62;
 pub mod bitcoded;
 
 pub use crate::{
@@ -8,6 +9,10 @@ pub use crate::{
         DataEq,
         DataCopyEq,
         Archive,
+    },
+    base62::{
+        base62_from_u64,
+        is_base62,
     },
 };
 
@@ -23,4 +28,11 @@ pub mod prelude {
 
 pub(crate) use std::{
     fmt::Debug,
+};
+
+pub use xxhash_rust::{
+    const_xxh3::xxh3_64 as hash64,
+    const_xxh3::xxh3_128 as hash128,
+    xxh3::Xxh3Default as DefaultHasher,
+    xxh3::Xxh3 as Hasher,
 };
