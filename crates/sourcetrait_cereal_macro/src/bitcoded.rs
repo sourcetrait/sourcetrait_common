@@ -26,7 +26,7 @@ use crate::shared::{extend_where, subst_self};
 
 /// Path of the runtime support module in the `sourcetrait_cereal` crate.
 fn rt() -> TokenStream {
-    quote!(::sourcetrait_cereal::bitcoded)
+    quote!(cereal::bitcoded)
 }
 
 /// Field-shape fragments for one struct, or one enum variant.

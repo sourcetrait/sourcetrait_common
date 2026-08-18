@@ -8,6 +8,7 @@ members = [
     "crates/sourcetrait_chronox",
     "crates/sourcetrait_clapx",
     "crates/sourcetrait_common",
+    "crates/sourcetrait_datum",
     "crates/sourcetrait_dotrepo",
     "crates/sourcetrait_gitparity",
     "crates/sourcetrait_ronx",
@@ -76,7 +77,7 @@ toml = "0.8"
 uzers = "0.12"
 walkdir = "2.5"
 widestring = "1"
-xxhash-rust = { version = "0.8", features = ["xxh3"] }
+xxhash-rust = { version = "0.8", features = ["const_xxh3"] }
 zerocopy = { version = "0.8", features = ["derive"] }
 
 
@@ -86,6 +87,7 @@ sourcetrait_cereal          = { path = "crates/sourcetrait_cereal",             
 sourcetrait_cereal_macro    = { path = "crates/sourcetrait_cereal_macro",       version = ">=0.0.0-0" }
 sourcetrait_chronox         = { path = "crates/sourcetrait_chronox",            version = ">=0.0.0-0" }
 sourcetrait_clapx           = { path = "crates/sourcetrait_clapx",              version = ">=0.0.0-0" }
+sourcetrait_datum           = { path = "crates/sourcetrait_datum",              version = ">=0.0.0-0" }
 sourcetrait_dotrepo         = { path = "crates/sourcetrait_dotrepo",            version = ">=0.0.0-0" }
 sourcetrait_gitparity       = { path = "crates/sourcetrait_gitparity",          version = ">=0.0.0-0" }
 sourcetrait_ronx            = { path = "crates/sourcetrait_ronx",               version = ">=0.0.0-0" }

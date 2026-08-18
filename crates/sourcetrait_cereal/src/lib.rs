@@ -2,7 +2,13 @@ pub(crate) mod data;
 pub mod bitcoded;
 
 pub use crate::{
-    data::*,
+    data::{
+        Data,
+        DataCopy,
+        DataEq,
+        DataCopyEq,
+        Archive,
+    },
 };
 
 pub mod prelude {
@@ -14,8 +20,6 @@ pub mod prelude {
         Archive,
     };
 }
-
-pub use sourcetrait_cereal_macro::*;
 
 pub(crate) use std::{
     fmt::Debug,

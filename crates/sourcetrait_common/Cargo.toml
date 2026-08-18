@@ -18,6 +18,7 @@ sourcetrait_cereal_macro    = { workspace = true, optional = true }
 sourcetrait_chronox         = { workspace = true, optional = true }
 sourcetrait_clapx           = { workspace = true, optional = true }
 sourcetrait_dotrepo         = { workspace = true, optional = true }
+sourcetrait_datum           = { workspace = true, optional = true }
 sourcetrait_gitparity       = { workspace = true, optional = true }
 sourcetrait_ronx            = { workspace = true, optional = true }
 sourcetrait_ronx_macro      = { workspace = true, optional = true }
@@ -31,11 +32,12 @@ sourcetrait_twostr          = { workspace = true, optional = true }
 
 [features]
 default = ["all"]
-all = ["agnostic","cereal","chronox","clapx","dotrepo","gitparity","ronx","stdx","sysgreen","testing","tomlx","tooling","twostr"]
+all = ["agnostic","cereal","chronox","clapx","datum","dotrepo","gitparity","ronx","stdx","sysgreen","testing","tomlx","tooling","twostr"]
 agnostic = ["dep:sourcetrait_agnostic", "dep:sourcetrait_agnostic_bridge"]
 cereal = ["dep:sourcetrait_cereal", "dep:sourcetrait_cereal_macro"]
 chronox = ["dep:sourcetrait_chronox"]
 clapx = ["dep:sourcetrait_clapx"]
+datum = ["dep:sourcetrait_datum"]
 dotrepo = ["dep:sourcetrait_dotrepo"]
 gitparity = ["dep:sourcetrait_gitparity"]
 ronx = ["dep:sourcetrait_ronx", "dep:sourcetrait_ronx_macro"]

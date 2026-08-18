@@ -59,7 +59,10 @@ pub(crate) use std::{
     },
 };
 
-pub(crate) use sourcetrait_cereal as cereal;
+pub(crate) mod cereal {
+    pub(crate) use sourcetrait_cereal::*;
+    pub(crate) use sourcetrait_cereal_macro::*;
+}
 pub(crate) use sourcetrait_agnostic as agnostic;
 pub(crate) use tokio::{
     sync::mpsc,

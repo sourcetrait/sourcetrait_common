@@ -1,6 +1,6 @@
 ///! Defines a subsystem that is will, upon request, either Add or Multiply a number by
 use sourcetrait_sysgreen::{ self as green, prelude::* };
-use sourcetrait_cereal as cereal;
+use sourcetrait_cereal_macro as cereal;
 use sourcetrait_agnostic::{ self as agnostic, prelude::* };
 use sourcetrait_tomlx::{ self as tomlx, prelude::* };
 use sourcetrait_testing::prelude::*;

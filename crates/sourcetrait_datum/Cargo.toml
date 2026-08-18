@@ -1,6 +1,6 @@
 [package]
-name = "sourcetrait_sysgreen"
-description = "Green thread subsystem framework"
+name = "sourcetrait_datum"
+description = "Common SourceTrait data types and tranformations"
 version.workspace    = true
 authors.workspace    = true
 license.workspace    = true
@@ -11,17 +11,13 @@ categories.workspace = true
 keywords.workspace   = true
 
 [dependencies]
-bitcode.workspace = true
-rkyv.workspace = true
-serde.workspace = true
-snafu.workspace = true
-tokio.workspace = true
-zerocopy.workspace = true
+bitcode.workspace   = true
+rkyv.workspace      = true
+serde.workspace     = true
+xxhash-rust.workspace = true
 
 sourcetrait_cereal.workspace = true
 sourcetrait_cereal_macro.workspace = true
-sourcetrait_agnostic.workspace = true
 
 [dev-dependencies]
 sourcetrait_testing.workspace = true
-sourcetrait_tomlx.workspace = true

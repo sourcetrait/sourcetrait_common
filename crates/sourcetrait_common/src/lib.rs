@@ -8,9 +8,7 @@ pub mod agnostic {
 #[cfg(feature = "cereal")]
 pub mod cereal {
     pub use sourcetrait_cereal::*;
-    pub mod macros {
-        pub use sourcetrait_cereal_macro::*;
-    }
+    pub use sourcetrait_cereal_macro::*;
 }
 #[cfg(feature = "chronox")]
 pub mod chronox {
@@ -19,6 +17,10 @@ pub mod chronox {
 #[cfg(feature = "clapx")]
 pub mod clapx {
     pub use sourcetrait_clapx::*;
+}
+#[cfg(feature = "datum")]
+pub mod datum {
+    pub use sourcetrait_datum::*;
 }
 #[cfg(feature = "dotrepo")]
 pub mod dotrepo {

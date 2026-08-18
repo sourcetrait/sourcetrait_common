@@ -2,7 +2,7 @@
 ///! by a specified operand and an internally accumulated number. The internal
 ///! number is initialized by configuration.
 use sourcetrait_sysgreen::{ self as green, prelude::* };
-use sourcetrait_cereal as cereal;
+use sourcetrait_cereal_macro as cereal;
 use sourcetrait_agnostic::{ self as agnostic, prelude::* };
 use sourcetrait_tomlx::{ self as tomlx, prelude::* };
 use std::{
