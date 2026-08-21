@@ -35,7 +35,7 @@ impl Nom {
         Self(generator.generate_with(&hashable).take())
     }
     
-    pub fn into_pair(self) -> NomPair { NomPair(self.0, cereal::base62_from_u64(self.0)) }
+    pub fn into_pair(self) -> NomPair { NomPair(self.0, cereal::Base62u64::encode(self.0)) }
 }
 
 impl From<u64> for Nom { fn from(v: u64) -> Self { Self::from_u64(v) } }
@@ -58,20 +58,18 @@ impl From<PathBuf> for Nom { fn from(v: PathBuf) -> Self { Self::from_str(v.to_s
 
 impl std::fmt::Display for Nom {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.into_pair().str())
+        f.write_str(self.into_pair().as_str())
     }
 }
 
-pub type NomStr = [u8; 11];
-
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct NomPair(pub(crate) u64, pub(crate) NomStr);
+pub struct NomPair(pub(crate) u64, pub(crate) cereal::Base62u64);
 impl NomPair {
-    pub const fn new_unchecked(nom: u64, nom_str: NomStr) -> Self { Self(nom, nom_str) }
-    pub const fn from_tuple_unchecked(tuple: (u64, NomStr)) -> Self { Self(tuple.0, tuple.1) }
-    pub const fn take(self) -> (u64, NomStr) { (self.0, self.1) }
+    pub const fn new_unchecked(nom: u64, base62: cereal::Base62u64) -> Self { Self(nom, base62) }
+    pub const fn from_tuple_unchecked(tuple: (u64, cereal::Base62u64)) -> Self { Self(tuple.0, tuple.1) }
+    pub const fn take(self) -> (u64, cereal::Base62u64) { (self.0, self.1) }
     pub const fn nom(&self) -> u64 { self. 0 }
-    pub const fn str(&self) -> &str { unsafe { str::from_utf8_unchecked(&self.1) } }
-    pub const fn str_bytes(&self) -> &NomStr { &self.1 }
+    pub const fn base62(&self) -> &cereal::Base62u64 { &self.1 }
+    pub const fn as_str(&self) -> &str { self.1.as_str() }
 }
 

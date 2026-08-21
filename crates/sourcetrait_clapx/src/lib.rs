@@ -1,5 +1,14 @@
 pub mod error;
-pub mod style;
+pub mod styles;
 pub mod subcmd;
+pub(crate) mod run;
 
-pub use self::{error::*, style::{*, styl}};
+pub use crate::{
+    error::*,
+    styles::{*, style},
+    run::run_error_srctrait,
+};
+
+pub(crate) use std::{
+    error::Error,
+};

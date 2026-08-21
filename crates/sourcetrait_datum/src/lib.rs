@@ -6,8 +6,8 @@ pub(crate) mod code {
 
 pub use crate::{
     code::{
-        nom::{Nom,NomPair,NomStr},
-        nonce::{Nonce,NoncePair,NonceStr,NonceGenerator},
+        nom::{Nom,NomPair},
+        nonce::{Nonce,NoncePair,NonceGenerator},
     },
 };
 

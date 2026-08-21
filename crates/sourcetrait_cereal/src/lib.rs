@@ -11,7 +11,7 @@ pub use crate::{
         Archive,
     },
     base62::{
-        base62_from_u64,
+        Base62u64,
         is_base62,
     },
 };
