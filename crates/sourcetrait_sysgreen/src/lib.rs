@@ -55,7 +55,7 @@ pub(crate) use std::{
     process::ExitCode,
     sync::{
         atomic::AtomicU64,
-        Mutex, MutexGuard
+        Arc, Mutex, MutexGuard
     },
 };
 
@@ -68,4 +68,10 @@ pub(crate) mod tkio {
     pub(crate) use tokio::sync::mpsc;
     pub(crate) use tokio::task;
     pub(crate) use tokio_util::sync::CancellationToken;
+    pub(crate) mod oneshot {
+        pub use tokio::sync::oneshot::Receiver;
+        pub use tokio::sync::oneshot::Sender;
+    }
 }
+
+pub(crate) use rustc_hash::FxHashMap;

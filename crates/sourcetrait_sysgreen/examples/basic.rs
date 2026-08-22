@@ -14,10 +14,21 @@ async fn main() {
     let paths = ExampleSysPaths::default();
     let config = ExampleSysConfig::default();
     let params = ExampleSysParams { op: Operation::Mul };
+
+    struct Handler;
+    impl green::Handler<ExampleSys> for Handler {
+        fn on_packet(&mut self, msg: green::Packet<FromExampleSys>) -> impl Future<Output = Option<green::Packet<FromExampleSys>>> + 'static + Send {
+            async move {
+                None
+            }
+        }
+    }
+    
     let mut sys: green::SystemControl<ExampleSys> = green::SystemControl::start(
         paths,
         config,
         params,
+        Handler,
     ).await.unwrap();
     
     let request = green::Packet::request(ToExampleSys::MathRequest(

@@ -13,6 +13,7 @@ keywords.workspace   = true
 [dependencies]
 bitcode.workspace = true
 rkyv.workspace = true
+rustc-hash.workspace = true
 serde.workspace = true
 snafu.workspace = true
 tokio.workspace = true

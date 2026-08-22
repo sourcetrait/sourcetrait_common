@@ -23,6 +23,15 @@ pub enum MsgFromSys<T> {
     Green(FromGreenSys),
 }
 
+impl<T> MsgFromSys<T> {
+    pub fn take_packet(self) -> Option<Packet<T>> {
+        match self {
+            MsgFromSys::Packet(packet) => Some(packet),
+            _ => None,
+        }
+    }
+}
+
 #[cereal::derived(Copy, Eq)]
 pub enum PacketNature {
     Singular,
