@@ -16,6 +16,7 @@ rkyv.workspace = true
 serde.workspace = true
 snafu.workspace = true
 tokio.workspace = true
+tokio-util.workspace = true
 zerocopy.workspace = true
 
 sourcetrait_cereal.workspace = true

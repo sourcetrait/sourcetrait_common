@@ -7,8 +7,8 @@ pub enum SysIo {
 
 impl SysIo {
     pub fn new_channel(size: usize) -> (Self, LineChannel) {
-        let (left_tx, left_rx) = mpsc::channel(size);
-        let (right_tx, right_rx) = mpsc::channel(size);
+        let (left_tx, left_rx) = tkio::mpsc::channel(size);
+        let (right_tx, right_rx) = tkio::mpsc::channel(size);
         
         (
             Self::LineChannel(LineChannel {
@@ -50,6 +50,6 @@ impl SysIo {
 }
 
 pub struct LineChannel {
-    pub output: mpsc::Sender<String>,
-    pub input: mpsc::Receiver<String>,
+    pub output: tkio::mpsc::Sender<String>,
+    pub input: tkio::mpsc::Receiver<String>,
 }

@@ -64,7 +64,8 @@ pub(crate) mod cereal {
     pub(crate) use sourcetrait_cereal_macro::*;
 }
 pub(crate) use sourcetrait_agnostic as agnostic;
-pub(crate) use tokio::{
-    sync::mpsc,
-    task,
-};
+pub(crate) mod tkio {
+    pub(crate) use tokio::sync::mpsc;
+    pub(crate) use tokio::task;
+    pub(crate) use tokio_util::sync::CancellationToken;
+}

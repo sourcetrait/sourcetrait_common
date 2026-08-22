@@ -49,6 +49,7 @@ impl<SYS: System> InnerSystem<SYS> {
         if !self.running { return Succeed }
         
         self.status = Status::NotReady(NotReady::Stop { halt: true });
+        self.channel.cancel.cancel();
         
         if !self.channel.rx.is_closed() {
             self.channel.rx.close();

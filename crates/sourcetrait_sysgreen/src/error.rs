@@ -120,8 +120,8 @@ impl From<tokio::task::JoinError> for GreenError {
     }
 }
 
-impl<T> From<mpsc::error::SendError<T>> for GreenError {
-    fn from(_: mpsc::error::SendError<T>) -> Self {
+impl<T> From<tkio::mpsc::error::SendError<T>> for GreenError {
+    fn from(_: tkio::mpsc::error::SendError<T>) -> Self {
         Self::ChannelClosed
     }
 }

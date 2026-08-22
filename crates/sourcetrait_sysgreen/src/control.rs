@@ -30,7 +30,7 @@ impl<SYS: System> SystemControl<SYS> {
         self.channel.send(MsgToSys::Packet(pkt)).await
     }
     
-    pub fn rx(&mut self) -> &mut mpsc::Receiver<MsgFromSys<SYS::FromSys>> {
+    pub fn rx(&mut self) -> &mut tkio::mpsc::Receiver<MsgFromSys<SYS::FromSys>> {
         &mut self.channel.rx
     }
     
