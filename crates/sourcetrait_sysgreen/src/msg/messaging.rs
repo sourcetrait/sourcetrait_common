@@ -30,6 +30,14 @@ impl<T> MsgFromSys<T> {
             _ => None,
         }
     }
+
+    pub const fn packet_response_to_id(&self) -> Option<u64> {
+        if let Self::Packet(pkt) = self && let PacketNature::Response(reqid) = pkt.nature {
+            Some(reqid)
+        } else {
+            None
+        }
+    }
 }
 
 #[cereal::derived(Copy, Eq)]
@@ -99,6 +107,8 @@ impl<T> Packet<T> {
     pub const fn id(&self) -> MsgID { self.id }
     
     pub const fn msg(&self) -> &T { &self.msg }
+
+    pub fn take_msg(self) -> T { self.msg }
     
     pub const fn is_singular(&self) -> bool {
         matches!(self.nature, PacketNature::Singular)
@@ -115,6 +125,14 @@ impl<T> Packet<T> {
     pub fn into_tuple(self) -> (MsgID, PacketNature, T) {
         let Self { id, nature, msg } = self;
         ( id, nature, msg )
+    }
+    
+    pub const fn response_to_id(&self) -> Option<u64> {
+        if let PacketNature::Response(reqid) = self.nature {
+            Some(reqid)
+        } else {
+            None
+        }
     }
     
     fn next_id() -> MsgID {

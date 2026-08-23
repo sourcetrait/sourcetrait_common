@@ -10,7 +10,13 @@ use std::{
 };
 
 #[tokio::main]
-async fn main() {
+async fn main() { basic().await }
+
+#[tokio::test]
+async fn test_basic() { basic().await }
+
+
+async fn basic() {
     let paths = ExampleSysPaths::default();
     let config = ExampleSysConfig::default();
     let params = ExampleSysParams { op: Operation::Mul };
@@ -31,12 +37,11 @@ async fn main() {
         Handler,
     ).await.unwrap();
     
-    let request = green::Packet::request(ToExampleSys::MathRequest(
-        MathRequest {
-            operand: 2.,
-        }
-    ));
-    let expected_request = green::Packet {
+    let request = MathRequest {
+        operand: 2.,
+    };
+    /* What gets sent here:
+    let expected_packet = green::Packet {
         id: 1,
         nature: green::PacketNature::Request,
         msg: ToExampleSys::MathRequest(
@@ -45,25 +50,19 @@ async fn main() {
             }
         ),
     };
-    assert_eq!(expected_request, request);
-    sys.send_packet(request).await.unwrap();
+    */
     
-    let response = sys.recv().await.unwrap();
-    let expected_response = green::MsgFromSys::Packet(green::Packet {
-        id: 2,
-        nature: green::PacketNature::Response(1),
-        msg: FromExampleSys::MathResponse(MathResponse {
-            result: Ok(2.),
-        }),
-    });
+    let response = sys.request(request).await.expect("response");
+    let expected_response = MathResponse {
+        result: Ok(2.),
+    };
     assert_eq!(expected_response, response);
     
-    let request = green::Packet::request(ToExampleSys::MathRequest(
-        MathRequest {
-            operand: 3.,
-        }
-    ));
-    let expected_request = green::Packet {
+    let request = MathRequest {
+        operand: 3.,
+    };
+    /* What gets sent here:
+    let expected_packet = green::Packet {
         id: 3,
         nature: green::PacketNature::Request,
         msg: ToExampleSys::MathRequest(
@@ -72,17 +71,12 @@ async fn main() {
             }
         ),
     };
-    assert_eq!(expected_request, request);
-    sys.send_packet(request).await.unwrap();
+    */
     
-    let expected_response = green::MsgFromSys::Packet(green::Packet {
-        id: 4,
-        nature: green::PacketNature::Response(3),
-        msg: FromExampleSys::MathResponse(MathResponse {
-            result: Ok(6.),
-        }),
-    });
-    let response = sys.recv().await.unwrap();
+    let expected_response = MathResponse {
+        result: Ok(6.),
+    };
+    let response = sys.request(request).await.unwrap();
     assert_eq!(expected_response, response);
 }
 
@@ -120,6 +114,21 @@ pub enum ToExampleSys {
 #[cereal::derived(Copy, Data)]
 pub struct MathResponse {
     result: MathResult,
+}
+
+impl green::Request<ExampleSys> for MathRequest { type ResponseType = MathResponse; }
+impl From<MathRequest> for ToExampleSys {
+    fn from(v: MathRequest) -> Self { ToExampleSys::MathRequest(v) }
+}
+impl TryFrom<FromExampleSys> for MathResponse {
+    type Error = green::GreenError;
+
+    fn try_from(v: FromExampleSys) -> Result<Self, Self::Error> {
+        match v {
+            FromExampleSys::MathResponse(v) => Ok(v),
+            _ => Err(green::GreenError::ResponseType),
+        }
+    }
 }
 
 #[cereal::derived(Data)]

@@ -27,3 +27,7 @@ sourcetrait_agnostic.workspace = true
 [dev-dependencies]
 sourcetrait_testing.workspace = true
 sourcetrait_tomlx.workspace = true
+
+[[example]]
+name = "basic"
+test = true

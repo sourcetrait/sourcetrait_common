@@ -23,9 +23,7 @@ impl<SYS: System> InnerSystem<SYS> {
             status: Status::NotReady(NotReady::Normal)
         };
         let sys = SYS::init(this, params).await.unwrap();
-        let handle = tokio::task::spawn(async move {
-            sys.run().await
-        });
+        let handle = tokio::task::spawn(async move { sys.run().await });
 
         Ok(Channel::new(external_channel, handle))
     }

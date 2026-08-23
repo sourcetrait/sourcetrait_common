@@ -62,6 +62,9 @@ pub enum GreenError {
     
     #[snafu(display("Sub-system failed"))]
     Fatal,
+
+    #[snafu(display("Unexpected response"))]
+    ResponseType,
 }
 
 pub type GreenResult<T> = Result<T, GreenError>;

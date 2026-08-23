@@ -2,9 +2,6 @@ use crate::*;
 
 /// Handles incoming messages
 /// Returns None if handled, else Some(msg) if unhandled.
-//pub type HandlerFn<SYS> = fn(msg: MsgFromSys<<SYS as System>::FromSys>)
-//    -> Pin<Box<dyn Future<Output = Option<MsgFromSys<<SYS as System>::FromSys>>> + Send + 'static>>;
-
 pub trait Handler<SYS: System>: 'static + Send {
     fn on_packet(&mut self, msg: Packet<SYS::FromSys>)
         -> impl Future<Output = Option<Packet<SYS::FromSys>>> + 'static + Send;
@@ -12,23 +9,64 @@ pub trait Handler<SYS: System>: 'static + Send {
 
 pub struct SystemControl<SYS: System>  {
     tx: tkio::mpsc::Sender<MsgToSys<<SYS as System>::ToSys>>,
-    handle: tkio::task::JoinHandle<Result<Success, Failure>>,
+    sys_handle: tkio::task::JoinHandle<UnitResult>,
+    self_handle: tkio::task::JoinHandle<UnitResult>,
     cancel: tkio::CancellationToken,
-    requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<MsgFromSys<<SYS as System>::FromSys>>>>>,
+    requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<<SYS as System>::FromSys>>>>,
 }
 
-struct ControlTask<SYS: System> {
+struct ControlTask<SYS: System, HNDLR: Handler<SYS>> {
     rx: tkio::mpsc::Receiver<MsgFromSys<<SYS as System>::FromSys>>,
-    requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<MsgFromSys<<SYS as System>::FromSys>>>>>,
+    handler: HNDLR,
+    requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<<SYS as System>::FromSys>>>>,
     cancel: tkio::CancellationToken,
+}
+
+impl<SYS: System, HNDLR: Handler<SYS>> ControlTask<SYS, HNDLR> {
+    async fn run(mut self) -> UnitResult {
+            let result = loop {
+            let result = tokio::select! {
+                rx = self.rx.recv() => match rx {
+                    None => Err(Failure),
+                    Some(MsgFromSys::Packet(pkt)) if let Some(reqid) = pkt.response_to_id() => {
+                        let req = self.requests.lock().expect("lock").remove(&reqid);
+                        match req {
+                            Some(shotx) => {
+                                shotx.send(pkt.take_msg())
+                                    .unwrap(); //todo
+                                Succeed
+                            },
+                            None => match self.handler.on_packet(pkt).await {
+                                None => Succeed,
+                                Some(msg) => Ok(Success),
+                            }
+                        }
+                    },
+                    Some(MsgFromSys::Packet(pkt)) => {
+                        match self.handler.on_packet(pkt).await {
+                            Some(msg) => Succeed,
+                            None => Ok(Success)
+                        }
+                    },
+                    Some(msg_todo) => todo!(),
+                },
+            };
+            
+            if let Err(e) = result {
+                break Err(e);
+            }
+        };
+
+        result
+    }
 }
 
 impl<SYS: System> SystemControl<SYS> {
-    pub async fn start<HNDL: Handler<SYS>>(
+    pub async fn start<HNDLR: Handler<SYS>>(
         paths: SYS::Paths,
         config: SYS::Config,
         params: SYS::Params,
-        mut handler: HNDL,
+        handler: HNDLR,
     ) -> GreenResult<Self> {
         let channel = InnerSystem::<SYS>::start(
             paths,
@@ -36,78 +74,42 @@ impl<SYS: System> SystemControl<SYS> {
             params,
         ).await?;
 
-        let Channel { tx, rx, cancel, handle } = channel;
+        let Channel { tx, rx, cancel, handle: sys_handle } = channel;
         let requests = Arc::new(Mutex::new(FxHashMap::default()));
 
-        let mut task: ControlTask<SYS> = ControlTask {
+        let task = ControlTask {
             rx,
+            handler,
             cancel: cancel.clone(),
             requests: requests.clone(),
         };
         
+        let self_handle = tokio::spawn(async move { task.run().await });
+        
         let this = Self {
             tx,
             cancel,
-            handle,
+            sys_handle,
+            self_handle,
             requests,
         };
         
-        tokio::spawn(async move {
-            let result: Result<(), Failure> = loop {
-                let result = tokio::select! {
-                    rx = task.rx.recv() => match rx {
-                        Some(msg @ MsgFromSys::Packet(pkt)) => {
-                            let remains = if let PacketNature::Response(reqid) = pkt.nature {
-                                let remains = {
-                                    let mut requests = task.requests.lock().expect("lock");
-                                    if let Some(req) = requests.remove(&reqid) {
-                                        req.send(msg)
-                                            .unwrap(); //todo
-                                        None
-                                    } else {
-                                        Some(msg)
-                                    }
-                                };
-                                
-                                remains
-                            } else { None };
-                            if let Some(msg) = remains {
-                                match handler.on_packet(msg.take_packet().expect("packet")).await {
-                                    Some(msg) => Ok(()),
-                                    None => Ok(())
-                                }
-                            } else {
-                                Ok(())
-                            }
-                        },
-                        _ => Err(Failure),
-                        None => Err(Failure),
-                    },
-                };
-                
-                if let Err(e) = result {
-                    break Err(e);
-                }
-            };
-        });
-        
-        //Ok(this)
-        unreachable!()
+        Ok(this)
     }
     
-    pub async fn send_sys(&self, msg: MsgToSys<SYS::ToSys>) -> GreenResult<()> {
-        self.tx.send(msg).await?;
+    pub async fn send_sysmsg(&self, sysmsg: MsgToSys<SYS::ToSys>) -> GreenResult<()> {
+        self.tx.send(sysmsg).await?;
         Ok(())
     }
     
-    pub async fn send(&self, pkt: Packet<SYS::ToSys>) -> GreenResult<()> {
+    pub async fn send_packet(&self, pkt: Packet<SYS::ToSys>) -> GreenResult<()> {
         self.tx.send(MsgToSys::Packet(pkt)).await?;
         Ok(())
     }
     
     pub async fn request<T: Request<SYS>>(&mut self, req: T) -> GreenResult<T::ResponseType>
     where
-        <T as Request<SYS>>::ResponseType: From<MsgFromSys<<SYS as System>::FromSys>>
+        <T as Request<SYS>>::ResponseType: TryFrom<<SYS as System>::FromSys, Error = GreenError>
     {
         let packet = Packet::request(req.into());
         let reqid = packet.id;
@@ -119,12 +121,12 @@ impl<SYS: System> SystemControl<SYS> {
         self.tx.send(msg).await?;
         let response: T::ResponseType = recv.await
             .map_err(|_| GreenError::Fatal)?
-            .into();
+            .try_into()?;
 
         Ok(response)
     }
 }
 
 pub trait Request<SYS: System>: Into<SYS::ToSys> {
-    type ResponseType: From<SYS::FromSys>;
+    type ResponseType: TryFrom<SYS::FromSys, Error = GreenError>;
 }
