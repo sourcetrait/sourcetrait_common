@@ -28,8 +28,8 @@ impl<SYS: System> InnerSystem<SYS> {
         Ok(Channel::new(external_channel, handle))
     }
     
-    pub async fn prepare_stop(&mut self, halt: bool) -> UnitResult {
-        if !self.running { return Succeed }
+    pub async fn prepare_stop(&mut self, halt: bool) -> RunResult {
+        if !self.running { return SUCCESS }
         
         self.status = Status::NotReady(NotReady::Stop { halt });
         
@@ -40,11 +40,11 @@ impl<SYS: System> InnerSystem<SYS> {
             let _ = self.channel.tx.send(msg).await;
         }
         
-        Succeed
+        SUCCESS
     }
 
-    pub async fn halt(&mut self) -> UnitResult {
-        if !self.running { return Succeed }
+    pub async fn halt(&mut self) -> RunResult {
+        if !self.running { return SUCCESS }
         
         self.status = Status::NotReady(NotReady::Stop { halt: true });
         self.channel.cancel.cancel();
@@ -54,7 +54,7 @@ impl<SYS: System> InnerSystem<SYS> {
         }
         
         self.running = false;
-        Succeed
+        SUCCESS
     }
 }
 

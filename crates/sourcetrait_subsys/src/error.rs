@@ -1,12 +1,6 @@
 use crate::*;
 
 #[cereal::derived(Copy, Eq)]
-pub struct Success;
-
-#[cereal::derived(Copy, Eq)]
-pub struct Failure;
-
-#[cereal::derived(Copy, Eq)]
 #[serde(bound(
     serialize = "T: cereal::DataCopyEq",
     deserialize = "T: cereal::DataCopyEq"
@@ -29,15 +23,17 @@ pub enum GreenFlow {
 #[cereal::derived(Copy, Eq, Data)]
 pub struct StdFlow;
 
-pub type UnitResult = Result<Success, Failure>;
+#[cereal::derived(Copy, Eq)]
+pub struct Success;
+#[cereal::derived(Copy, Eq)]
+pub struct Failure;
+pub type RunResult = Result<Success, Failure>;
+pub const FAILURE: RunResult = Err(Failure);
+pub const SUCCESS: RunResult = Ok(Success);
+
 pub type SysResult<T> = Result<T, Failure>;
 pub type FlowResult<T> = Result<Flow<T>, Failure>;
 pub type GreenFlowResult = Result<GreenFlow, Failure>;
-
-#[allow(non_upper_case_globals)]
-pub const Fail: UnitResult = Err(Failure);
-#[allow(non_upper_case_globals)]
-pub const Succeed: UnitResult = Ok(Success);
 
 pub trait ExitTrait {
     fn exit_code(self) -> ExitCode;
@@ -101,7 +97,7 @@ impl GreenError {
     }
 }
 
-impl ExitTrait for UnitResult {
+impl ExitTrait for RunResult {
     #[inline]
     fn exit_code(self) -> ExitCode {
         match self {

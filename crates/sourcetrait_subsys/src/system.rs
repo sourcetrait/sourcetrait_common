@@ -9,21 +9,21 @@ pub trait System: Sized + Send + 'static {
     type FromSys: cereal::Data;
     type Flow: cereal::DataCopyEq;
     
-    fn send_channel(&mut self, msg: MsgFromSys<Self::FromSys>) -> impl Future<Output = UnitResult> {
+    fn send_channel(&mut self, msg: MsgFromSys<Self::FromSys>) -> impl Future<Output = RunResult> {
         async {
             let inner = self.inner_mut();
             match inner.channel.tx.send(msg).await {
-                Ok(_) => Succeed,
+                Ok(_) => SUCCESS,
                 Err(e) => self.unrecoverable(e, false).await,
             }
         }
     }
     
-    fn send_channel_packet(&mut self, pkt: Packet<Self::FromSys>) -> impl Future<Output = UnitResult> {
+    fn send_channel_packet(&mut self, pkt: Packet<Self::FromSys>) -> impl Future<Output = RunResult> {
         self.send_channel(MsgFromSys::Packet(pkt))
     }
 
-    fn send_channel_status_change(&mut self) -> impl Future<Output = UnitResult> {
+    fn send_channel_status_change(&mut self) -> impl Future<Output = RunResult> {
         let msg = MsgFromSys::Green(FromGreenSys::StatusChange(
             Packet::singular(StatusChange(self.status()))
         ));
@@ -32,13 +32,13 @@ pub trait System: Sized + Send + 'static {
     
     /// always succeeds
     #[inline]
-    fn shutdown(&mut self) -> impl Future<Output = UnitResult> {
+    fn shutdown(&mut self) -> impl Future<Output = RunResult> {
         self.stop(false)
     }
     
     /// always succeeds
     #[inline]
-    fn halt(&mut self) -> impl Future<Output = UnitResult> {
+    fn halt(&mut self) -> impl Future<Output = RunResult> {
         self.stop(true)
     }
     
@@ -50,9 +50,9 @@ pub trait System: Sized + Send + 'static {
     }
     
     /// always succeeds
-    fn stop(&mut self, halt: bool) -> impl Future<Output = UnitResult> {
+    fn stop(&mut self, halt: bool) -> impl Future<Output = RunResult> {
         async move {
-            if !self.inner().running { return Succeed; }
+            if !self.inner().running { return SUCCESS; }
             
             let stopping = self.status_stop();
             if stopping.is_none() {
@@ -65,17 +65,17 @@ pub trait System: Sized + Send + 'static {
                 let _ = self.inner_mut().halt().await;
             }
             
-            Succeed
+            SUCCESS
         }
     }
 
-    fn done(&mut self, result: UnitResult) -> impl Future<Output = UnitResult> {
+    fn done(&mut self, result: RunResult) -> impl Future<Output = RunResult> {
         async move {
             match result {
                 Ok(_) => self.shutdown().await,
                 Err(_) => {
                     let _ = self.shutdown().await;
-                    Fail
+                    FAILURE
                 }
             }
         }
@@ -130,7 +130,7 @@ pub trait System: Sized + Send + 'static {
                         Packet::response(
                             request_id,
                             ControlResponse {
-                                result: Succeed,
+                                result: SUCCESS,
                             },
                         )
                     ))
@@ -142,8 +142,8 @@ pub trait System: Sized + Send + 'static {
             let ready = self.on_resume().await.map_err(|_| Failure)?;
             
             let (status, result) = match ready {
-                true => (Status::Ready, Succeed),
-                false => (Status::NotReady(NotReady::Normal), Fail),
+                true => (Status::Ready, SUCCESS),
+                false => (Status::NotReady(NotReady::Normal), FAILURE),
             };
             
             self.inner_mut().status = status; 
@@ -166,7 +166,7 @@ pub trait System: Sized + Send + 'static {
                         Packet::response(
                             request_id,
                             ControlResponse {
-                                result: Succeed,
+                                result: SUCCESS,
                             },
                         )
                     ))).await.map(|_| Flow::Continue)
@@ -208,12 +208,12 @@ pub trait System: Sized + Send + 'static {
     
     fn init(inner: InnerSystem<Self>, params: Self::Params) -> impl Future<Output = GreenResult<Self>>;
         
-    fn run(self) -> impl Future<Output = UnitResult> + Send + 'static;
+    fn run(self) -> impl Future<Output = RunResult> + Send + 'static;
 
     /// Contract:
     /// - Unless stop() is called manually, will only be called if not currently
     ///   stopping with the same severity (halt)
-    fn on_stop(&mut self, halt: bool) -> impl Future<Output = UnitResult>;
+    fn on_stop(&mut self, halt: bool) -> impl Future<Output = RunResult>;
     
     ///
     /// Contract:

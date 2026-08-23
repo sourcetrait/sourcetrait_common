@@ -1,6 +1,6 @@
 [package]
-name = "sourcetrait_sysgreen"
-description = "Green thread subsystem framework"
+name = "sourcetrait_subsys"
+description = "Subsystem framework"
 version.workspace    = true
 authors.workspace    = true
 license.workspace    = true

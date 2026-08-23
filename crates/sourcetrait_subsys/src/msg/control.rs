@@ -5,7 +5,7 @@ pub struct ControlRequest {
     pub control: Control,
 }
 
-pub type ControlResult = UnitResult; 
+pub type ControlResult = RunResult; 
 
 #[cereal::derived(Copy, Eq)]
 pub struct ControlResponse {

@@ -164,7 +164,7 @@ impl green::System for ExampleSys {
         })
     }
     
-    async fn run(mut self) -> green::UnitResult {
+    async fn run(mut self) -> green::RunResult {
         let result = loop {
             let result = tokio::select! {
                 rx = self.inner.channel.rx.recv() => match rx {
@@ -190,8 +190,8 @@ impl green::System for ExampleSys {
         }
     }
 
-    async fn on_stop(&mut self, _halt: bool) -> green::UnitResult {
-        green::Succeed
+    async fn on_stop(&mut self, _halt: bool) -> green::RunResult {
+        green::SUCCESS
     }
 
     async fn on_resume(&mut self) -> green::SysResult<bool> {

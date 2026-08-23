@@ -9,8 +9,8 @@ pub trait Handler<SYS: System>: 'static + Send {
 
 pub struct SystemControl<SYS: System>  {
     tx: tkio::mpsc::Sender<MsgToSys<<SYS as System>::ToSys>>,
-    sys_handle: tkio::task::JoinHandle<UnitResult>,
-    self_handle: tkio::task::JoinHandle<UnitResult>,
+    sys_handle: tkio::task::JoinHandle<RunResult>,
+    self_handle: tkio::task::JoinHandle<RunResult>,
     cancel: tkio::CancellationToken,
     requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<<SYS as System>::FromSys>>>>,
 }
@@ -23,7 +23,7 @@ struct ControlTask<SYS: System, HNDLR: Handler<SYS>> {
 }
 
 impl<SYS: System, HNDLR: Handler<SYS>> ControlTask<SYS, HNDLR> {
-    async fn run(mut self) -> UnitResult {
+    async fn run(mut self) -> RunResult {
             let result = loop {
             let result = tokio::select! {
                 rx = self.rx.recv() => match rx {
@@ -34,17 +34,17 @@ impl<SYS: System, HNDLR: Handler<SYS>> ControlTask<SYS, HNDLR> {
                             Some(shotx) => {
                                 shotx.send(pkt.take_msg())
                                     .unwrap(); //todo
-                                Succeed
+                                SUCCESS
                             },
                             None => match self.handler.on_packet(pkt).await {
-                                None => Succeed,
+                                None => SUCCESS,
                                 Some(msg) => Ok(Success),
                             }
                         }
                     },
                     Some(MsgFromSys::Packet(pkt)) => {
                         match self.handler.on_packet(pkt).await {
-                            Some(msg) => Succeed,
+                            Some(msg) => SUCCESS,
                             None => Ok(Success)
                         }
                     },
