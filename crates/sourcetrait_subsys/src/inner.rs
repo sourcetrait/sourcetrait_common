@@ -13,7 +13,7 @@ impl<SYS: System> InnerSystem<SYS> {
         paths: SYS::Paths,
         config: SYS::Config,
         params: SYS::Params,
-    ) -> GreenResult<Channel<MsgToSys<SYS::ToSys>, MsgFromSys<SYS::FromSys>>> {
+    ) -> SubsysResult<Channel<MsgToSys<SYS::ToSys>, MsgFromSys<SYS::FromSys>>> {
         let (channel, external_channel) = InternalChannel::new_pair(SYS::CHANNEL_SIZE);
         let this = Self {
             paths,
@@ -34,8 +34,8 @@ impl<SYS: System> InnerSystem<SYS> {
         self.status = Status::NotReady(NotReady::Stop { halt });
         
         if !self.channel.tx.is_closed() && !halt {
-            let msg = MsgFromSys::Green(
-                FromGreenSys::StatusChange(Packet::singular(StatusChange(self.status))
+            let msg = MsgFromSys::Sub(
+                FromSub::StatusChange(Packet::singular(StatusChange(self.status))
             ));
             let _ = self.channel.tx.send(msg).await;
         }

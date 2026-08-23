@@ -67,7 +67,7 @@ impl<SYS: System> SystemControl<SYS> {
         config: SYS::Config,
         params: SYS::Params,
         handler: HNDLR,
-    ) -> GreenResult<Self> {
+    ) -> SubsysResult<Self> {
         let channel = InnerSystem::<SYS>::start(
             paths,
             config,
@@ -97,19 +97,19 @@ impl<SYS: System> SystemControl<SYS> {
         Ok(this)
     }
     
-    pub async fn send_sysmsg(&self, sysmsg: MsgToSys<SYS::ToSys>) -> GreenResult<()> {
+    pub async fn send_sysmsg(&self, sysmsg: MsgToSys<SYS::ToSys>) -> SubsysResult<()> {
         self.tx.send(sysmsg).await?;
         Ok(())
     }
     
-    pub async fn send_packet(&self, pkt: Packet<SYS::ToSys>) -> GreenResult<()> {
+    pub async fn send_packet(&self, pkt: Packet<SYS::ToSys>) -> SubsysResult<()> {
         self.tx.send(MsgToSys::Packet(pkt)).await?;
         Ok(())
     }
     
-    pub async fn request<T: Request<SYS>>(&mut self, req: T) -> GreenResult<T::ResponseType>
+    pub async fn request<T: Request<SYS>>(&mut self, req: T) -> SubsysResult<T::ResponseType>
     where
-        <T as Request<SYS>>::ResponseType: TryFrom<<SYS as System>::FromSys, Error = GreenError>
+        <T as Request<SYS>>::ResponseType: TryFrom<<SYS as System>::FromSys, Error = SubsysError>
     {
         let packet = Packet::request(req.into());
         let reqid = packet.id;
@@ -120,7 +120,7 @@ impl<SYS: System> SystemControl<SYS> {
             .insert(reqid, send);
         self.tx.send(msg).await?;
         let response: T::ResponseType = recv.await
-            .map_err(|_| GreenError::Fatal)?
+            .map_err(|_| SubsysError::Fatal)?
             .try_into()?;
 
         Ok(response)
@@ -128,5 +128,5 @@ impl<SYS: System> SystemControl<SYS> {
 }
 
 pub trait Request<SYS: System>: Into<SYS::ToSys> {
-    type ResponseType: TryFrom<SYS::FromSys, Error = GreenError>;
+    type ResponseType: TryFrom<SYS::FromSys, Error = SubsysError>;
 }

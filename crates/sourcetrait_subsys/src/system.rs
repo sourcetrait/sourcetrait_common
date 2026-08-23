@@ -24,7 +24,7 @@ pub trait System: Sized + Send + 'static {
     }
 
     fn send_channel_status_change(&mut self) -> impl Future<Output = RunResult> {
-        let msg = MsgFromSys::Green(FromGreenSys::StatusChange(
+        let msg = MsgFromSys::Sub(FromSub::StatusChange(
             Packet::singular(StatusChange(self.status()))
         ));
         self.send_channel(msg)
@@ -115,8 +115,8 @@ pub trait System: Sized + Send + 'static {
         async move {
             match msg {
                 MsgToSys::Packet(pkt) => self.on_channel_recv(pkt).await,
-                MsgToSys::Green(ToGreenSys::ControlRequest(pkt)) => self.handle_control_request(pkt).await,
-                MsgToSys::Green(ToGreenSys::StatusRequest(pkt)) => self.handle_status_request(pkt).await,
+                MsgToSys::Sub(ToSub::ControlRequest(pkt)) => self.handle_control_request(pkt).await,
+                MsgToSys::Sub(ToSub::StatusRequest(pkt)) => self.handle_status_request(pkt).await,
                 MsgToSys::Envelope => todo!("Envelopes are not implemented"),
             }
         }
@@ -126,7 +126,7 @@ pub trait System: Sized + Send + 'static {
         async move {
             if !self.is_paused() {
                 return self.send_channel(
-                    MsgFromSys::Green(FromGreenSys::ControlResponse(
+                    MsgFromSys::Sub(FromSub::ControlResponse(
                         Packet::response(
                             request_id,
                             ControlResponse {
@@ -147,7 +147,7 @@ pub trait System: Sized + Send + 'static {
             };
             
             self.inner_mut().status = status; 
-            self.send_channel(MsgFromSys::Green(FromGreenSys::ControlResponse(
+            self.send_channel(MsgFromSys::Sub(FromSub::ControlResponse(
                 Packet::response(
                     request_id,
                     ControlResponse {
@@ -162,7 +162,7 @@ pub trait System: Sized + Send + 'static {
         async move {
             match self.status() {
                 Status::NotReady(NotReady::Stop {halt: false}) if !halt => {
-                    self.send_channel(MsgFromSys::Green(FromGreenSys::ControlResponse(
+                    self.send_channel(MsgFromSys::Sub(FromSub::ControlResponse(
                         Packet::response(
                             request_id,
                             ControlResponse {
@@ -191,7 +191,7 @@ pub trait System: Sized + Send + 'static {
     
     fn handle_status_request(&mut self, pkt: Packet<StatusRequest>) -> impl Future<Output = FlowResult<Self::Flow>> {
         async move {
-            let msg = MsgFromSys::Green(FromGreenSys::StatusResponse(
+            let msg = MsgFromSys::Sub(FromSub::StatusResponse(
                 pkt.respond(StatusResponse {
                     status: self.inner().status,
                 })
@@ -206,7 +206,7 @@ pub trait System: Sized + Send + 'static {
     
     fn inner_mut(&mut self) -> &mut InnerSystem<Self>;
     
-    fn init(inner: InnerSystem<Self>, params: Self::Params) -> impl Future<Output = GreenResult<Self>>;
+    fn init(inner: InnerSystem<Self>, params: Self::Params) -> impl Future<Output = SubsysResult<Self>>;
         
     fn run(self) -> impl Future<Output = RunResult> + Send + 'static;
 

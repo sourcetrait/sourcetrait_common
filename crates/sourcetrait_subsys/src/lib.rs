@@ -31,6 +31,7 @@ pub use crate::{
 };
 
 pub mod prelude {
+    pub use crate::control::{Handler, Request};
     pub use crate::{
         error::ExitTrait,
         system::System,

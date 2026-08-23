@@ -3,7 +3,7 @@ use crate::*;
 pub type MsgID = u64;
 
 #[cereal::derived(Copy, Eq)]
-pub enum FromGreenSys {
+pub enum FromSub {
     ControlResponse(Packet<ControlResponse>),
     StatusChange(Packet<StatusChange>),
     StatusResponse(Packet<StatusResponse>),
@@ -13,14 +13,14 @@ pub enum FromGreenSys {
 pub enum MsgToSys<T> {
     Envelope, //todo
     Packet(Packet<T>),
-    Green(ToGreenSys),
+    Sub(ToSub),
 }
 
 #[cereal::derived]
 pub enum MsgFromSys<T> {
     Envelope, // todo
     Packet(Packet<T>),
-    Green(FromGreenSys),
+    Sub(FromSub),
 }
 
 impl<T> MsgFromSys<T> {
@@ -142,7 +142,7 @@ impl<T> Packet<T> {
 }
 
 #[cereal::derived(Eq, Data)]
-pub enum ToGreenSys {
+pub enum ToSub {
     ControlRequest(Packet<ControlRequest>),
     StatusRequest(Packet<StatusRequest>),
 }

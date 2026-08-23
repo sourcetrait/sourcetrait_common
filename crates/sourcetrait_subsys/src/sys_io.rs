@@ -26,7 +26,7 @@ impl SysIo {
         matches!(self, Self::Stdio)
     }
     
-    pub async fn read_line(&mut self) -> GreenResult<String> {
+    pub async fn read_line(&mut self) -> SubsysResult<String> {
         match self {
             Self::Stdio => {
                 let handle = tokio::task::spawn_blocking(move || -> io::Result<String> {
@@ -41,7 +41,7 @@ impl SysIo {
                 tokio::select! {
                     rx = channel.input.recv() => match rx {
                         Some(line) => Ok(line),
-                        None => GreenError::err_channel_closed(),
+                        None => SubsysError::err_channel_closed(),
                     }
                 }
             }

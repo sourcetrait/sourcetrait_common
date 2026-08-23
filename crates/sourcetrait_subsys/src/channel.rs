@@ -22,7 +22,7 @@ impl<TX,RX> InternalChannel<TX,RX> {
         ( Self { tx: left_tx, rx: left_rx, cancel }, (right_tx, right_rx) )
     }
     
-    pub async fn send(&self, msg: TX) -> GreenResult<()> {
+    pub async fn send(&self, msg: TX) -> SubsysResult<()> {
         self.tx.send(msg).await?;
         Ok(())
     }
@@ -34,15 +34,15 @@ impl<TX,RX> Channel<TX, RX> {
         Self { tx: tuple.0, rx: tuple.1, cancel, handle }
     }
     
-    pub async fn send(&self, msg: TX) -> GreenResult<()> {
+    pub async fn send(&self, msg: TX) -> SubsysResult<()> {
         self.tx.send(msg).await?;
         Ok(())
     }
     
-    pub async fn join(self) -> GreenResult<()> {
+    pub async fn join(self) -> SubsysResult<()> {
         match self.handle.await? {
             Ok(_) => Ok(()),
-            Err(_) => Err(GreenError::TaskFail)
+            Err(_) => Err(SubsysError::TaskFail)
         }
     }
 }

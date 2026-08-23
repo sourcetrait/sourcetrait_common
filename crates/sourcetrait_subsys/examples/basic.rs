@@ -121,12 +121,12 @@ impl From<MathRequest> for ToExampleSys {
     fn from(v: MathRequest) -> Self { ToExampleSys::MathRequest(v) }
 }
 impl TryFrom<FromExampleSys> for MathResponse {
-    type Error = subsys::GreenError;
+    type Error = subsys::SubsysError;
 
     fn try_from(v: FromExampleSys) -> Result<Self, Self::Error> {
         match v {
             FromExampleSys::MathResponse(v) => Ok(v),
-            _ => Err(subsys::GreenError::ResponseType),
+            _ => Err(subsys::SubsysError::ResponseType),
         }
     }
 }
@@ -156,7 +156,7 @@ impl subsys::System for ExampleSys {
     fn inner(&self) -> &subsys::InnerSystem<Self> { &self.inner }
     fn inner_mut(&mut self) -> &mut subsys::InnerSystem<Self> { &mut self.inner }
     
-    async fn init(inner: subsys::InnerSystem<Self>, params: Self::Params) -> subsys::GreenResult<Self> {
+    async fn init(inner: subsys::InnerSystem<Self>, params: Self::Params) -> subsys::SubsysResult<Self> {
         Ok(Self {
             op: params.op,
             num: 1.,
@@ -224,7 +224,7 @@ pub struct ExampleSysPaths(agnostic::AppPathRouter);
 impl Default for ExampleSysPaths {
     fn default() -> Self {
         Self(agnostic::DefaultAppPaths::Default(
-            "sourcetrait/sysgreen/examples/basic"
+            "sourcetrait/subsys/examples/basic"
         ).into())
     }
 }
@@ -250,10 +250,10 @@ pub struct ExampleSysConfig {
 }
 
 impl ExampleSysConfig {
-    pub fn read(paths: &ExampleSysPaths) -> subsys::GreenResult<Self> {
+    pub fn read(paths: &ExampleSysPaths) -> subsys::SubsysResult<Self> {
         let config_path = paths.config_toml(); 
         ExampleSysConfig::from_toml_file(&config_path)
-            .map_err(|e| subsys::GreenError::into_io(e))
+            .map_err(|e| subsys::SubsysError::into_io(e))
     }
 }
 

@@ -14,7 +14,7 @@ pub enum Flow<T> {
 }
 
 #[cereal::derived(Copy, Eq, Data)]
-pub enum GreenFlow {
+pub enum SubsysFlow {
     Normal,
     /// Affects control flow of [System::run]
     Control(Control),
@@ -33,14 +33,14 @@ pub const SUCCESS: RunResult = Ok(Success);
 
 pub type SysResult<T> = Result<T, Failure>;
 pub type FlowResult<T> = Result<Flow<T>, Failure>;
-pub type GreenFlowResult = Result<GreenFlow, Failure>;
+pub type SubsysFlowResult = Result<SubsysFlow, Failure>;
 
 pub trait ExitTrait {
     fn exit_code(self) -> ExitCode;
 }
 
 #[derive(Debug, snafu::Snafu)]
-pub enum GreenError {
+pub enum SubsysError {
     #[snafu(display("Channel closed"))]
     ChannelClosed,
     
@@ -63,9 +63,9 @@ pub enum GreenError {
     ResponseType,
 }
 
-pub type GreenResult<T> = Result<T, GreenError>;
+pub type SubsysResult<T> = Result<T, SubsysError>;
 
-impl GreenError {
+impl SubsysError {
     #[inline]
     #[track_caller]
     pub const fn channel_closed() -> Self {
@@ -74,7 +74,7 @@ impl GreenError {
     
     #[inline]
     #[track_caller]
-    pub const fn err_channel_closed<T>() -> GreenResult<T> {
+    pub const fn err_channel_closed<T>() -> SubsysResult<T> {
         Err(Self::channel_closed())
     }
     
@@ -86,7 +86,7 @@ impl GreenError {
     
     #[inline]
     #[track_caller]
-    pub fn err_into_io<T, E: Into<io::Error>>(source: E) -> GreenResult<T> {
+    pub fn err_into_io<T, E: Into<io::Error>>(source: E) -> SubsysResult<T> {
         Err(Self::into_io(source))
     }
     
@@ -107,28 +107,28 @@ impl ExitTrait for RunResult {
     }
 }
 
-impl From<io::Error> for GreenError {
+impl From<io::Error> for SubsysError {
     fn from(source: io::Error) -> Self {
         Self::io(source)
     }
 }
 
-impl From<tokio::task::JoinError> for GreenError {
+impl From<tokio::task::JoinError> for SubsysError {
     fn from(_: tokio::task::JoinError) -> Self {
         Self::TaskJoin
     }
 }
 
-impl<T> From<tkio::mpsc::error::SendError<T>> for GreenError {
+impl<T> From<tkio::mpsc::error::SendError<T>> for SubsysError {
     fn from(_: tkio::mpsc::error::SendError<T>) -> Self {
         Self::ChannelClosed
     }
 }
 
-impl From<GreenError> for Failure { fn from(_: GreenError) -> Self { Self } }
+impl From<SubsysError> for Failure { fn from(_: SubsysError) -> Self { Self } }
 
-impl From<GreenError> for ExitCode {
-    fn from(_: GreenError) -> Self {
+impl From<SubsysError> for ExitCode {
+    fn from(_: SubsysError) -> Self {
         Self::FAILURE
     }
 }
