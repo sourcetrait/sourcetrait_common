@@ -12,13 +12,13 @@ pub struct SystemControl<SYS: System>  {
     sys_handle: tkio::task::JoinHandle<RunResult>,
     self_handle: tkio::task::JoinHandle<RunResult>,
     cancel: tkio::CancellationToken,
-    requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<<SYS as System>::FromSys>>>>,
+    requests: Arc<Mutex<FxHashMap<u64, tkio::oneshot::Sender<<SYS as System>::FromSys>>>>,
 }
 
 struct ControlTask<SYS: System, HNDLR: Handler<SYS>> {
     rx: tkio::mpsc::Receiver<MsgFromSys<<SYS as System>::FromSys>>,
     handler: HNDLR,
-    requests: Arc<Mutex<FxHashMap<u64, tokio::sync::oneshot::Sender<<SYS as System>::FromSys>>>>,
+    requests: Arc<Mutex<FxHashMap<u64, tkio::oneshot::Sender<<SYS as System>::FromSys>>>>,
     cancel: tkio::CancellationToken,
 }
 
@@ -114,7 +114,7 @@ impl<SYS: System> SystemControl<SYS> {
         let packet = Packet::request(req.into());
         let reqid = packet.id;
         let msg = MsgToSys::Packet(packet);
-        let (send, recv) = tokio::sync::oneshot::channel();
+        let (send, recv) = tkio::oneshot::channel();
         self.requests
             .lock().expect("lock")
             .insert(reqid, send);

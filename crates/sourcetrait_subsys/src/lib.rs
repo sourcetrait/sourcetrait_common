@@ -69,8 +69,8 @@ pub(crate) mod tkio {
     pub(crate) use tokio::task;
     pub(crate) use tokio_util::sync::CancellationToken;
     pub(crate) mod oneshot {
-        pub use tokio::sync::oneshot::Receiver;
-        pub use tokio::sync::oneshot::Sender;
+        #[allow(unused)]
+        pub(crate) use tokio::sync::oneshot::{Receiver, Sender, channel};
     }
 }
 

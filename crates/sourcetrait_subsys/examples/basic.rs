@@ -1,7 +1,7 @@
 ///! Defines a subsystem that will, upon request, either Add or Multiply a number
 ///! by a specified operand and an internally accumulated number. The internal
 ///! number is initialized by configuration.
-use sourcetrait_sysgreen::{ self as green, prelude::* };
+use sourcetrait_subsys::{self as subsys, prelude::* };
 use sourcetrait_cereal_macro as cereal;
 use sourcetrait_agnostic::{ self as agnostic, prelude::* };
 use sourcetrait_tomlx::{ self as tomlx, prelude::* };
@@ -22,15 +22,15 @@ async fn basic() {
     let params = ExampleSysParams { op: Operation::Mul };
 
     struct Handler;
-    impl green::Handler<ExampleSys> for Handler {
-        fn on_packet(&mut self, msg: green::Packet<FromExampleSys>) -> impl Future<Output = Option<green::Packet<FromExampleSys>>> + 'static + Send {
+    impl subsys::Handler<ExampleSys> for Handler {
+        fn on_packet(&mut self, msg: subsys::Packet<FromExampleSys>) -> impl Future<Output = Option<subsys::Packet<FromExampleSys>>> + 'static + Send {
             async move {
                 None
             }
         }
     }
     
-    let mut sys: green::SystemControl<ExampleSys> = green::SystemControl::start(
+    let mut sys: subsys::SystemControl<ExampleSys> = subsys::SystemControl::start(
         paths,
         config,
         params,
@@ -41,9 +41,9 @@ async fn basic() {
         operand: 2.,
     };
     /* What gets sent here:
-    let expected_packet = green::Packet {
+    let expected_packet = subsys::Packet {
         id: 1,
-        nature: green::PacketNature::Request,
+        nature: subsys::PacketNature::Request,
         msg: ToExampleSys::MathRequest(
             MathRequest {
                 operand: 2.,
@@ -62,9 +62,9 @@ async fn basic() {
         operand: 3.,
     };
     /* What gets sent here:
-    let expected_packet = green::Packet {
+    let expected_packet = subsys::Packet {
         id: 3,
-        nature: green::PacketNature::Request,
+        nature: subsys::PacketNature::Request,
         msg: ToExampleSys::MathRequest(
             MathRequest {
                 operand: 3.,
@@ -81,7 +81,7 @@ async fn basic() {
 }
 
 pub struct ExampleSys {
-    inner: green::InnerSystem<Self>,
+    inner: subsys::InnerSystem<Self>,
     op: Operation,
     num: f64,
 }
@@ -116,17 +116,17 @@ pub struct MathResponse {
     result: MathResult,
 }
 
-impl green::Request<ExampleSys> for MathRequest { type ResponseType = MathResponse; }
+impl subsys::Request<ExampleSys> for MathRequest { type ResponseType = MathResponse; }
 impl From<MathRequest> for ToExampleSys {
     fn from(v: MathRequest) -> Self { ToExampleSys::MathRequest(v) }
 }
 impl TryFrom<FromExampleSys> for MathResponse {
-    type Error = green::GreenError;
+    type Error = subsys::GreenError;
 
     fn try_from(v: FromExampleSys) -> Result<Self, Self::Error> {
         match v {
             FromExampleSys::MathResponse(v) => Ok(v),
-            _ => Err(green::GreenError::ResponseType),
+            _ => Err(subsys::GreenError::ResponseType),
         }
     }
 }
@@ -141,9 +141,9 @@ pub struct ExampleSysParams {
     op: Operation,
 }
 
-impl green::Params for ExampleSysParams {}
+impl subsys::Params for ExampleSysParams {}
 
-impl green::System for ExampleSys {
+impl subsys::System for ExampleSys {
     const CHANNEL_SIZE: usize = 100;
     
     type Paths = ExampleSysPaths;
@@ -151,12 +151,12 @@ impl green::System for ExampleSys {
     type Config = ExampleSysConfig;
     type ToSys = ToExampleSys;
     type FromSys = FromExampleSys;
-    type Flow = green::StdFlow;
+    type Flow = subsys::StdFlow;
 
-    fn inner(&self) -> &green::InnerSystem<Self> { &self.inner }
-    fn inner_mut(&mut self) -> &mut green::InnerSystem<Self> { &mut self.inner }
+    fn inner(&self) -> &subsys::InnerSystem<Self> { &self.inner }
+    fn inner_mut(&mut self) -> &mut subsys::InnerSystem<Self> { &mut self.inner }
     
-    async fn init(inner: green::InnerSystem<Self>, params: Self::Params) -> green::GreenResult<Self> {
+    async fn init(inner: subsys::InnerSystem<Self>, params: Self::Params) -> subsys::GreenResult<Self> {
         Ok(Self {
             op: params.op,
             num: 1.,
@@ -164,12 +164,12 @@ impl green::System for ExampleSys {
         })
     }
     
-    async fn run(mut self) -> green::RunResult {
+    async fn run(mut self) -> subsys::RunResult {
         let result = loop {
             let result = tokio::select! {
                 rx = self.inner.channel.rx.recv() => match rx {
                     Some(msg) => self.handle_channel_recv(msg).await,
-                    None => Err(green::Failure),
+                    None => Err(subsys::Failure),
                 },
             };
             
@@ -181,26 +181,26 @@ impl green::System for ExampleSys {
         self.done(result).await
     }
     
-    async fn on_channel_recv(&mut self, pkt: green::Packet<ToExampleSys>) -> green::FlowResult<Self::Flow> {
+    async fn on_channel_recv(&mut self, pkt: subsys::Packet<ToExampleSys>) -> subsys::FlowResult<Self::Flow> {
         let (id, nature, msg) = pkt.into_tuple();
         match (nature, msg) {
-            (green::PacketNature::Request, ToExampleSys::MathRequest(req))
-                => self.on_math_request(green::Packet::new(id, nature, req)).await,
+            (subsys::PacketNature::Request, ToExampleSys::MathRequest(req))
+                => self.on_math_request(subsys::Packet::new(id, nature, req)).await,
             _ => todo!(),
         }
     }
 
-    async fn on_stop(&mut self, _halt: bool) -> green::RunResult {
-        green::SUCCESS
+    async fn on_stop(&mut self, _halt: bool) -> subsys::RunResult {
+        subsys::SUCCESS
     }
 
-    async fn on_resume(&mut self) -> green::SysResult<bool> {
+    async fn on_resume(&mut self) -> subsys::SysResult<bool> {
         Ok(true)
     }
 }
 
 impl ExampleSys {
-    async fn on_math_request(&mut self, req: green::Packet<MathRequest>) -> green::FlowResult<green::StdFlow> {
+    async fn on_math_request(&mut self, req: subsys::Packet<MathRequest>) -> subsys::FlowResult<subsys::StdFlow> {
         self.num = match self.op {
             Operation::Add => req.msg.operand + self.num,
             Operation::Mul => req.msg.operand * self.num,
@@ -212,7 +212,7 @@ impl ExampleSys {
             }
         ))).await?;
         
-        Ok(green::Flow::Continue)
+        Ok(subsys::Flow::Continue)
     }
 }
 
@@ -250,14 +250,14 @@ pub struct ExampleSysConfig {
 }
 
 impl ExampleSysConfig {
-    pub fn read(paths: &ExampleSysPaths) -> green::GreenResult<Self> {
+    pub fn read(paths: &ExampleSysPaths) -> subsys::GreenResult<Self> {
         let config_path = paths.config_toml(); 
         ExampleSysConfig::from_toml_file(&config_path)
-            .map_err(|e| green::GreenError::into_io(e))
+            .map_err(|e| subsys::GreenError::into_io(e))
     }
 }
 
-impl green::Config for ExampleSysConfig {}
+impl subsys::Config for ExampleSysConfig {}
 impl tomlx::FromToml for ExampleSysConfig {}
 
 
