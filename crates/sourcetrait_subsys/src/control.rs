@@ -3,7 +3,7 @@ use crate::*;
 /// Handles incoming messages
 /// Returns None if handled, else Some(msg) if unhandled.
 pub trait Handler<SYS: System>: 'static + Send {
-    fn on_packet(&mut self, msg: Packet<SYS::FromSys>)
+    fn on_packet(&mut self, pkt: Packet<SYS::FromSys>)
         -> impl Future<Output = Option<Packet<SYS::FromSys>>> + 'static + Send;
 }
 
