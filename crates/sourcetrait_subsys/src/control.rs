@@ -107,7 +107,7 @@ impl<SYS: System> SystemControl<SYS> {
         Ok(())
     }
     
-    pub async fn request<T: Request<SYS>>(&mut self, req: T) -> SubsysResult<T::ResponseType>
+    pub async fn request<T: Request<SYS>>(&self, req: T) -> SubsysResult<T::ResponseType>
     where
         <T as Request<SYS>>::ResponseType: TryFrom<<SYS as System>::FromSys, Error = SubsysError>
     {

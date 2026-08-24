@@ -23,6 +23,8 @@ pub enum SubsysFlow {
 #[cereal::derived(Copy, Eq, Data)]
 pub struct StdFlow;
 
+pub const CONTINUE: FlowResult<StdFlow> = Ok(Flow::Continue);
+
 #[cereal::derived(Copy, Eq)]
 pub struct Success;
 #[cereal::derived(Copy, Eq)]

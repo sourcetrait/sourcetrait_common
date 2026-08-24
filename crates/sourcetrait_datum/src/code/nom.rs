@@ -35,7 +35,7 @@ impl Nom {
         Self(generator.generate_with(&hashable).take())
     }
     
-    pub fn into_pair(self) -> NomPair { NomPair(self.0, cereal::Base62u64::encode(self.0)) }
+    pub const fn into_pair(self) -> NomPair { NomPair(self.0, cereal::Base62u64::encode(self.0)) }
 }
 
 impl From<u64> for Nom { fn from(v: u64) -> Self { Self::from_u64(v) } }
@@ -62,14 +62,15 @@ impl std::fmt::Display for Nom {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[cereal::derived(Data, Eq)]
 pub struct NomPair(pub(crate) u64, pub(crate) cereal::Base62u64);
 impl NomPair {
+    pub const fn as_u64(&self) -> u64 { self. 0 }
+    pub const fn as_str(&self) -> &str { self.1.as_str() }
     pub const fn new_unchecked(nom: u64, base62: cereal::Base62u64) -> Self { Self(nom, base62) }
     pub const fn from_tuple_unchecked(tuple: (u64, cereal::Base62u64)) -> Self { Self(tuple.0, tuple.1) }
     pub const fn take(self) -> (u64, cereal::Base62u64) { (self.0, self.1) }
-    pub const fn nom(&self) -> u64 { self. 0 }
+    pub const fn nom(&self) -> Nom { Nom(self.0) }
     pub const fn base62(&self) -> &cereal::Base62u64 { &self.1 }
-    pub const fn as_str(&self) -> &str { self.1.as_str() }
 }
 
