@@ -21,6 +21,7 @@ pub mod dir {
     pub mod app_paths;
     pub mod cross;
     pub mod xdg;
+    pub mod udir;
 }
 pub mod error;
 pub mod platform {
@@ -84,6 +85,7 @@ pub use self::{
     dir::{
         cross::*,
         xdg::*,
+        udir::*,
         app_paths::*,
     },
     error::*,
