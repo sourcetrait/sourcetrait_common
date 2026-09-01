@@ -25,11 +25,11 @@ impl OsableIntoUtf8 for PathBuf {
 } 
 
 pub(crate) trait OsableFromUtf8: Sized {
-    fn from_utf8_string<S: Into<String>>(s: S) -> OsableResult<Self>;
+    fn from_utf8<S: Into<String>>(s: S) -> OsableResult<Self>;
 }
 
 impl OsableFromUtf8 for CString {
-    fn from_utf8_string<S: Into<String>>(s: S) -> OsableResult<Self> {
+    fn from_utf8<S: Into<String>>(s: S) -> OsableResult<Self> {
         Self::new(s.into()).map_err(|_| OsableError::CString)
     }
 }

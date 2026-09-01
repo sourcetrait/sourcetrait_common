@@ -2,7 +2,7 @@ use crate::*;
 
 pub fn mkdtemp<D: AsRef<Path>, S: AsRef<str>>(dir: D, template: S) -> OsableResult<PathBuf> {
     let template = dir.as_ref().join(template.as_ref()).into_utf8()?;
-    let template = CString::from_utf8_string(template)?;
+    let template = CString::from_utf8(template)?;
     let ptr = template.into_raw();
 
     unsafe {
@@ -37,7 +37,7 @@ fn sysconf_size(conf: libc::c_int) -> usize {
 }
 
 pub fn username_id<S: Into<String>>(username: S) -> OsableResult<Option<UID>> {
-    let username = CString::from_utf8_string(username)?;
+    let username = CString::from_utf8(username)?;
     let mut cap = sysconf_size(libc::_SC_GETPW_R_SIZE_MAX);
     let mut buf = vec![0 as libc::c_char; cap];
     let mut pwd: libc::passwd = unsafe { mem::zeroed() };
@@ -66,7 +66,7 @@ pub fn username_id<S: Into<String>>(username: S) -> OsableResult<Option<UID>> {
 }
 
 pub fn groupname_id<S: Into<String>>(groupname: S) -> OsableResult<Option<GID>> {
-    let groupname = CString::from_utf8_string(groupname)?;
+    let groupname = CString::from_utf8(groupname)?;
     let mut cap = sysconf_size(libc::_SC_GETGR_R_SIZE_MAX);
     let mut buf = vec![0 as libc::c_char; cap];
     let mut grp: libc::group = unsafe { mem::zeroed() };
