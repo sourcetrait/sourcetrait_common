@@ -11,6 +11,7 @@ members = [
     "crates/sourcetrait_datum",
     "crates/sourcetrait_dotrepo",
     "crates/sourcetrait_gitparity",
+    "crates/sourcetrait_osable",
     "crates/sourcetrait_ronx",
     "crates/sourcetrait_ronx_macro",
     "crates/sourcetrait_stdx",
